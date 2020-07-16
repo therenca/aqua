@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 class Line extends StatelessWidget{
 
 	final Color color;
-	final double borderWidth;
 
-	final dynamic width;
-	final dynamic height;
+	final double width;
+	final double height;
+	final double borderWidth;
 
 	final bool horizontal;
 
-	Line({this.color, this.borderWidth, this.width, this.height, this.horizontal});
+	Line({this.color, this.width, this.height, this.horizontal, this.borderWidth});
 
 	@override
 	Widget build(BuildContext context){
@@ -22,12 +22,12 @@ class Line extends StatelessWidget{
 				border: horizontal ? Border(
 					bottom: BorderSide(
 						color: color,
-						width: borderWidth
+						width: height
 					)
 				) : Border(
 					right: BorderSide(
 						color: color,
-						width: borderWidth
+						width: width,
 					)
 				)
 			),
