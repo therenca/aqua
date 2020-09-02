@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class  TextFormFieldCustom extends StatelessWidget {
+class  TextFormFieldCustom extends StatefulWidget {
 
 	final Widget prefix;
 	final Widget prefixIcon;
@@ -40,6 +40,12 @@ class  TextFormFieldCustom extends StatelessWidget {
 	final bool isFilled;
 	final Color filledColor;
 
+	final IconData prefixIconData;
+	final Color prefixIconColor;
+	final Color focusedPrefixIconColor;
+
+	final Color cursorColor;
+
 	TextFormFieldCustom({
 		this.prefixIcon,
 		this.suffixIcon,
@@ -50,6 +56,9 @@ class  TextFormFieldCustom extends StatelessWidget {
 		this.labelColor=Colors.black,
 		this.borderColor=Colors.black,
 		this.focusedBorderColor=Colors.black,
+		this.prefixIconData,
+		this.prefixIconColor=Colors.black,
+		this.focusedPrefixIconColor=Colors.black,
 		this.borderWidth=2.0,
 		this.focusBorderWidth=2.0,
 		this.borderRadius=4.0,
@@ -71,63 +80,87 @@ class  TextFormFieldCustom extends StatelessWidget {
 		this.hintTextStyle,
 		this.labelTextStyle,
 		this.isFilled=false,
-		this.filledColor
+		this.filledColor,
+		this.cursorColor=Colors.red
 	});
+
+	@override
+	_TextFormFieldCustomState createState() => _TextFormFieldCustomState();
+
+}
+
+class _TextFormFieldCustomState extends State<TextFormFieldCustom>{
+
+	bool hasFocus = false;
+
+	@override
+	void initState(){
+		super.initState();
+
+		if(widget.focusNode != null){
+			widget.focusNode.addListener((){
+				hasFocus = widget.focusNode.hasFocus;
+				setState((){});
+			});
+		}
+	}
 
 	Widget _buildTextFormField(BuildContext context){
 
 		BorderSide borderSide = BorderSide(
-			width: borderWidth,
-			color: borderColor
+			width: widget.borderWidth,
+			color: widget.borderColor
 		);
 
 		BorderSide focusedBorderSide = BorderSide(
-			width: focusBorderWidth,
-			color: focusedBorderColor
+			width: widget.focusBorderWidth,
+			color: widget.focusedBorderColor
 		);
 
 		return TextFormField(
 			style: TextStyle(
-				fontSize: fontSize,
-				color: textColor
+				fontSize: widget.fontSize,
+				color: widget.textColor
 			),
-			keyboardType: keyboardType,
-			obscureText: isObscureText,
-			validator: (inputValue) => validator(inputValue),
-			maxLines: maxLines,
-			controller: controller,
-			focusNode: focusNode,
-			textInputAction: textInputAction,
-			onFieldSubmitted: (inputValue) => onSubmitted(inputValue),
+			keyboardType: widget.keyboardType,
+			obscureText: widget.isObscureText,
+			validator: (inputValue) => widget.validator(inputValue),
+			maxLines: widget.maxLines,
+			controller: widget.controller,
+			focusNode: widget.focusNode,
+			textInputAction: widget.textInputAction,
+			onFieldSubmitted: (inputValue) => widget.onSubmitted(inputValue),
 			decoration: InputDecoration(
-				icon: beforeInput,
-				enabledBorder: isOutlineBorder ? OutlineInputBorder(
+				icon: widget.beforeInput,
+				enabledBorder: widget.isOutlineBorder ? OutlineInputBorder(
 					borderSide: borderSide,
-					borderRadius: BorderRadius.circular(borderRadius)
+					borderRadius: BorderRadius.circular(widget.borderRadius)
 				) : UnderlineInputBorder(
 					borderSide: borderSide,
 				),
-				focusedBorder: isOutlineBorder ? OutlineInputBorder(
+				focusedBorder: widget.isOutlineBorder ? OutlineInputBorder(
 					borderSide: focusedBorderSide,
-					borderRadius: BorderRadius.circular(borderRadius)
+					borderRadius: BorderRadius.circular(widget.borderRadius)
 				) : UnderlineInputBorder(
 					borderSide: focusedBorderSide
 				),
 				contentPadding: EdgeInsets.symmetric(
-					vertical: verticalPadding,
-					horizontal: horizontalPadding
+					vertical: widget.verticalPadding,
+					horizontal: widget.horizontalPadding
 				),
-				labelText: labelText,
-				labelStyle: labelTextStyle,
-				hintText: hintText,
-				hintStyle: hintTextStyle,
-				prefix: prefix,
-				prefixIcon: prefixIcon,
-				suffixIcon: suffixIcon,
-				filled: isFilled,
-				fillColor: filledColor
+				labelText: widget.labelText,
+				labelStyle: widget.labelTextStyle,
+				hintText: widget.hintText,
+				hintStyle: widget.hintTextStyle,
+				prefix: widget.prefix,
+				prefixIcon: widget.prefixIcon == null ? Icon(
+					widget.prefixIconData, size: 17.0, color: hasFocus ? widget.focusedPrefixIconColor : widget.prefixIconColor) : widget.prefixIcon,
+				suffixIcon: widget.suffixIcon,
+				filled: widget.isFilled,
+				fillColor: widget.filledColor,
 			),
-			onChanged: onChanged,
+			cursorColor: widget.cursorColor,
+			onChanged: widget.onChanged,
 		);
 	}
 

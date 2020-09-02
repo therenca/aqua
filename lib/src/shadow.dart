@@ -19,7 +19,7 @@ class Shadow extends StatelessWidget {
 		@required this.width,
 		@required this.height,
 		this.end, this.begin,
-		this.top, this.left, this.right, this.bottom, this.colors});
+		this.top=0.0, this.left=0.0, this.right=0.0, this.bottom=0.0, this.colors});
 
 	Widget _buildShadow(BuildContext context){
 		return Positioned(

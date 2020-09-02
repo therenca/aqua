@@ -1,5 +1,6 @@
 library aqua;
 
+export 'src/mouse.dart';
 export 'src/post.dart';
 export 'src/line.dart';
 export 'src/random.dart';
@@ -16,7 +17,9 @@ export 'src/generate_id.dart';
 export 'src/navigate_to.dart';
 export 'src/loading_icon.dart';
 export 'src/google_fonts.dart';
+export 'src/request_focus.dart';
 export 'src/circle_clipper.dart';
 export 'src/text_form_field.dart';
 export 'src/background_image.dart';
+export 'src/windows/navigation.dart';
 export 'src/graphics/smooth_corner.dart';

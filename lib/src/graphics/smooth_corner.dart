@@ -5,7 +5,9 @@ class SmoothCorner {
 	Offset targetPoint;
 	Offset controlPoint;
 
-	SmoothCorner({@required this.path, @required this.targetPoint, @required this.controlPoint});
+	SmoothCorner({
+		@required this.path,
+		@required this.targetPoint, @required this.controlPoint});
 
 	Path _getSmoothCurve(){
 		path.quadraticBezierTo(
