@@ -48,7 +48,6 @@ class _NavigationState extends State<Navigation> {
 		currentContext = context;
 
 		return RouteManager(
-			context: currentContext,
 			routes: widget.routes,
 			bgColors: widget.bgColors,
 			header: widget.header,
