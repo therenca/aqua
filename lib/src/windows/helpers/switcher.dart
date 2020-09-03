@@ -8,8 +8,8 @@ class WindowSwitcher {
 	Map<String, Map<String, dynamic>> routes;
 
 	WindowSwitcher({
-		this.routeName,
 		this.routes,
+		this.routeName,
 		this.navStreamer,
 	});
 

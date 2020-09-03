@@ -3,11 +3,12 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:aqua/aqua.dart' as aqua;
 
-import '../helpers/switcher.dart';
+import 'helpers/switcher.dart';
 
 
-class Standard extends StatefulWidget {
+class SideBar extends StatefulWidget {
 
+	final String type;
 	final double width;
 	final double height;
 	final Widget header;
@@ -15,21 +16,22 @@ class Standard extends StatefulWidget {
 	final aqua.NavigationStreamer navStreamer;
 	final Map<String, Map<String, dynamic>> routes;
 
-	Standard({
+	SideBar({
 		@required this.width,
 		@required this.height,
 		@required this.routes,
 		@required this.navStreamer,
+		this.type,
 		this.header,
 		this.bgColors,
 	});
 
 	@override
-	StandardState createState() => StandardState();
+	SidebarState createState() => SidebarState();
 
 }
 
-class StandardState extends State<Standard>{
+class SidebarState extends State<SideBar>{
 
 	Color selectedColor;
 	bool isHovering = false;
@@ -38,7 +40,6 @@ class StandardState extends State<Standard>{
 	@override
 	void initState(){
 		super.initState();
-
 
 		widget.navStreamer.listen((data){
 			aqua.pretifyOutput('[SETTINGS MINI SIDEBAR] data from nav stream: $data');
@@ -52,29 +53,29 @@ class StandardState extends State<Standard>{
 
 		List<Widget> routeWidgets = [];
 		widget.routes.forEach((routeName, routeInfo){
-			Widget route = AnimatedContainer(
-				duration: Duration(milliseconds: 300),
-				color: isHovering ? _hoverOnCurrentRoute(routeName) : _getCurrentSelectedColor(routeName),
-				padding: EdgeInsets.only(
-					top: 10.0,
-					left: 20.0,
-					bottom: 10.0
-				),
-				width: widget.width,
-				child: Row(
-					children: [
+			Widget route;
+			switch(widget.type){
+
+				case 'standard': {
+					route = _buildStandardRoute(routeName, routeInfo['icon']);
+					break;
+				}
+
+				case 'compact': {
+					route = _buildCompactRoute(
+						routeName,
 						routeInfo['icon'],
-						SizedBox(width: 15.0),
-						Text(
-							routeName,
-							style: TextStyle(
-								color: Colors.black,
-								fontWeight: FontWeight.bold
-							),
-						),
-					],
-				),
-			);
+						routeInfo['extra']
+					);
+
+					break;
+				}
+
+				default: {
+					break;
+				}
+			}
+
 
 			Widget addGestureToRoute = GestureDetector(
 				child: route,
@@ -111,14 +112,16 @@ class StandardState extends State<Standard>{
 		}
 
 		return routeWidgets;
-
-
 	}
 
-	Widget _buildStandard(BuildContext context){
+	Widget _buildSideBar(BuildContext context){
 
 		List<Widget> nav = _buildRoutes();
-		Widget settings = nav.removeAt(nav.length - 1);
+
+		Widget settings;
+		if(widget.type == 'standard'){
+			settings = nav.removeAt(nav.length - 1);
+		}
 
 		return Container(
 			width: widget.width,
@@ -139,11 +142,10 @@ class StandardState extends State<Standard>{
 						)
 					),
 
-					
-					Positioned(
+					widget.type == 'standard' ? Positioned(
 						bottom: 10.0,
 						child: settings,
-					)
+					) : Container()
 				],
 			),
 		);
@@ -151,7 +153,7 @@ class StandardState extends State<Standard>{
 	}
 
 	@override
-	Widget build(BuildContext context) => _buildStandard(context);
+	Widget build(BuildContext context) => _buildSideBar(context);
 
 	Color _getCurrentSelectedColor(String routeName){
 
@@ -176,6 +178,60 @@ class StandardState extends State<Standard>{
 		}
 
 		return hoverColor;
+	}
+
+	Widget _buildStandardRoute(String routeName, Icon icon){
+		return  AnimatedContainer(
+			duration: Duration(milliseconds: 300),
+			color: isHovering ? _hoverOnCurrentRoute(routeName) : _getCurrentSelectedColor(routeName),
+			padding: EdgeInsets.only(
+				top: 10.0,
+				left: 20.0,
+				bottom: 10.0
+			),
+			width: widget.width,
+			child: Row(
+				children: [
+					icon,
+					SizedBox(width: 15.0),
+					Text(
+						routeName,
+						style: TextStyle(
+							color: Colors.black,
+							fontWeight: FontWeight.bold
+						),
+					),
+				],
+			),
+		);
+	}
+
+	Widget _buildCompactRoute(String routeName, Icon icon, String extra){
+		return Container(
+			child: Row(
+				children: [
+					icon,
+					SizedBox(width: 15.0),
+					Column(
+						children: [
+							Text(
+								routeName,
+								style: TextStyle(
+
+								),
+							),
+							SizedBox(height: 10.0,),
+							Text(
+								extra,
+								style: TextStyle(
+
+								),
+							),
+						],
+					)
+				],
+			),
+		);
 	}
 
 }

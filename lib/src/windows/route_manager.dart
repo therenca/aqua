@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:aqua/aqua.dart' as aqua;
-import 'navs/standard.dart';
+import 'sidebar.dart';
 
 class RouteManager extends StatefulWidget {
 
@@ -50,32 +50,16 @@ class _RouteManagerState extends State<RouteManager>{
 
 	}
 
-	Widget _buildNavTypes(){
-		Widget routeWidget;
-
-		switch(widget.type){
-
-			case 'standard':
-				routeWidget = Standard(
-					width: widget.width,
-					height: widget.height,
-					routes: widget.routes,
-					header: widget.header,
-					bgColors: widget.bgColors,
-					navStreamer: widget.navStreamer,
-				);
-				
-				break;
-
-			default:
-				break;
-		}
-
-		return routeWidget;
-	}
-
 	Widget _buildRouteManager(BuildContext context){
-		return _buildNavTypes();
+		return SideBar(
+			type: widget.type,
+			width: widget.width,
+			height: widget.height,
+			routes: widget.routes,
+			header: widget.header,
+			bgColors: widget.bgColors,
+			navStreamer: widget.navStreamer,
+		);
 	}
 
 	@override
