@@ -1,24 +1,33 @@
+import 'dart:async';
 import 'package:flutter/widgets.dart';
-import 'package:provider/provider.dart' as provider;
-
 import 'package:aqua/aqua.dart' as aqua;
 
 class WindowSwitcher {
 	
 	String routeName;
 	BuildContext context;
+	aqua.NavigationStreamer navStreamer;
+	StreamController<Map<String, dynamic>> streamController;
 	Map<String, Map<String, dynamic>> routes;
 
-	WindowSwitcher({this.routeName, this.routes, this.context});
+	WindowSwitcher({
+		this.routeName,
+		this.routes,
+		this.context,
+		this.navStreamer,
+		this.streamController
+	});
 
 	Widget switcher(){
-		Map<String, Map<String, dynamic>> routes = provider.Provider.of<aqua.NavigationModel>(context, listen: false).routes;
 
-		provider.Provider.of<aqua.NavigationModel>(context, listen: false).selectedWidget = routes[routeName]['window'];
+		Map<String, dynamic> selectedWidget = {
+			'routeName': routeName,
+			'window': routes[routeName]['window'],
+			'hoverColor': routes[routeName]['hoverColor'],
+			'selectedColor': routes[routeName]['selectedColor'],
+		};
 
-		provider.Provider.of<aqua.NavigationModel>(context, listen: false).selectedColor = routes[routeName]['selectedColor'];
-
-		provider.Provider.of<aqua.NavigationModel>(context, listen: false).selectedRouteName = routeName;
+		navStreamer.controller.sink.add(selectedWidget);
 
 		return routes[routeName]['window'];
 	}

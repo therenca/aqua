@@ -2,25 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 
-import 'package:provider/provider.dart' as provider;
-
 import 'package:aqua/aqua.dart' as aqua;
 import 'helpers/switcher.dart';
+
 
 class RouteManager extends StatefulWidget {
 
 	final String type;
 	final double width;
+	final double height;
 	final Widget header;
+	final List<Color> bgColors;
 	final BuildContext context;
 	final Map<String, Map<String, dynamic>> routes;
+
+	final aqua.NavigationStreamer navStreamer;
 
 	RouteManager({
 		@required this.routes,
 		@required this.context,
+		@required this.navStreamer,
 		this.type='standard',
-		this.width,
 		this.header,
+		this.width,
+		this.height,
+		this.bgColors,
 	}){
 		routes.forEach((routeName, routeInfo){
 			routeInfo['isHovering'] = false;
@@ -28,7 +34,6 @@ class RouteManager extends StatefulWidget {
 			routeInfo['icon'] = _buildIconRoute(iconData);
 		});
 
-		provider.Provider.of<aqua.NavigationModel>(context, listen: false).routes = routes;
 	}
 
 	@override
@@ -41,7 +46,24 @@ class RouteManager extends StatefulWidget {
 
 class _RouteManagerState extends State<RouteManager>{
 
+	Color hoverColor;
+	Color selectedColor;
 	bool isHovering = false;
+	String selectedRouteName;
+
+	@override
+	void initState(){
+		super.initState();
+
+
+		widget.navStreamer.listen((data){
+			aqua.pretifyOutput('[SETTINGS MINI SIDEBAR] data from nav stream: $data');
+			
+			hoverColor = data['hoverColor'];
+			selectedRouteName = data['routeName'];
+			selectedColor = data['selectedColor'];
+		});
+	}
 	
 	List<Widget> _buildStandard(){
 
@@ -77,7 +99,9 @@ class _RouteManagerState extends State<RouteManager>{
 					WindowSwitcher(
 						routeName: routeName,
 						context: context,
-						routes: widget.routes
+						routes: widget.routes,
+						// streamController: widget.streamController
+						navStreamer: widget.navStreamer
 					).switcher();
 				},
 			);
@@ -124,8 +148,35 @@ class _RouteManagerState extends State<RouteManager>{
 	}
 
 	Widget _buildRouteManager(BuildContext context){
-		return ListView(
-			children: _buildNavTypes(),
+
+		List<Widget> nav = _buildNavTypes();
+		Widget settings = nav.removeAt(nav.length - 1);
+
+		return Container(
+			width: widget.width,
+			height: widget.height,
+			child: Stack(
+				children: [
+					aqua.Shadow(
+						width: widget.width,
+						height: widget.height,
+						colors: widget.bgColors,
+					),
+
+					SizedBox(
+						width: widget.width,
+						height: widget.height,
+						child: ListView(
+							children: nav
+						)
+					),
+
+					Positioned(
+						bottom: 10.0,
+						child: settings,
+					)
+				],
+			),
 		);
 	}
 
@@ -133,11 +184,11 @@ class _RouteManagerState extends State<RouteManager>{
 	Widget build(BuildContext context) => _buildRouteManager(context);
 
 	Color _getCurrentSelectedColor(String routeName){
-		Color selectedColor;
-		String selectedRouteName = provider.Provider.of<aqua.NavigationModel>(context, listen: false).selectedRouteName;
-		
+
 		if(selectedRouteName == routeName){
-			selectedColor = provider.Provider.of<aqua.NavigationModel>(context, listen: false).selectedColor;
+			if(selectedColor == null){
+				return Colors.cyan;
+			}
 		} else {
 			selectedColor = Colors.transparent;
 		}
@@ -146,10 +197,11 @@ class _RouteManagerState extends State<RouteManager>{
 	}
 
 	Color _hoverOnCurrentRoute(String routeName){
-		Color hoverColor;
 
 		if(widget.routes[routeName]['isHovering']){
-			hoverColor = provider.Provider.of<aqua.NavigationModel>(context, listen: false).hoverColor;
+			if(hoverColor == null){
+				hoverColor = Colors.grey;
+			}
 		} else {
 			hoverColor = Colors.transparent;
 		}

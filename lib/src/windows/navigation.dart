@@ -1,11 +1,8 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+import 'package:aqua/aqua.dart' as aqua;
 
-import '../shadow.dart';
 import 'route_manager.dart';
-import 'models/m_navigation.dart' as m_nav;
-
-class NavigationModel extends m_nav.Navigation {}
 
 class Navigation extends StatefulWidget {
 
@@ -22,6 +19,8 @@ class Navigation extends StatefulWidget {
 	final Widget header;
 	final Map<String, Map<String, dynamic>> routes;
 
+	final NavigationStreamer navStreamer;
+
 	Navigation({
 		@required this.width,
 		@required this.height,
@@ -32,7 +31,9 @@ class Navigation extends StatefulWidget {
 		this.header,
 		this.parentContext,
 		this.type='standard',
+		
 		@required this.routes,
+		@required this.navStreamer
 	});
 
 	@override
@@ -43,51 +44,53 @@ class _NavigationState extends State<Navigation> {
 
 	BuildContext currentContext;
 
-	// List<Widget> _buildNavTypes(){
-
-	// 	List<Widget> nav;
-
-	// 	nav = RouteManager(
-	// 		header: widget.header,
-	// 		type: widget.type,
-	// 		width: widget.width,
-	// 		routes: widget.routes,
-	// 		context: currentContext,
-	// 		// context: widget.parentContext
-	// 	);
-
-	// 	return nav;
-	// }
-
 	Widget _buildNavigation(BuildContext context){
 		currentContext = context;
-		return Container(
-			width: widget.width,
+
+		return RouteManager(
+			context: currentContext,
+			routes: widget.routes,
+			bgColors: widget.bgColors,
+			header: widget.header,
 			height: widget.height,
-			child: Stack(
-				children: [
-					Shadow(
-						width: widget.width,
-						height: widget.height,
-						colors: widget.bgColors,
-					),
-					SizedBox(
-						width: widget.width,
-						height: widget.height,
-						child: RouteManager(
-							header: widget.header,
-							type: widget.type,
-							width: widget.width,
-							routes: widget.routes,
-							context: currentContext,
-							// context: widget.parentContext
-						)
-					)
-				],
-			),
+			width: widget.width,
+			navStreamer: widget.navStreamer,
 		);
 	}
 
 	@override
 	Widget build(BuildContext context) => _buildNavigation(context);
+}
+
+class NavigationStreamer {
+	
+	StreamController<Map<String, dynamic>> _controller;
+
+	NavigationStreamer(){
+		_controller = StreamController.broadcast();
+	}
+
+	StreamController get controller => _controller;
+	Stream get stream => _controller.stream;
+
+	StreamSubscription listen(Function listenCallback){
+		StreamSubscription sub = _controller.stream.distinct().listen(
+			(data){
+				listenCallback(data);
+			},
+			onError: (err){
+				aqua.pretifyOutput('[MAIN NAV STREAM|Error] $err', color: 'red');
+			},
+			cancelOnError: false,
+			onDone: (){
+				aqua.pretifyOutput('[MAIN NAV STREAM] DONE');
+			}
+		);
+
+		return sub;
+	}
+
+	void close(){
+		_controller.close();
+	}
 }
