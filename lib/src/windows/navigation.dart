@@ -72,11 +72,15 @@ class _NavigationState extends State<Navigation> {
 
 class NavigationStreamer {
 	
+	Function onDone;
+	Function onError;
 	StreamController<Map<String, dynamic>> _controller;
 
-	NavigationStreamer(){
+	NavigationStreamer({this.onDone, this.onError}){
 		_controller = StreamController.broadcast();
 	}
+
+
 
 	StreamController get controller => _controller;
 	Stream get stream => _controller.stream;
@@ -86,13 +90,13 @@ class NavigationStreamer {
 			(data){
 				listenCallback(data);
 			},
-			onError: (err){
-				aqua.pretifyOutput('[MAIN NAV STREAM|Error] $err', color: 'red');
-			},
+			onError: onError == null ? (err){
+				aqua.pretifyOutput('[NAV STREAM|Error] $err', color: 'red');
+			} : onError,
 			cancelOnError: false,
-			onDone: (){
-				aqua.pretifyOutput('[MAIN NAV STREAM] DONE');
-			}
+			onDone: onDone == null ? (){
+				aqua.pretifyOutput('[NAV STREAM] DONE');
+			} : onDone
 		);
 
 		return sub;

@@ -82,6 +82,9 @@ class SidebarState extends State<SideBar>{
 			Widget addGestureToRoute = GestureDetector(
 				child: route,
 				onTap: (){
+					isHovering = false;
+					setState((){});
+
 					WindowSwitcher(
 						routeName: routeName,
 						routes: widget.routes,
@@ -95,12 +98,12 @@ class SidebarState extends State<SideBar>{
 				cursor: SystemMouseCursors.click,
 				onEnter: (PointerEnterEvent event){
 					isHovering = true;
-					widget.routes[routeName]['isHovering'] = isHovering;
+					widget.routes[routeName]['isHovering'] = true;
 					setState((){});
 				},
 				onExit: (PointerExitEvent event){
 					isHovering = false;
-					widget.routes[routeName]['isHovering'] = isHovering;
+					widget.routes[routeName]['isHovering'] = false;
 					setState((){});
 				},
 				child: addGestureToRoute,
@@ -183,19 +186,18 @@ class SidebarState extends State<SideBar>{
 		if(selectedRouteName == routeName){
 			return selectedColor;
 		} else {
-			return null;
+			return Colors.transparent;
 		}
 	}
 
 	Color _hoverOnCurrentRoute(String routeName){
 		Color hoverColor;
-
 		if(widget.routes[routeName]['isHovering']){
 			hoverColor = widget.routes[routeName]['hoverColor'];
 		} else {
 			hoverColor = Colors.transparent;
 		}
-
+	
 		return hoverColor;
 	}
 
