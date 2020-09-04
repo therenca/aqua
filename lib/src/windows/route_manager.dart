@@ -9,33 +9,37 @@ class RouteManager extends StatefulWidget {
 	final double height;
 	final Widget header;
 	final List<Color> bgColors;
+	final Color selectedColor;
+	final Color hoverColor;
+	final aqua.NavigationStreamer navStreamer;
 	final Map<String, Map<String, dynamic>> routes;
 
-	final aqua.NavigationStreamer navStreamer;
+	final Alignment begin;
+	final Alignment end;
 
 	RouteManager({
 		@required this.routes,
 		@required this.navStreamer,
 		this.type='standard',
+		this.selectedColor,
+		this.hoverColor,
 		this.header,
 		this.width,
 		this.height,
 		this.bgColors,
+		this.begin,
+		this.end
 	}){
 		routes.forEach((routeName, routeInfo){
 			routeInfo['isHovering'] = false;
-			IconData iconData = routeInfo.remove('iconData');
-			routeInfo['icon'] = _buildIconRoute(iconData);
+			routeInfo['hoverColor'] = hoverColor;
+			routeInfo['selectedColor'] = selectedColor;
 		});
-
 	}
 
 	@override
 	_RouteManagerState createState() => _RouteManagerState();
 
-	Widget _buildIconRoute(IconData iconData){
-		return  Icon(iconData, size: 20.0, color: Colors.green,);
-	}
 }
 
 class _RouteManagerState extends State<RouteManager>{
@@ -52,6 +56,8 @@ class _RouteManagerState extends State<RouteManager>{
 
 	Widget _buildRouteManager(BuildContext context){
 		return SideBar(
+			end: widget.end,
+			begin: widget.begin,
 			type: widget.type,
 			width: widget.width,
 			height: widget.height,

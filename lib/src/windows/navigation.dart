@@ -12,6 +12,8 @@ class Navigation extends StatefulWidget {
 	final Alignment end;
 	final Alignment begin;
 	final List<Color> bgColors;
+	final Color selectedColor;
+	final Color hoverColor;
 	final BuildContext parentContext;
 	
 	final String type;
@@ -24,6 +26,8 @@ class Navigation extends StatefulWidget {
 	Navigation({
 		@required this.width,
 		@required this.height,
+		this.selectedColor,
+		this.hoverColor,
 		this.bgColors,
 		this.begin,
 		this.end,
@@ -48,12 +52,17 @@ class _NavigationState extends State<Navigation> {
 		currentContext = context;
 
 		return RouteManager(
+			type: widget.type,
 			routes: widget.routes,
 			bgColors: widget.bgColors,
 			header: widget.header,
 			height: widget.height,
 			width: widget.width,
+			hoverColor: widget.hoverColor,
+			selectedColor: widget.selectedColor,
 			navStreamer: widget.navStreamer,
+			end: widget.end,
+			begin: widget.begin,
 		);
 	}
 

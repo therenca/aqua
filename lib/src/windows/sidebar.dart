@@ -5,13 +5,14 @@ import 'package:aqua/aqua.dart' as aqua;
 
 import 'helpers/switcher.dart';
 
-
 class SideBar extends StatefulWidget {
 
 	final String type;
 	final double width;
 	final double height;
 	final Widget header;
+	final Alignment begin;
+	final Alignment end;
 	final List<Color> bgColors;
 	final aqua.NavigationStreamer navStreamer;
 	final Map<String, Map<String, dynamic>> routes;
@@ -24,11 +25,12 @@ class SideBar extends StatefulWidget {
 		this.type,
 		this.header,
 		this.bgColors,
+		this.begin,
+		this.end
 	});
 
 	@override
 	SidebarState createState() => SidebarState();
-
 }
 
 class SidebarState extends State<SideBar>{
@@ -123,16 +125,37 @@ class SidebarState extends State<SideBar>{
 			settings = nav.removeAt(nav.length - 1);
 		}
 
+		Widget background;
+		if(widget.bgColors != null){
+			if(widget.bgColors.length == 1){
+				background = Container(
+					width: widget.width,
+					height: widget.height,
+					color: widget.bgColors[0],
+				);
+			} else {
+				background = aqua.Shadow(
+					width: widget.width,
+					height: widget.height,
+					colors: widget.bgColors,
+					begin: widget.begin,
+					end: widget.end,
+				);
+			}
+		} else {
+			background = Container(
+				width: widget.width,
+				height: widget.height,
+				color: Colors.white,
+			);
+		}
+
 		return Container(
 			width: widget.width,
 			height: widget.height,
 			child: Stack(
 				children: [
-					aqua.Shadow(
-						width: widget.width,
-						height: widget.height,
-						colors: widget.bgColors,
-					),
+					background,
 
 					SizedBox(
 						width: widget.width,
@@ -158,14 +181,10 @@ class SidebarState extends State<SideBar>{
 	Color _getCurrentSelectedColor(String routeName){
 
 		if(selectedRouteName == routeName){
-			if(selectedColor == null){
-				return Colors.cyan;
-			}
+			return selectedColor;
 		} else {
-			selectedColor = Colors.transparent;
+			return null;
 		}
-
-		return selectedColor;
 	}
 
 	Color _hoverOnCurrentRoute(String routeName){
@@ -207,24 +226,44 @@ class SidebarState extends State<SideBar>{
 	}
 
 	Widget _buildCompactRoute(String routeName, Icon icon, String extra){
+		double fontSize = 12.0;
 		return Container(
+			padding: EdgeInsets.symmetric(
+				vertical: 20.0,
+				horizontal: 20.0,
+			),
+			decoration: BoxDecoration(
+				border: Border(
+					bottom: BorderSide(
+						width: 2.0,
+						color: Color(0xFFF8F9FF),
+						// color: Colors.grey,
+						// style: BorderStyle.solid
+					)
+				)
+			),
 			child: Row(
+				crossAxisAlignment: CrossAxisAlignment.start,
 				children: [
 					icon,
 					SizedBox(width: 15.0),
 					Column(
+						crossAxisAlignment: CrossAxisAlignment.start,
 						children: [
 							Text(
 								routeName,
 								style: TextStyle(
-
+									fontSize: fontSize,
+									fontWeight: FontWeight.bold
 								),
 							),
-							SizedBox(height: 10.0,),
+							SizedBox(height: 5.0,),
 							Text(
 								extra,
 								style: TextStyle(
-
+									fontSize: fontSize,
+									color: Colors.grey,
+									fontWeight: FontWeight.bold
 								),
 							),
 						],
@@ -233,5 +272,4 @@ class SidebarState extends State<SideBar>{
 			),
 		);
 	}
-
 }
