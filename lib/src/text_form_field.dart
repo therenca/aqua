@@ -117,6 +117,19 @@ class _TextFormFieldCustomState extends State<TextFormFieldCustom>{
 			color: widget.focusedBorderColor
 		);
 
+		Widget _buildPrefixIcon(){
+			Widget _prefixIcon;
+
+			if(widget.prefixIconData != null){
+				_prefixIcon = Icon(
+					widget.prefixIconData, size: 17.0,
+					color: hasFocus ? widget.focusedPrefixIconColor : widget.prefixIconColor
+				);
+			}
+
+			return _prefixIcon;
+		}
+
 		return TextFormField(
 			style: TextStyle(
 				fontSize: widget.fontSize,
@@ -153,8 +166,7 @@ class _TextFormFieldCustomState extends State<TextFormFieldCustom>{
 				hintText: widget.hintText,
 				hintStyle: widget.hintTextStyle,
 				prefix: widget.prefix,
-				prefixIcon: widget.prefixIcon == null ? Icon(
-					widget.prefixIconData, size: 17.0, color: hasFocus ? widget.focusedPrefixIconColor : widget.prefixIconColor) : widget.prefixIcon,
+				prefixIcon: widget.prefixIcon == null ? _buildPrefixIcon() : widget.prefixIcon,
 				suffixIcon: widget.suffixIcon,
 				filled: widget.isFilled,
 				fillColor: widget.filledColor,
