@@ -13,6 +13,7 @@ export 'src/websocket.dart';
 export 'src/tab_header.dart';
 export 'src/dimensions.dart';
 export 'src/capitalize.dart';
+export 'src/table/table.dart';
 export 'src/generate_id.dart';
 export 'src/navigate_to.dart';
 export 'src/loading_icon.dart';
