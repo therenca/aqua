@@ -13,6 +13,7 @@ class TabHeader extends StatelessWidget{
 		for(int index=0; index<tabListing.length; index++){
 			Tab tab = Tab(
 				child: Container(
+					padding: EdgeInsets.only(left: 10.0),
 					alignment: Alignment.centerLeft,
 					child: Text(
 						tabListing[index]

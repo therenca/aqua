@@ -218,6 +218,7 @@ class SidebarState extends State<SideBar>{
 					Text(
 						routeName,
 						style: TextStyle(
+							fontSize: 13.0,
 							color: Colors.black,
 							fontWeight: FontWeight.bold
 						),

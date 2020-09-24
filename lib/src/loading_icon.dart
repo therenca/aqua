@@ -10,18 +10,18 @@ class LoadingIcon extends StatelessWidget{
 	final dynamic spinkitWidget;
 
 	LoadingIcon({
-		@required this.width, @required this.height, @required this.iconSize, @required this.iconColor, @required this.bgColor, this.spinkitWidget});
+		this.width=40.0, this.height=40.0, this.iconSize=40.0, this.iconColor, this.bgColor, this.spinkitWidget});
 
 	@override
 	Widget build(BuildContext context){
 		return Container(
-			color: bgColor,
 			width: width,
 			height: height,
+			color: bgColor == null ? Colors.transparent : bgColor,
 			child: Center(
 				child: spinkitWidget == null ? SpinKitWanderingCubes(
 					size: iconSize,
-					color: iconColor,
+					color: iconColor == null ? Colors.red : iconColor
 				) : spinkitWidget,
 			),
 		);
