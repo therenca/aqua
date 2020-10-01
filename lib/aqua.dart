@@ -1,5 +1,7 @@
 library aqua;
 
+export 'src/pref.dart';
+export 'src/try.dart';
 export 'src/client.dart';
 export 'src/mouse.dart';
 export 'src/post.dart';
@@ -8,7 +10,6 @@ export 'src/random.dart';
 export 'src/output.dart';
 export 'src/shadow.dart';
 export 'src/dropdown.dart';
-export 'src/sqflite.dart';
 export 'src/streamer.dart';
 export 'src/websocket.dart';
 export 'src/tab_header.dart';

@@ -77,7 +77,7 @@ class CustomNavigator{
 					Navigator.push(
 						context,
 						MaterialPageRoute(
-							maintainState: false,
+							maintainState: true,
 							builder: (BuildContext context) => buildScreen()
 						)
 					);

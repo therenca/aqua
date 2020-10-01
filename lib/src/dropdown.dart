@@ -3,10 +3,14 @@ import 'package:flutter/material.dart';
 class DropDown extends StatefulWidget {
 
 	final String initValue;
-	final List<String> items;
-	// final Function callback;
+	final List<dynamic> items;
+	final Function callback;
 
-	DropDown({@required this.initValue, @required this.items});
+	DropDown({
+		@required this.initValue,
+		@required this.items,
+		this.callback
+	});
 
 	@override
 	_DropDownState createState() => _DropDownState();
@@ -25,19 +29,23 @@ class _DropDownState extends State<DropDown>{
 	}
 
 	Widget _buildDropDown(BuildContext context){
-		return DropdownButton<String>(
+		return DropdownButton<dynamic>(
 			value: selectedValue,
 
 			style: TextStyle(color: Colors.white),
 			underline: Container(),
-			onChanged: (String newValue){
+			onChanged: (dynamic newValue) async {
 				setState(() {
 					selectedValue = newValue;
 				});
+
+				if(widget.callback != null){
+					await widget.callback(newValue);
+				}
 			},
 
 			items: widget.items
-				.map<DropdownMenuItem<String>>((String value){
+				.map<DropdownMenuItem<String>>((dynamic value){
 					return DropdownMenuItem<String>(
 						value: value,
 						child: Text(value),

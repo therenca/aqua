@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
@@ -65,10 +66,15 @@ class Client {
 		} else {
 			uri = httpUri(method);
 		}
+		pretifyOutput('[$_now][POSTED TO] $uri');
 		switch(method){
 			case 'POST': {
 				try {
-					response = await http.post(uri.toString(), body: query);
+					response = await http.post(
+						uri.toString(),
+						headers: {HttpHeaders.contentTypeHeader: 'application/json'},
+						body: jsonEncode(query),
+					);
 				} catch(e){
 					error = e.toString();
 				}
@@ -92,7 +98,7 @@ class Client {
 				pretifyOutput('[$_now][HTTP ERROR] $error', color: 'red');
 				return;
 			} else {
-				pretifyOutput('[$_now][SERVER RESPONSE][${response.statusCode}] ${response.body}]');
+				pretifyOutput('[$_now][SERVER RESPONSE][${response.statusCode}] ${response.body}');
 			}
 
 		}
