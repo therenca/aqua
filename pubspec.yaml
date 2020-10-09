@@ -19,6 +19,7 @@ dependencies:
   provider: ^4.3.2+1
   flutter_icons: ^1.1.0
   shared_preferences: ^0.5.12
+  palette_generator: ^0.2.3
 
 dev_dependencies:
   flutter_test:

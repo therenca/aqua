@@ -20,6 +20,7 @@ export 'src/navigate_to.dart';
 export 'src/loading_icon.dart';
 export 'src/google_fonts.dart';
 export 'src/request_focus.dart';
+export 'src/dominant_color.dart';
 export 'src/circle_clipper.dart';
 export 'src/text_form_field.dart';
 export 'src/background_image.dart';
