@@ -9,8 +9,8 @@ class Client {
 	String serverIp;
 	int serverPort;
 	String path;
-	// Map <String, dynamic>query;
-	dynamic query;
+	Map <String, dynamic>query;
+	// dynamic query;
 	String method;
 	bool isSecured;
 	bool verbose;

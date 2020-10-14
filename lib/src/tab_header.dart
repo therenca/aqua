@@ -8,6 +8,7 @@ class TabHeader extends StatelessWidget{
 	final Border border;
 	final Function onTap;
 	final TabController controller;
+	final double borderRadius;
 
 	TabHeader({
 		@required this.tabListing,
@@ -15,7 +16,8 @@ class TabHeader extends StatelessWidget{
 		this.underline,
 		this.border,
 		this.onTap,
-		this.controller
+		this.controller,
+		this.borderRadius
 	});
 
 	Widget _buildTabHeader(BuildContext context){
@@ -49,7 +51,7 @@ class TabHeader extends StatelessWidget{
 			indicatorColor: underline,
 			indicator: bgColor != null ? BoxDecoration(
 				color: bgColor.withOpacity(0.6),
-				borderRadius: BorderRadius.circular(25.0),
+				borderRadius: borderRadius != null ? BorderRadius.circular(borderRadius) : null,
 			) : null,
 			tabs: tabs,
 			onTap: onTap != null ? onTap : null,
