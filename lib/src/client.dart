@@ -10,7 +10,6 @@ class Client {
 	int serverPort;
 	String path;
 	Map <String, dynamic>query;
-	// dynamic query;
 	String method;
 	bool isSecured;
 	bool verbose;
@@ -37,7 +36,8 @@ class Client {
 	Uri httpUri (String method){
 		Uri uri;
 		if(query != null && method == 'GET'){	
-			uri = Uri.http('$serverIp:$serverPort', path, query);
+			Map<String, String> _query = query;
+			uri = Uri.http('$serverIp:$serverPort', path, _query);
 		} else {
 			uri = Uri.http('$serverIp:$serverPort', path);
 		}
