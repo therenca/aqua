@@ -47,8 +47,9 @@ class Client {
 
 	Uri httpsUri (String method){
 		Uri uri;
-		if(query != null && method == 'GET'){	
-			uri = Uri.https('$serverIp:$serverPort', path, query);
+		if(query != null && method == 'GET'){
+			Map<String, String> _query = query.cast<String, String>();	
+			uri = Uri.https('$serverIp:$serverPort', path, _query);
 		} else {
 			uri = Uri.https('$serverIp:$serverPort', path);
 		}
@@ -90,7 +91,6 @@ class Client {
 				}
 				break;
 			}
-
 		}
 
 		if(verbose){

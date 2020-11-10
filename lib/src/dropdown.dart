@@ -5,10 +5,12 @@ class DropDown extends StatefulWidget {
 	final String initValue;
 	final List<dynamic> items;
 	final Function callback;
+	final TextStyle textStyle;
 
 	DropDown({
 		@required this.initValue,
 		@required this.items,
+		this.textStyle,
 		this.callback
 	});
 
@@ -31,8 +33,6 @@ class _DropDownState extends State<DropDown>{
 	Widget _buildDropDown(BuildContext context){
 		return DropdownButton<dynamic>(
 			value: selectedValue,
-
-			style: TextStyle(color: Colors.white),
 			underline: Container(),
 			onChanged: (dynamic newValue) async {
 				setState(() {
@@ -48,7 +48,12 @@ class _DropDownState extends State<DropDown>{
 				.map<DropdownMenuItem<String>>((dynamic value){
 					return DropdownMenuItem<String>(
 						value: value,
-						child: Text(value),
+						child: Text(
+							value,
+							style: widget.textStyle == null ? TextStyle(
+								color: Colors.black,
+							) : widget.textStyle
+						),
 					);
 				}).toList()
 		);
