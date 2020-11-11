@@ -339,10 +339,10 @@ class PlayState extends State<Play>{
 }
 ```
 
-**`DESKTOP ONLY`** [Desktop Navigator](#desktop-navigator), a bit of boilerplate code is needed for this to work ...
+**`DESKTOP ONLY`** [Desktop Navigator](#desktop-navigator), a bit of boilerplate code is needed for this to work ...<br>
 To setup your environment for desktop, click [here](https://flutter.dev/desktop)
 
-Copy paste the code below to render a screen like this:
+Copy paste the code below to render a screen like this:<br/>
 ![Navigator in Action](readme/window_nav.gif)
 
 ```dart
