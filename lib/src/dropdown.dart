@@ -24,7 +24,8 @@ class _DropDownState extends State<DropDown>{
 	String selectedValue;
 
 	String _getSelectedValue(){
-		return selectedValue == null ? widget.initValue : selectedValue;
+		// return selectedValue == null ? widget.initValue : selectedValue;
+		return selectedValue == null ? widget.items.first : widget.items.contains(selectedValue) ? selectedValue : widget.items.first;
 	}
 
 	Widget _buildDropDown(BuildContext context){
