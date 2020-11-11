@@ -23,16 +23,13 @@ class _DropDownState extends State<DropDown>{
 
 	String selectedValue;
 
-	@override
-	void initState(){
-		super.initState();
-
-		selectedValue = widget.initValue;
+	String _getSelectedValue(){
+		return selectedValue == null ? widget.initValue : selectedValue;
 	}
 
 	Widget _buildDropDown(BuildContext context){
 		return DropdownButton<dynamic>(
-			value: selectedValue,
+			value: _getSelectedValue(),
 			underline: Container(),
 			onChanged: (dynamic newValue) async {
 				setState(() {
