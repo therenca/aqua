@@ -388,8 +388,8 @@ class ShellState extends State<Shell>{
 		);
 
 		Widget firstWidget = Container(
-			width: windowWidth,
-			height: windowHeight,
+			width: contentWindowWidth,
+			height: aqua.Dimensions.height,
 			color: Colors.blue
 		);
 
@@ -411,7 +411,7 @@ class ShellState extends State<Shell>{
 								),
 								routes: generatedRoutes,
 								bgColors: <Color>[
-									Colors.blue
+									Colors.blue,
 									Colors.blueAccent
 								],
 								hoverColor: Colors.brown.withOpacity(0.5),
@@ -454,7 +454,16 @@ class ShellState extends State<Shell>{
 				'window': Container(
 					width: windowWidth,
 					height: windowHeight,
-					color: Colors.blue
+					color: Colors.white,
+					child: Center(
+						child: Text(
+							'Home',
+							style: TextStyle(
+								color: Colors.black,
+								fontWeight: FontWeight.bold
+							),
+						)
+					),
 				),
 				'icon': _buildIconHelper(Icons.home)
 			},
@@ -462,8 +471,35 @@ class ShellState extends State<Shell>{
 				'window': Container(
 					width: windowWidth,
 					height: windowHeight,
+					color: Colors.white,
+					child: Center(
+						child: Text(
+							'Search',
+							style: TextStyle(
+								color: Colors.black,
+								fontWeight: FontWeight.bold
+							),
+						)
+					),
 				),
 				'icon': _buildIconHelper(Icons.search)
+			},
+			'Settings': {
+				'window': Container(
+					width: windowWidth,
+					height: windowHeight,
+					color: Colors.white,
+					child: Center(
+						child: Text(
+							'Settings',
+							style: TextStyle(
+								color: Colors.black,
+								fontWeight: FontWeight.bold
+							),
+						)
+					),
+				),
+				'icon': _buildIconHelper(Icons.settings)
 			}
 		};
 	}
