@@ -339,7 +339,12 @@ class PlayState extends State<Play>{
 }
 ```
 
-**`DESKTOP ONLY`** Desktop Navigator, a bit of boilerplate code is needed for this to work ... 
+**`DESKTOP ONLY`** [Desktop Navigator](#desktop-navigator), a bit of boilerplate code is needed for this to work ...
+To setup your environment for desktop, click [here](https://flutter.dev/desktop)
+
+Copy paste the code below to render a screen like this:
+![Navigator in Action](readme/window_nav.gif)
+
 ```dart
 import 'dart:async';
 import 'package:flutter/material.dart';
@@ -387,10 +392,22 @@ class ShellState extends State<Shell>{
 			aqua.Dimensions.height
 		);
 
+		var textStyle = TextStyle(
+			fontSize: 30.0,
+			color: Colors.white,
+			fontWeight: FontWeight.bold
+		);
+
 		Widget firstWidget = Container(
 			width: contentWindowWidth,
 			height: aqua.Dimensions.height,
-			color: Colors.blue
+			color: Colors.purple,
+			child: Center(
+				child: Text(
+					'Home',
+					style: textStyle
+				)
+			),
 		);
 
 		return Scaffold(
@@ -407,7 +424,16 @@ class ShellState extends State<Shell>{
 								header: Container(
 									width: navWidth,
 									height: 100.0,
-									color: Colors.red
+									color: Colors.red,
+									child: Center(
+										child: Text(
+											'Header',
+											style: TextStyle(
+												color: Colors.white,
+												fontWeight: FontWeight.bold
+											),
+										),
+									),
 								),
 								routes: generatedRoutes,
 								bgColors: <Color>[
@@ -445,6 +471,12 @@ class ShellState extends State<Shell>{
 
 	Map<String, Map<String, dynamic>> _buildGeneratedRoutes(double windowWidth, double windowHeight){
 
+		var textStyle = TextStyle(
+			fontSize: 30.0,
+			color: Colors.white,
+			fontWeight: FontWeight.bold
+		);
+
 		Function _buildIconHelper = (IconData iconData){
 			return Icon(iconData, color: Colors.black, size: 15.0,);
 		};
@@ -454,14 +486,11 @@ class ShellState extends State<Shell>{
 				'window': Container(
 					width: windowWidth,
 					height: windowHeight,
-					color: Colors.white,
+					color: Colors.purple,
 					child: Center(
 						child: Text(
 							'Home',
-							style: TextStyle(
-								color: Colors.black,
-								fontWeight: FontWeight.bold
-							),
+							style: textStyle
 						)
 					),
 				),
@@ -471,16 +500,24 @@ class ShellState extends State<Shell>{
 				'window': Container(
 					width: windowWidth,
 					height: windowHeight,
-					color: Colors.white,
-					child: Center(
-						child: Text(
-							'Search',
-							style: TextStyle(
-								color: Colors.black,
-								fontWeight: FontWeight.bold
+					child: Stack(
+						children: [
+							aqua.Shadow(
+								height: windowWidth,
+								width: windowHeight,
+								colors: [
+									Colors.green,
+									Colors.teal
+								],
 							),
-						)
-					),
+							Center(
+								child: Text(
+									'Search',
+									style: textStyle
+								)
+							),
+						],
+					)
 				),
 				'icon': _buildIconHelper(Icons.search)
 			},
@@ -488,14 +525,11 @@ class ShellState extends State<Shell>{
 				'window': Container(
 					width: windowWidth,
 					height: windowHeight,
-					color: Colors.white,
+					color: Colors.indigo,
 					child: Center(
 						child: Text(
 							'Settings',
-							style: TextStyle(
-								color: Colors.black,
-								fontWeight: FontWeight.bold
-							),
+							style: textStyle
 						)
 					),
 				),
