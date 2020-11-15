@@ -8,8 +8,8 @@ class DropDown extends StatefulWidget {
 	final TextStyle textStyle;
 
 	DropDown({
-		@required this.initValue,
 		@required this.items,
+		this.initValue,
 		this.textStyle,
 		this.callback
 	});
@@ -25,7 +25,9 @@ class _DropDownState extends State<DropDown>{
 
 	String _getSelectedValue(){
 		// return selectedValue == null ? widget.initValue : selectedValue;
-		return selectedValue == null ? widget.items.first : widget.items.contains(selectedValue) ? selectedValue : widget.items.first;
+		// return selectedValue == null ? widget.items.first : widget.items.contains(selectedValue) ? selectedValue : widget.items.first;
+
+		return selectedValue == null ? widget.initValue == null ? widget.items.first : widget.initValue : widget.items.contains(selectedValue) ? selectedValue : widget.items.first;
 	}
 
 	Widget _buildDropDown(BuildContext context){
