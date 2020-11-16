@@ -24,6 +24,7 @@ export 'src/pretify_number.dart';
 export 'src/dominant_color.dart';
 export 'src/circle_clipper.dart';
 export 'src/text_form_field.dart';
+export 'src/center_in_column.dart';
 export 'src/background_image.dart';
 export 'src/windows/navigation.dart';
 export 'src/graphics/smooth_corner.dart';

@@ -105,6 +105,12 @@ class _TextFormFieldCustomState extends State<TextFormFieldCustom>{
 		}
 	}
 
+	@override
+	void dispose(){
+		widget.controller?.dispose();
+		super.dispose();
+	}
+
 	Widget _buildTextFormField(BuildContext context){
 
 		BorderSide borderSide = BorderSide(
