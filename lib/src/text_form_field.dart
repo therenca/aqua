@@ -107,7 +107,11 @@ class _TextFormFieldCustomState extends State<TextFormFieldCustom>{
 
 	@override
 	void dispose(){
-		widget.controller?.dispose();
+		// throws the following error
+		// A TextEditingController was used after being disposed.
+		// widget.controller?.dispose();
+
+		// you must dispose your own controller
 		super.dispose();
 	}
 
