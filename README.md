@@ -339,7 +339,8 @@ class PlayState extends State<Play>{
 }
 ```
 
-**`DESKTOP ONLY`** [Desktop Navigator](#desktop-navigator), a bit of boilerplate code is needed for this to work ...<br>
+**`FLUTTER DEVICES`** [Window Navigator](#window-navigator), a bit of boilerplate code is needed for this to work ...<br>
+To setup your environment for mobile, click [here](https://flutter.dev/)
 To setup your environment for desktop, click [here](https://flutter.dev/desktop)
 
 Copy paste the code below to render a screen like this:<br/>
