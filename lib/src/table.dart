@@ -126,11 +126,11 @@ class _TableState extends State<Table>{
 												}),
 												selected: selectedRowsState[index],
 												onSelectChanged: (bool value){
-													selectedRowsState[index] = value;
-													setState((){});
 													if(widget.onSelectRaw != null){
 														// var savedValue = selectedRowsState[index];
 														// print('index: $index: $savedValue');
+														selectedRowsState[index] = value;
+														setState((){});
 														widget.onSelectRaw(index, value);
 													}
 												},
