@@ -141,13 +141,15 @@ Widget build(BuildContext context){
 						tabListing: ['car', 'transit', 'bike'],
 					),
 
-					TabBarView(
-						children: [
-							Icon(Icons.directions_car),
-							Icon(Icons.directions_transit),
-							Icon(Icons.directions_bike),
-						],
-					),
+					Expanded(
+						child: TabBarView(
+							children: [
+								Icon(Icons.directions_car),
+								Icon(Icons.directions_transit),
+								Icon(Icons.directions_bike),
+							],
+						),
+					)
 				],
 			),
 		)
