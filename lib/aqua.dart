@@ -1,11 +1,12 @@
 library aqua;
 
 export 'src/log.dart';
-export 'src/pref.dart';
 export 'src/try.dart';
-export 'src/client.dart';
-export 'src/mouse.dart';
+export 'src/pref.dart';
 export 'src/line.dart';
+export 'src/table.dart';
+export 'src/mouse.dart';
+export 'src/client.dart';
 export 'src/random.dart';
 export 'src/output.dart';
 export 'src/shadow.dart';
