@@ -12,4 +12,7 @@ Added `textStyle` property to `aqua.Dropdown`
 Readme updated
 
 ### 1.0.2
-Added `aqua.Table`
+#### Added
+ `aqua.Table`
+ Added `textStyle` property to `aqua.TabHeader`
+

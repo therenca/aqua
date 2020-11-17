@@ -9,6 +9,7 @@ class TabHeader extends StatelessWidget{
 	final Function onTap;
 	final TabController controller;
 	final double borderRadius;
+	final TextStyle textStyle;
 
 	TabHeader({
 		@required this.tabListing,
@@ -17,7 +18,8 @@ class TabHeader extends StatelessWidget{
 		this.border,
 		this.onTap,
 		this.controller,
-		this.borderRadius
+		this.borderRadius,
+		this.textStyle
 	});
 
 	Widget _buildTabHeader(BuildContext context){
@@ -38,7 +40,12 @@ class TabHeader extends StatelessWidget{
 					// 	)
 					// ) : null,
 					child: Text(
-						tabListing[index]
+						tabListing[index],
+						style: textStyle != null ? textStyle : TextStyle(
+							fontSize: 15.0,
+							color: Colors.black,
+							fontWeight: FontWeight.bold
+						),
 					),
 				),
 			);
