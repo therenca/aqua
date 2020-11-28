@@ -6,12 +6,14 @@ class DropDown extends StatefulWidget {
 	final List<dynamic> items;
 	final Function callback;
 	final TextStyle textStyle;
+	final Color dropdownColor;
 
 	DropDown({
 		@required this.items,
 		this.initValue,
 		this.textStyle,
-		this.callback
+		this.callback,
+		this.dropdownColor
 	});
 
 	@override
@@ -32,6 +34,7 @@ class _DropDownState extends State<DropDown>{
 
 	Widget _buildDropDown(BuildContext context){
 		return DropdownButton<dynamic>(
+			dropdownColor: widget.dropdownColor,
 			value: _getSelectedValue(),
 			underline: Container(),
 			onChanged: (dynamic newValue) async {

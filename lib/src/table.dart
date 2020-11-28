@@ -149,5 +149,4 @@ class _TableState extends State<Table>{
 
 	@override
 	Widget build(BuildContext context) => _buildTable(context);
-
 }

@@ -100,7 +100,7 @@ class _TextFormFieldCustomState extends State<TextFormFieldCustom>{
 		if(widget.focusNode != null){
 			widget.focusNode.addListener((){
 				hasFocus = widget.focusNode.hasFocus;
-				setState((){});
+				if(mounted) setState((){});
 			});
 		}
 	}
