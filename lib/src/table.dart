@@ -30,9 +30,15 @@ class _TableState extends State<Table>{
 	@override
 	void initState(){
 		super.initState();
-
 		selectedRowsState = List<bool>.generate(widget.rows.length, (index) => false);
 	}	
+
+	@override
+	void didUpdateWidget(Table oldWidget){
+		super.didUpdateWidget(oldWidget);
+
+		selectedRowsState = List<bool>.generate(widget.rows.length, (index) => false);
+	}
 
 	Widget _buildTable(BuildContext context){
 		return Container(
