@@ -4,8 +4,9 @@ class Table extends StatefulWidget {
 
 	final List<String> thead;
 	final List<List<dynamic>> rows;
-	final Function onSelectRaw;
+	final Function onSelectRow;
 	final Function onSelectAll;
+	final List<Map<String, dynamic>> selectedRows;
 
 	Table({
 		this.thead = const ['TH1', 'TH2', 'TH3', 'TH4'],
@@ -14,8 +15,9 @@ class Table extends StatefulWidget {
 			['five', 'six', 'seven', 'eight'],
 			['nine', 'ten', 'eleven', 'twelve']
 		],
-		this.onSelectRaw,
+		this.onSelectRow,
 		this.onSelectAll,
+		this.selectedRows
 	});
 
 	@override
@@ -31,13 +33,14 @@ class _TableState extends State<Table>{
 	void initState(){
 		super.initState();
 		selectedRowsState = List<bool>.generate(widget.rows.length, (index) => false);
+		updateSelectedRowsState();
 	}	
 
 	@override
 	void didUpdateWidget(Table oldWidget){
 		super.didUpdateWidget(oldWidget);
-
 		selectedRowsState = List<bool>.generate(widget.rows.length, (index) => false);
+		updateSelectedRowsState();
 	}
 
 	Widget _buildTable(BuildContext context){
@@ -76,7 +79,7 @@ class _TableState extends State<Table>{
 										// ) 										
 									),
 									child: DataTable(
-										showCheckboxColumn: widget.onSelectRaw != null,
+										showCheckboxColumn: widget.onSelectRow != null,
 										onSelectAll: widget.onSelectAll != null ? widget.onSelectAll : null,
 										columnSpacing: 20.0,
 										columns: widget.thead.map((th){
@@ -132,12 +135,12 @@ class _TableState extends State<Table>{
 												}),
 												selected: selectedRowsState[index],
 												onSelectChanged: (bool value){
-													if(widget.onSelectRaw != null){
+													if(widget.onSelectRow != null){
 														// var savedValue = selectedRowsState[index];
 														// print('index: $index: $savedValue');
 														selectedRowsState[index] = value;
 														setState((){});
-														widget.onSelectRaw(index, value);
+														widget.onSelectRow(index, value, widget.rows[index]);
 													}
 												},
 												cells: tdListing
@@ -155,4 +158,16 @@ class _TableState extends State<Table>{
 
 	@override
 	Widget build(BuildContext context) => _buildTable(context);
+
+	void updateSelectedRowsState(){
+		if(widget.selectedRows != null){
+			for(var index=0; index<widget.selectedRows.length; index++){
+				var savedState = widget.selectedRows[index];
+				var savedIndex = savedState['index'];
+				selectedRowsState[savedIndex] = true;
+
+				setState((){});
+			}
+		}
+	}
 }
