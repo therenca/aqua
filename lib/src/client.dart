@@ -107,7 +107,7 @@ class Client {
 			if(json){
 				return jsonDecode(response.body);
 			} else {
-				return null;
+				return response.body;
 			}
 		}
 	}
