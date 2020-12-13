@@ -4,6 +4,7 @@ export 'src/log.dart';
 export 'src/try.dart';
 export 'src/pref.dart';
 export 'src/line.dart';
+export 'src/delay.dart';
 export 'src/table.dart';
 export 'src/mouse.dart';
 export 'src/client.dart';

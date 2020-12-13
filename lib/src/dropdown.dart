@@ -2,18 +2,22 @@ import 'package:flutter/material.dart';
 
 class DropDown extends StatefulWidget {
 
+	final ValueKey key;
 	final String initValue;
 	final List<dynamic> items;
 	final Function callback;
 	final TextStyle textStyle;
 	final Color dropdownColor;
+	final Function initCallback;
 
 	DropDown({
 		@required this.items,
+		this.key,
 		this.initValue,
 		this.textStyle,
 		this.callback,
-		this.dropdownColor
+		this.dropdownColor,
+		this.initCallback
 	});
 
 	@override
@@ -22,6 +26,12 @@ class DropDown extends StatefulWidget {
 }
 
 class _DropDownState extends State<DropDown>{
+
+	@override
+	void initState(){
+		super.initState();
+		widget.initCallback != null ? widget.initCallback() : print('');
+	}
 
 	String selectedValue;
 
@@ -34,6 +44,7 @@ class _DropDownState extends State<DropDown>{
 
 	Widget _buildDropDown(BuildContext context){
 		return DropdownButton<dynamic>(
+			key: widget.key,
 			dropdownColor: widget.dropdownColor,
 			value: _getSelectedValue(),
 			underline: Container(),
