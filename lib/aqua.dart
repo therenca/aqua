@@ -3,6 +3,7 @@ library aqua;
 export 'src/log.dart';
 export 'src/try.dart';
 export 'src/pref.dart';
+export 'src/epoch.dart';
 export 'src/line.dart';
 export 'src/delay.dart';
 export 'src/table.dart';

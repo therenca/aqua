@@ -14,3 +14,8 @@
 ### 1.0.3
 - remove dependencies and files
 
+### 1.0.4
+- added delay
+
+### 1.0.5
+- added epoch
