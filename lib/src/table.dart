@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 class Table extends StatefulWidget {
 
+	final TextStyle tdTextStyle;
+	final TextStyle theadTextStyle;
 	final List<String> thead;
 	final List<List<dynamic>> rows;
 	final Function onSelectRow;
@@ -17,7 +19,9 @@ class Table extends StatefulWidget {
 		],
 		this.onSelectRow,
 		this.onSelectAll,
-		this.selectedRows
+		this.selectedRows,
+		this.theadTextStyle,
+		this.tdTextStyle
 	});
 
 	@override
@@ -86,11 +90,11 @@ class _TableState extends State<Table>{
 											return DataColumn(
 												label: Text(
 													th,
-													style: TextStyle(
+													style: widget.theadTextStyle == null ? TextStyle(
 														fontSize: 13.0,
 														color: Colors.black,
 														fontWeight: FontWeight.bold
-													),
+													) : widget.theadTextStyle,
 												)
 											);
 										}).toList(),
@@ -106,11 +110,11 @@ class _TableState extends State<Table>{
 													tdWidget = Container(
 														child: Text(
 															td,
-															style: TextStyle(
+															style: widget.tdTextStyle == null ?  TextStyle(
 																fontSize: 12.0,
 																color: Colors.black,
 																fontWeight: FontWeight.bold,
-															),
+															) : widget.tdTextStyle,
 														),
 													);
 												} else if(td is Widget){

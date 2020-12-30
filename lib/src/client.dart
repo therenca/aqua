@@ -14,7 +14,7 @@ class Client {
 	bool isSecured;
 	bool verbose;
 	bool json;
-
+	Map<String, String> headers;
 	String _now;
 	final int ok = 200;
 
@@ -27,7 +27,8 @@ class Client {
 			this.query,
 			this.json=true,
 			this.verbose=false,
-			this.isSecured=false
+			this.isSecured=false,
+			this.headers
 		}){
 
 		_now = DateTime.now().toString();
@@ -36,7 +37,7 @@ class Client {
 	Uri httpUri (String method){
 		Uri uri;
 		if(query != null && method == 'GET'){	
-			Map<String, String> _query = query;
+			Map<String, String> _query = query.cast<String, String>();
 			uri = Uri.http('$serverIp:$serverPort', path, _query);
 		} else {
 			uri = Uri.http('$serverIp:$serverPort', path);
@@ -67,13 +68,21 @@ class Client {
 		} else {
 			uri = httpUri(method);
 		}
-		pretifyOutput('[$_now][POSTED TO] $uri');
+		if(verbose){
+			pretifyOutput('[$_now][$method] $uri');
+		}
+
+		var _headers = {HttpHeaders.contentTypeHeader: 'application/json'};
+		if(headers != null){
+			_headers.addAll(headers);
+		}
+		
 		switch(method){
 			case 'POST': {
 				try {
 					response = await http.post(
 						uri.toString(),
-						headers: {HttpHeaders.contentTypeHeader: 'application/json'},
+						headers: _headers,
 						body: jsonEncode(query),
 					);
 				} catch(e){
@@ -84,13 +93,29 @@ class Client {
 			}
 
 			case 'GET': {
+				
 				try {
-					response = await http.get(uri.toString());
+					response = await http.get(uri.toString(), headers: _headers);
 				} catch(e){
 					error = e.toString();
 				}
 				break;
 			}
+
+			case 'PUT': {
+				try{
+					response = await http.put(
+						uri.toString(),
+						headers: _headers,
+						body: jsonEncode(query)
+					);
+				} catch(e){
+					error = e.toString();
+				}
+
+				break;
+			}
+
 		}
 
 		if(verbose){
@@ -103,12 +128,17 @@ class Client {
 
 		}
 
-		if(response.statusCode == ok){
+		if(response!= null && response.statusCode == ok){
 			if(json){
 				return jsonDecode(response.body);
 			} else {
 				return response.body;
 			}
+		} else {
+			return {
+				'body': response.body,
+				'statusCode': response.statusCode
+			};
 		}
 	}
 }
