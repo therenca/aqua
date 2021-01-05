@@ -17,6 +17,9 @@ class Client {
 	Map<String, String> headers;
 	String _now;
 	final int ok = 200;
+	List<int> expectedStatusCodes; // anticipate successful response
+
+	int _statusCode;
 
 	final String header = '[CLIENT]';
 
@@ -28,11 +31,21 @@ class Client {
 			this.json=true,
 			this.verbose=false,
 			this.isSecured=false,
-			this.headers
+			this.headers,
+			this.expectedStatusCodes
 		}){
-
+		
+		if(expectedStatusCodes != null){
+			if(!expectedStatusCodes.contains(ok)){
+				expectedStatusCodes.add(ok);
+			}
+		}  else {
+			expectedStatusCodes = [ok];
+		}
 		_now = DateTime.now().toString();
 	}
+
+	int get statusCode => _statusCode;
 
 	Uri httpUri (String method){
 		Uri uri;
@@ -125,20 +138,17 @@ class Client {
 			} else {
 				pretifyOutput('[$_now][SERVER RESPONSE][${response.statusCode}] ${response.body}');
 			}
-
 		}
 
-		if(response!= null && response.statusCode == ok){
-			if(json){
-				return jsonDecode(response.body);
-			} else {
-				return response.body;
+		if(response != null){
+			_statusCode = response.statusCode;
+			if(expectedStatusCodes.contains(_statusCode)){
+				if(json){
+					return jsonDecode(response.body);
+				} else {
+					return response.body;
+				}
 			}
-		} else {
-			return {
-				'body': response.body,
-				'statusCode': response.statusCode
-			};
 		}
 	}
 }
