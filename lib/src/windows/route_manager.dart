@@ -65,6 +65,7 @@ class _RouteManagerState extends State<RouteManager>{
 			header: widget.header,
 			bgColors: widget.bgColors,
 			navStreamer: widget.navStreamer,
+			selectedColor: widget.selectedColor,
 		);
 	}
 

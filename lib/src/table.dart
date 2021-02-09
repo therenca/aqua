@@ -129,12 +129,9 @@ class _TableState extends State<Table>{
 												),
 												onSort: (columnIndex, sortAscending){
 													if(widget.sortColumnIndex != null){
-
-														_isAscending = !_isAscending;
-														setState((){});
-
 														if(columnIndex == widget.sortColumnIndex){
-															print('column: $columnIndex, sort: $sortAscending');
+															_isAscending = !_isAscending;
+															setState((){});
 															if(sortAscending){
 																mutableRows.sort((a, b) => a[widget.sortColumnIndex].compareTo(b[widget.sortColumnIndex]));
 															} else {
@@ -210,5 +207,4 @@ class _TableState extends State<Table>{
 
 	@override
 	Widget build(BuildContext context) => _buildTable(context);
-
 }

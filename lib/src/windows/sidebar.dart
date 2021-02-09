@@ -13,6 +13,7 @@ class SideBar extends StatefulWidget {
 	final Widget header;
 	final Alignment begin;
 	final Alignment end;
+	final Color selectedColor;
 	final List<Color> bgColors;
 	final aqua.NavigationStreamer navStreamer;
 	final Map<String, Map<String, dynamic>> routes;
@@ -26,7 +27,8 @@ class SideBar extends StatefulWidget {
 		this.header,
 		this.bgColors,
 		this.begin,
-		this.end
+		this.end,
+		this.selectedColor
 	});
 
 	@override
@@ -35,7 +37,6 @@ class SideBar extends StatefulWidget {
 
 class SidebarState extends State<SideBar>{
 
-	Color selectedColor;
 	bool isHovering = false;
 	String selectedRouteName;
 
@@ -47,19 +48,20 @@ class SidebarState extends State<SideBar>{
 			aqua.pretifyOutput('[SETTINGS MINI SIDEBAR] data from nav stream: $data');
 			
 			selectedRouteName = data['routeName'];
-			selectedColor = data['selectedColor'];
+			// selectedColor = data['selectedColor'];
 		});
 	}
 
 	List<Widget> _buildRoutes(){
 
+		int tracker = 1;
 		List<Widget> routeWidgets = [];
 		widget.routes.forEach((routeName, routeInfo){
 			Widget route;
 			switch(widget.type){
 
 				case 'standard': {
-					route = _buildStandardRoute(routeName, routeInfo['icon']);
+					route = _buildStandardRoute(routeName, routeInfo['icon'], tracker);
 					break;
 				}
 
@@ -110,6 +112,8 @@ class SidebarState extends State<SideBar>{
 			);
 
 			routeWidgets.add(addMouseRegion);
+
+			tracker++;
 		});
 
 		if(widget.header != null){
@@ -121,11 +125,15 @@ class SidebarState extends State<SideBar>{
 
 	Widget _buildSideBar(BuildContext context){
 
+		var isPositionedBottom = false;
 		List<Widget> nav = _buildRoutes();
 
 		Widget settings;
 		if(widget.type == 'standard'){
-			settings = nav.removeAt(nav.length - 1);
+			if(widget.header != null && nav.length > 2) {
+				isPositionedBottom = true;
+				settings = nav.removeAt(nav.length - 1);
+			}
 		}
 
 		Widget background;
@@ -168,7 +176,7 @@ class SidebarState extends State<SideBar>{
 						)
 					),
 
-					widget.type == 'standard' ? Positioned(
+					widget.type == 'standard' && isPositionedBottom ? Positioned(
 						bottom: 10.0,
 						child: settings,
 					) : Container()
@@ -181,10 +189,12 @@ class SidebarState extends State<SideBar>{
 	@override
 	Widget build(BuildContext context) => _buildSideBar(context);
 
-	Color _getCurrentSelectedColor(String routeName){
+	Color _getCurrentSelectedColor(String routeName, int tracker){
 
-		if(selectedRouteName == routeName){
-			return selectedColor;
+		if(selectedRouteName == null && tracker == 1){
+			return widget.selectedColor;
+		} else if(selectedRouteName == routeName){
+			return widget.selectedColor;
 		} else {
 			return Colors.transparent;
 		}
@@ -201,10 +211,10 @@ class SidebarState extends State<SideBar>{
 		return hoverColor;
 	}
 
-	Widget _buildStandardRoute(String routeName, Icon icon){
+	Widget _buildStandardRoute(String routeName, Icon icon, int tracker){
 		return  AnimatedContainer(
 			duration: Duration(milliseconds: 300),
-			color: isHovering ? _hoverOnCurrentRoute(routeName) : _getCurrentSelectedColor(routeName),
+			color: isHovering ? _hoverOnCurrentRoute(routeName) : _getCurrentSelectedColor(routeName, tracker),
 			padding: EdgeInsets.only(
 				top: 10.0,
 				left: 20.0,
