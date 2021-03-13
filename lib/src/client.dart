@@ -70,10 +70,11 @@ class Client {
 		return uri;
 	}
 
-	Future<dynamic> getResponse({String method='POST'}) async {
+	Future<dynamic> getResponse({String method='POST', Map<String, String> multipartInfo, Map<String, String> files}) async {
 		
 		String error;
-		http.Response response;
+		// http.Response response;
+		var response;
 
 		var uri;
 		if(isSecured){
@@ -93,11 +94,30 @@ class Client {
 		switch(method){
 			case 'POST': {
 				try {
-					response = await http.post(
-						uri.toString(),
-						headers: _headers,
-						body: jsonEncode(query),
-					);
+					if(multipartInfo != null || files != null){
+						var request = http.MultipartRequest('POST', uri);
+						request.fields.addAll(multipartInfo != null ? multipartInfo : <String, String>{});
+
+						if(files != null){
+							files.forEach((String fileName, String filePath) async {
+								var file = await http.MultipartFile.fromPath(
+									fileName,
+									filePath
+								);
+								request.files.add(file);
+							});
+						}
+
+						response = await request.send();
+						
+					} else {
+
+						response = await http.post(
+							uri,
+							headers: _headers,
+							body: jsonEncode(query),
+						);
+					}
 				} catch(e){
 					error = e.toString();
 				}
@@ -108,7 +128,7 @@ class Client {
 			case 'GET': {
 				
 				try {
-					response = await http.get(uri.toString(), headers: _headers);
+					response = await http.get(uri, headers: _headers);
 				} catch(e){
 					error = e.toString();
 				}
@@ -118,7 +138,7 @@ class Client {
 			case 'PUT': {
 				try{
 					response = await http.put(
-						uri.toString(),
+						uri,
 						headers: _headers,
 						body: jsonEncode(query)
 					);
@@ -128,15 +148,18 @@ class Client {
 
 				break;
 			}
-
 		}
 
+		var isFormData = multipartInfo != null || files != null ? true : false;
 		if(verbose){
 			if(error != null){
 				pretifyOutput('[$_now][HTTP ERROR] $error', color: 'red');
 				return;
 			} else {
-				pretifyOutput('[$_now][SERVER RESPONSE][${response.statusCode}] ${response.body}');
+				pretifyOutput('[$_now][SERVER RESPONSE][${response.statusCode}]', endLine: isFormData ? '\n' : ' ');
+				if(!isFormData){
+					pretifyOutput('${response.body}');
+				}
 			}
 		}
 
@@ -144,9 +167,13 @@ class Client {
 			_statusCode = response.statusCode;
 			if(expectedStatusCodes.contains(_statusCode)){
 				if(json){
-					return jsonDecode(response.body);
+					if(!isFormData){
+						return jsonDecode(response.body);
+					}
 				} else {
-					return response.body;
+					if(!isFormData){
+						return response.body;
+					}
 				}
 			}
 		}

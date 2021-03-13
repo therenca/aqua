@@ -1,18 +1,16 @@
+import 'dart:io';
+import 'dart:async';
 import 'package:colorize/colorize.dart';
+import 'log.dart';
 
-void formatError(String info, {String error=''}){
-
-	Colorize errorInfo = Colorize('$info: $error');
-	errorInfo.red();
-	// errorInfo.bgWhite();
-	errorInfo.blink();
-	// errorInfo.apply();
-
-	print(errorInfo);
-
-}
-
-void pretifyOutput(String info, {String color=''}){
+Future<void> pretifyOutput(String info,
+	{
+		String color='', 
+		String bgColor='',
+		String path,
+		bool clear=false,
+		String endLine,
+	}) async {
 
 	Colorize toPretify = Colorize(info);
 
@@ -20,25 +18,83 @@ void pretifyOutput(String info, {String color=''}){
 
 		case 'white': {
 			toPretify.white();
+			break;
 		}
-		break;
 
 		case 'red': {
 			toPretify.red();
+			break;
 		}
 		break;
 
 		case 'yellow': {
 			toPretify.yellow();
+			break;
+		}
+
+		case 'magenta': {
+			toPretify.magenta();
+			break;
+		}
+
+		case 'cyan': {
+			toPretify.cyan();
+			break;
 		}
 		break;
+
+		case 'blue': {
+			toPretify.blue();
+			break;
+		}
 
 		default: {
 			toPretify.green();
+			break;
 		}
-		break;
 	}
 
-	print(toPretify);
+	if(bgColor.isNotEmpty){
 
+		switch(bgColor){
+
+			case 'white': {
+				toPretify.bgWhite();
+				break;
+			}
+
+			case 'red': {
+				toPretify.bgRed();
+				break;
+			}
+
+			case 'yellow': {
+				toPretify.bgYellow();
+				break;
+			}
+
+			case 'magenta': {
+				toPretify.bgMagenta();
+				break;
+			}
+
+			case 'cyan': {
+				toPretify.bgCyan();
+				break;
+			}
+
+			case 'blue': {
+				toPretify.bgBlue();
+				break;
+			}
+		}
+	}
+
+	// print(toPretify);
+	var end = endLine ?? '\n';
+	stdout.write('$toPretify$end');
+
+	if(path != null){
+		await log(info, logFile: path, clear: clear);
+	}
 }

@@ -5,7 +5,7 @@ class Pref {
 
 	static dynamic get(String key) async {
 		SharedPreferences pref = await SharedPreferences.getInstance();
-		dynamic value = await pref.get(key);
+		dynamic value =  pref.get(key);
 		if(value != null){
 			return jsonDecode(value);
 		} else {

@@ -42,7 +42,7 @@ class WebsocketHandler {
 			isConnected = true;
 		} catch(error){
 			isConnected = false;
-			formatError('[WEBSOCKET] while connecting to $websocketUrl', error: error.toString());
+			pretifyOutput('[WEBSOCKET] while connecting to $websocketUrl: ${error.toString()}', color: 'red');
 		}
 
 		if(isConnected){
@@ -64,7 +64,7 @@ class WebsocketHandler {
 				decodedData = jsonDecode(data);
 				isDecoded = true;
 			} catch(error){
-				formatError('[WEBSOCKETS] while decoding data from channel $channelName', error: error.toString());
+				pretifyOutput('[WEBSOCKETS] while decoding data from channel $channelName: ${error.toString()}', color: 'red');
 				isDecoded = false;
 			}
 
@@ -78,7 +78,7 @@ class WebsocketHandler {
 		try{
 			_channel.sink.add(data);
 		} catch(error){
-			formatError('[WEBSOCKET | ${channelName.toUpperCase()} | $username]', error: error.toString());
+			pretifyOutput('[WEBSOCKET | ${channelName.toUpperCase()} | $username]: ${error.toString()}', color: 'red');
 		}
 	}
 

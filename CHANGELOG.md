@@ -19,3 +19,6 @@
 
 ### 1.0.5
 - added epoch
+
+### 1.0.6
+- automatic navigation selection on load
