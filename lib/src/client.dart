@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:convert';
+import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 
 import 'output.dart';
@@ -177,5 +178,58 @@ class Client {
 				}
 			}
 		}
+	}
+
+	Future<Uint8List> downloadBinary({String method='POST', String size='small', String path}) async {
+		var uri;
+		Uint8List binary;
+		if(isSecured){
+			uri = httpsUri(method);
+		} else {
+			uri = httpUri(method);
+		}
+
+		var client = http.Client();
+		var request = http.Request(method, uri);
+		http.StreamedResponse response = await client.send(request);
+
+		switch(size){
+
+			case 'small': {
+				binary =  await response.stream.toBytes();
+				if(path != null){
+					var file = File(path);
+					await file.writeAsBytes(binary);
+				}
+				break;
+			}
+
+			case 'large': {
+
+				var length = response.contentLength;
+				var received = 0;
+
+				var file = File(path);
+				var sink = file.openWrite();
+				List<int> fullBytes = [];
+				await response.stream.map((List<int> bytes){
+					received += bytes.length;
+					fullBytes += bytes;
+
+					if(verbose){
+						pretifyOutput('[DOWNLOAD | $size] $received / $length');
+					}
+
+					return bytes;
+				}).pipe(sink);
+
+				sink.close();
+				binary = Uint8List.fromList(fullBytes);
+
+				break;
+			}
+		}
+
+		return binary;
 	}
 }
