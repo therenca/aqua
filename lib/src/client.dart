@@ -192,7 +192,8 @@ class Client {
 		var client = http.Client();
 		var request = http.Request(method, uri);
 		http.StreamedResponse response = await client.send(request);
-
+		_statusCode = response.statusCode;
+		
 		switch(size){
 
 			case 'small': {

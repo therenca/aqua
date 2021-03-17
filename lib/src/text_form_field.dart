@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 
 class  TextFormFieldCustom extends StatefulWidget {
@@ -46,6 +47,8 @@ class  TextFormFieldCustom extends StatefulWidget {
 
 	final Color cursorColor;
 
+	final StreamController streamController;
+
 	TextFormFieldCustom({
 		this.prefixIcon,
 		this.suffixIcon,
@@ -81,7 +84,8 @@ class  TextFormFieldCustom extends StatefulWidget {
 		this.labelTextStyle,
 		this.isFilled=false,
 		this.filledColor,
-		this.cursorColor=Colors.red
+		this.cursorColor=Colors.red,
+		this.streamController
 	});
 
 	@override
@@ -182,7 +186,15 @@ class _TextFormFieldCustomState extends State<TextFormFieldCustom>{
 				fillColor: widget.filledColor,
 			),
 			cursorColor: widget.cursorColor,
-			onChanged: widget.onChanged,
+			onChanged: (String value){
+				// var checked;
+				if(widget.onChanged != null){
+					widget.onChanged(value, widget.controller);
+					if(widget.streamController != null){
+						widget.streamController.sink.add(value);
+					}
+				}
+			}
 		);
 	}
 

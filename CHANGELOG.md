@@ -8,7 +8,7 @@
 - Readme updated
 
 ### 1.0.2
-- Added `aqua.Table`\
+- Added `aqua.Table`
 - Added `textStyle` property to `aqua.TabHeader`
 
 ### 1.0.3
@@ -22,3 +22,6 @@
 
 ### 1.0.6
 - automatic navigation selection on load
+
+### 1.0.7
+- Supports upload and download of binary blobs
