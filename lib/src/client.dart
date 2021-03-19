@@ -151,30 +151,25 @@ class Client {
 			}
 		}
 
-		var isFormData = multipartInfo != null || files != null ? true : false;
 		if(verbose){
 			if(error != null){
 				pretifyOutput('[$_now][HTTP ERROR] $error', color: 'red');
 				return;
 			} else {
-				pretifyOutput('[$_now][SERVER RESPONSE][${response.statusCode}]', endLine: isFormData ? '\n' : ' ');
-				if(!isFormData){
-					pretifyOutput('${response.body}');
-				}
+				pretifyOutput('[$_now][SERVER RESPONSE][${response.statusCode}] ${response.body}');
 			}
 		}
 
 		if(response != null){
 			_statusCode = response.statusCode;
 			if(expectedStatusCodes.contains(_statusCode)){
-				if(json){
-					if(!isFormData){
-						return jsonDecode(response.body);
-					}
+				// thoughts
+				// we are using contain because the full header could return 
+				// e.g 'application/json; charset=utf-8
+				if(response.headers['content-type'].contains('application/json')){
+					return jsonDecode(response.body);
 				} else {
-					if(!isFormData){
-						return response.body;
-					}
+					return response.body;
 				}
 			}
 		}
