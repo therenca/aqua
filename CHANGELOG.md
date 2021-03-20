@@ -25,3 +25,5 @@
 
 ### 1.0.7
 - Supports upload and download of binary blobs
+
+### 1.0.8

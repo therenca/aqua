@@ -151,25 +151,33 @@ class Client {
 			}
 		}
 
-		if(verbose){
-			if(error != null){
-				pretifyOutput('[$_now][HTTP ERROR] $error', color: 'red');
-				return;
-			} else {
-				pretifyOutput('[$_now][SERVER RESPONSE][${response.statusCode}] ${response.body}');
-			}
-		}
-
+		var bodyStr;
 		if(response != null){
+
+			if(response is http.StreamedResponse){
+				bodyStr = await response.stream.bytesToString();
+			} else {
+				bodyStr = response.body;
+			}
+
+			if(verbose){
+				if(error != null){
+					pretifyOutput('[$_now][HTTP ERROR] $error', color: 'red');
+					return;
+				} else {
+					pretifyOutput('[$_now][SERVER RESPONSE][${response.statusCode}] $bodyStr');
+				}
+			}
+
 			_statusCode = response.statusCode;
 			if(expectedStatusCodes.contains(_statusCode)){
 				// thoughts
 				// we are using contain because the full header could return 
 				// e.g 'application/json; charset=utf-8
 				if(response.headers['content-type'].contains('application/json')){
-					return jsonDecode(response.body);
+					return jsonDecode(bodyStr);
 				} else {
-					return response.body;
+					return bodyStr;
 				}
 			}
 		}
