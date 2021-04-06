@@ -27,3 +27,9 @@
 - Supports upload and download of binary blobs
 
 ### 1.0.8
+
+### 1.0.9
+- Body for StreamedResponse converted from bytes to string
+
+### 1.1.0
+- Added snackbar, can specify textColor, hoverTextColor for navigation

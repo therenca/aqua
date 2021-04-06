@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class Pref {
 
-	static dynamic get(String key) async {
+	static Future<dynamic> get(String key) async {
 		SharedPreferences pref = await SharedPreferences.getInstance();
 		dynamic value =  pref.get(key);
 		if(value != null){
@@ -13,7 +13,7 @@ class Pref {
 		}
 	}
 
-	static dynamic set(String key, dynamic value) async {
+	static Future<dynamic> set(String key, dynamic value) async {
 		String _value;
 		if(value != null){
 			_value = jsonEncode(value);
@@ -21,5 +21,10 @@ class Pref {
 		
 		SharedPreferences pref = await SharedPreferences.getInstance();
 		return await pref.setString(key, _value);
+	}
+
+	static Future<bool> remove(String key) async {
+		SharedPreferences pref = await SharedPreferences.getInstance();
+		return await pref.remove(key);
 	}
 }

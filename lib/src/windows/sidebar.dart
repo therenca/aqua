@@ -14,6 +14,8 @@ class SideBar extends StatefulWidget {
 	final Alignment begin;
 	final Alignment end;
 	final Color selectedColor;
+	final Color textColor;
+	final Color hoverTextColor;
 	final List<Color> bgColors;
 	final aqua.NavigationStreamer navStreamer;
 	final Map<String, Map<String, dynamic>> routes;
@@ -28,7 +30,9 @@ class SideBar extends StatefulWidget {
 		this.bgColors,
 		this.begin,
 		this.end,
-		this.selectedColor
+		this.selectedColor,
+		this.textColor,
+		this.hoverTextColor
 	});
 
 	@override
@@ -45,10 +49,7 @@ class SidebarState extends State<SideBar>{
 		super.initState();
 
 		widget.navStreamer.listen((data){
-			aqua.pretifyOutput('[SETTINGS MINI SIDEBAR] data from nav stream: $data');
-			
 			selectedRouteName = data['routeName'];
-			// selectedColor = data['selectedColor'];
 		});
 	}
 
@@ -200,21 +201,28 @@ class SidebarState extends State<SideBar>{
 		}
 	}
 
-	Color _hoverOnCurrentRoute(String routeName){
+	List<Color> _hoverOnCurrentRoute(String routeName){
 		Color hoverColor;
+		Color hoverTextColor;
 		if(widget.routes[routeName]['isHovering']){
 			hoverColor = widget.routes[routeName]['hoverColor'];
+			hoverTextColor = widget.hoverTextColor == null ? Colors.black : widget.hoverTextColor;
 		} else {
 			hoverColor = Colors.transparent;
+			hoverTextColor = widget.textColor == null ? Colors.black : widget.textColor;
 		}
 	
-		return hoverColor;
+		return [hoverColor, hoverTextColor];
 	}
 
 	Widget _buildStandardRoute(String routeName, Icon icon, int tracker){
+
+		var hoverColors = _hoverOnCurrentRoute(routeName);
+
 		return  AnimatedContainer(
 			duration: Duration(milliseconds: 300),
-			color: isHovering ? _hoverOnCurrentRoute(routeName) : _getCurrentSelectedColor(routeName, tracker),
+			// color: isHovering ? _hoverOnCurrentRoute(routeName) : _getCurrentSelectedColor(routeName, tracker),
+			color: isHovering ? hoverColors[0] :  _getCurrentSelectedColor(routeName, tracker),
 			padding: EdgeInsets.only(
 				top: 10.0,
 				left: 20.0,
@@ -229,7 +237,7 @@ class SidebarState extends State<SideBar>{
 						routeName,
 						style: TextStyle(
 							fontSize: 13.0,
-							color: Colors.black,
+							color: isHovering ? hoverColors[1] : widget.textColor == null ? Colors.black : widget.textColor,
 							fontWeight: FontWeight.bold
 						),
 					),

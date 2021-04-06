@@ -14,6 +14,7 @@ export 'src/output.dart';
 export 'src/shadow.dart';
 export 'src/isolate.dart';
 export 'src/dropdown.dart';
+export 'src/snackbar.dart';
 export 'src/websocket.dart';
 export 'src/tab_header.dart';
 export 'src/dimensions.dart';

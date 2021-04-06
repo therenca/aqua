@@ -21,6 +21,7 @@ class Client {
 	List<int> expectedStatusCodes; // anticipate successful response
 
 	int _statusCode;
+	String _uri;
 
 	final String header = '[CLIENT]';
 
@@ -46,6 +47,7 @@ class Client {
 		_now = DateTime.now().toString();
 	}
 
+	String get uri => _uri;
 	int get statusCode => _statusCode;
 
 	Uri httpUri (String method){
@@ -83,6 +85,8 @@ class Client {
 		} else {
 			uri = httpUri(method);
 		}
+		
+		_uri = uri.toString();
 		if(verbose){
 			pretifyOutput('[$_now][$method] $uri');
 		}

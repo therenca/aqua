@@ -8,6 +8,8 @@ class RouteManager extends StatefulWidget {
 	final double width;
 	final double height;
 	final Widget header;
+	final Color textColor;
+	final Color hoverTextColor;
 	final List<Color> bgColors;
 	final Color selectedColor;
 	final Color hoverColor;
@@ -23,6 +25,8 @@ class RouteManager extends StatefulWidget {
 		this.type='standard',
 		this.selectedColor,
 		this.hoverColor,
+		this.textColor,
+		this.hoverTextColor,
 		this.header,
 		this.width,
 		this.height,
@@ -66,6 +70,8 @@ class _RouteManagerState extends State<RouteManager>{
 			bgColors: widget.bgColors,
 			navStreamer: widget.navStreamer,
 			selectedColor: widget.selectedColor,
+			textColor: widget.textColor,
+			hoverTextColor: widget.hoverTextColor
 		);
 	}
 
