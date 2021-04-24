@@ -33,3 +33,6 @@
 
 ### 1.1.0
 - Added snackbar, can specify textColor, hoverTextColor for navigation
+
+### 1.1.0+1
+- updated download method in Client

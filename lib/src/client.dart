@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:http/http.dart' as http;
@@ -14,7 +15,6 @@ class Client {
 	String method;
 	bool isSecured;
 	bool verbose;
-	bool json;
 	Map<String, String> headers;
 	String _now;
 	final int ok = 200;
@@ -30,7 +30,6 @@ class Client {
 		this.serverPort,
 		this.path,{
 			this.query,
-			this.json=true,
 			this.verbose=false,
 			this.isSecured=false,
 			this.headers,
@@ -187,7 +186,7 @@ class Client {
 		}
 	}
 
-	Future<Uint8List> downloadBinary({String method='POST', String size='small', String path}) async {
+	Future<Uint8List> downloadBinary(String filePath, {String method='POST', String size='small', StreamController<double> controller}) async {
 		var uri;
 		Uint8List binary;
 		if(isSecured){
@@ -196,28 +195,25 @@ class Client {
 			uri = httpUri(method);
 		}
 
+		_uri = uri.toString();
 		var client = http.Client();
 		var request = http.Request(method, uri);
 		http.StreamedResponse response = await client.send(request);
 		_statusCode = response.statusCode;
-		
+		var file = await File(filePath).create();
 		switch(size){
 
 			case 'small': {
 				binary =  await response.stream.toBytes();
-				if(path != null){
-					var file = File(path);
-					await file.writeAsBytes(binary);
-				}
+				await file.writeAsBytes(binary);
 				break;
 			}
 
 			case 'large': {
 
-				var length = response.contentLength;
 				var received = 0;
-
-				var file = File(path);
+				var length = response.contentLength;
+				
 				var sink = file.openWrite();
 				List<int> fullBytes = [];
 				await response.stream.map((List<int> bytes){
@@ -226,6 +222,15 @@ class Client {
 
 					if(verbose){
 						pretifyOutput('[DOWNLOAD | $size] $received / $length');
+					}
+
+					if(controller != null){
+						var downloadProgress = received / length;
+						controller.sink.add(downloadProgress);
+
+						if(length == received){
+							controller.close();
+						}
 					}
 
 					return bytes;
