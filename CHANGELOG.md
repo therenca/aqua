@@ -36,3 +36,6 @@
 
 ### 1.1.0+1
 - updated download method in Client
+
+### 1.1.0+2
+- added dynamic dimensions

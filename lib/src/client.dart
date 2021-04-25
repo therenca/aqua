@@ -188,6 +188,7 @@ class Client {
 
 	Future<Uint8List> downloadBinary(String filePath, {String method='POST', String size='small', StreamController<double> controller}) async {
 		var uri;
+		var file;
 		Uint8List binary;
 		if(isSecured){
 			uri = httpsUri(method);
@@ -200,44 +201,51 @@ class Client {
 		var request = http.Request(method, uri);
 		http.StreamedResponse response = await client.send(request);
 		_statusCode = response.statusCode;
-		var file = await File(filePath).create();
+
+		if(filePath.isNotEmpty){
+			file = await File(filePath).create();
+		}
+
 		switch(size){
 
 			case 'small': {
 				binary =  await response.stream.toBytes();
-				await file.writeAsBytes(binary);
+				file != null ? await file.writeAsBytes(binary) : file = null;
 				break;
 			}
 
 			case 'large': {
 
-				var received = 0;
-				var length = response.contentLength;
-				
-				var sink = file.openWrite();
-				List<int> fullBytes = [];
-				await response.stream.map((List<int> bytes){
-					received += bytes.length;
-					fullBytes += bytes;
+				if(filePath.isNotEmpty){
 
-					if(verbose){
-						pretifyOutput('[DOWNLOAD | $size] $received / $length');
-					}
+					var received = 0;
+					var length = response.contentLength;
+					
+					var sink = file.openWrite();
+					List<int> fullBytes = [];
+					await response.stream.map((List<int> bytes){
+						received += bytes.length;
+						fullBytes += bytes;
 
-					if(controller != null){
-						var downloadProgress = received / length;
-						controller.sink.add(downloadProgress);
-
-						if(length == received){
-							controller.close();
+						if(verbose){
+							pretifyOutput('[DOWNLOAD | $size] $received / $length');
 						}
-					}
 
-					return bytes;
-				}).pipe(sink);
+						if(controller != null){
+							var downloadProgress = received / length;
+							controller.sink.add(downloadProgress);
 
-				sink.close();
-				binary = Uint8List.fromList(fullBytes);
+							if(length == received){
+								controller.close();
+							}
+						}
+
+						return bytes;
+					}).pipe(sink);
+
+					sink.close();
+					binary = Uint8List.fromList(fullBytes);
+				}
 
 				break;
 			}

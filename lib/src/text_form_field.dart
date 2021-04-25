@@ -35,6 +35,7 @@ class  TextFormFieldCustom extends StatefulWidget {
 	final TextInputAction textInputAction;
 	final TextEditingController controller;
 
+	final TextAlign textAlign;
 	final TextStyle hintTextStyle;
 	final TextStyle labelTextStyle;
 
@@ -85,7 +86,8 @@ class  TextFormFieldCustom extends StatefulWidget {
 		this.isFilled=false,
 		this.filledColor,
 		this.cursorColor=Colors.red,
-		this.streamController
+		this.streamController,
+		this.textAlign
 	});
 
 	@override
@@ -194,7 +196,8 @@ class _TextFormFieldCustomState extends State<TextFormFieldCustom>{
 						widget.streamController.sink.add(value);
 					}
 				}
-			}
+			},
+			textAlign: widget.textAlign == null ? TextAlign.left : widget.textAlign,
 		);
 	}
 

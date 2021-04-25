@@ -5,10 +5,6 @@ import 'package:aqua/aqua.dart' as aqua;
 import 'route_manager.dart';
 
 class Navigation extends StatefulWidget {
-
-	final double width;
-	final double height;
-
 	final Alignment end;
 	final Alignment begin;
 	final List<Color> bgColors;
@@ -26,8 +22,6 @@ class Navigation extends StatefulWidget {
 	final NavigationStreamer navStreamer;
 
 	Navigation({
-		@required this.width,
-		@required this.height,
 		this.selectedColor,
 		this.hoverColor,
 		this.textColor,
@@ -60,8 +54,6 @@ class _NavigationState extends State<Navigation> {
 			routes: widget.routes,
 			bgColors: widget.bgColors,
 			header: widget.header,
-			height: widget.height,
-			width: widget.width,
 			hoverColor: widget.hoverColor,
 			selectedColor: widget.selectedColor,
 			textColor: widget.textColor,

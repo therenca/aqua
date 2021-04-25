@@ -8,8 +8,6 @@ import 'helpers/switcher.dart';
 class SideBar extends StatefulWidget {
 
 	final String type;
-	final double width;
-	final double height;
 	final Widget header;
 	final Alignment begin;
 	final Alignment end;
@@ -21,8 +19,6 @@ class SideBar extends StatefulWidget {
 	final Map<String, Map<String, dynamic>> routes;
 
 	SideBar({
-		@required this.width,
-		@required this.height,
 		@required this.routes,
 		@required this.navStreamer,
 		this.type,
@@ -53,7 +49,7 @@ class SidebarState extends State<SideBar>{
 		});
 	}
 
-	List<Widget> _buildRoutes(){
+	List<Widget> _buildRoutes(double width){
 
 		int tracker = 1;
 		List<Widget> routeWidgets = [];
@@ -62,7 +58,7 @@ class SidebarState extends State<SideBar>{
 			switch(widget.type){
 
 				case 'standard': {
-					route = _buildStandardRoute(routeName, routeInfo['icon'], tracker);
+					route = _buildStandardRoute(width, routeName, routeInfo['icon'], tracker);
 					break;
 				}
 
@@ -125,64 +121,67 @@ class SidebarState extends State<SideBar>{
 	}
 
 	Widget _buildSideBar(BuildContext context){
+		return aqua.DynamicDimensions(
+			renderWidget: (double width, double height){
+				var isPositionedBottom = false;
+				List<Widget> nav = _buildRoutes(width);
 
-		var isPositionedBottom = false;
-		List<Widget> nav = _buildRoutes();
+				Widget settings;
+				if(widget.type == 'standard'){
+					if(widget.header != null && nav.length > 2) {
+						isPositionedBottom = true;
+						settings = nav.removeAt(nav.length - 1);
+					}
+				}
 
-		Widget settings;
-		if(widget.type == 'standard'){
-			if(widget.header != null && nav.length > 2) {
-				isPositionedBottom = true;
-				settings = nav.removeAt(nav.length - 1);
-			}
-		}
+				Widget background;
+				if(widget.bgColors != null){
+					if(widget.bgColors.length == 1){
+						background = Container(
+							width: width,
+							height: height,
+							color: widget.bgColors[0],
+						);
+					} else {
+						background = aqua.Shadow(
+							width: width,
+							height: height,
+							colors: widget.bgColors,
+							begin: widget.begin,
+							end: widget.end,
+						);
+					}
+				} else {
+					background = Container(
+						width: width,
+						height: height,
+						color: Colors.white,
+					);
+				}
 
-		Widget background;
-		if(widget.bgColors != null){
-			if(widget.bgColors.length == 1){
-				background = Container(
-					width: widget.width,
-					height: widget.height,
-					color: widget.bgColors[0],
-				);
-			} else {
-				background = aqua.Shadow(
-					width: widget.width,
-					height: widget.height,
-					colors: widget.bgColors,
-					begin: widget.begin,
-					end: widget.end,
-				);
-			}
-		} else {
-			background = Container(
-				width: widget.width,
-				height: widget.height,
-				color: Colors.white,
-			);
-		}
+				return Container(
+					width: width,
+					height: height,
+					child: Stack(
+						children: [
+							background,
 
-		return Container(
-			width: widget.width,
-			height: widget.height,
-			child: Stack(
-				children: [
-					background,
+							SizedBox(
+								width: width,
+								height: height,
+								child: ListView(
+									children: nav
+								)
+							),
 
-					SizedBox(
-						width: widget.width,
-						height: widget.height,
-						child: ListView(
-							children: nav
-						)
+							widget.type == 'standard' && isPositionedBottom ? Positioned(
+								bottom: 10.0,
+								child: settings,
+							) : Container()
+						],
 					),
-
-					widget.type == 'standard' && isPositionedBottom ? Positioned(
-						bottom: 10.0,
-						child: settings,
-					) : Container()
-				],
-			),
+				);
+			},
 		);
 
 	}
@@ -215,7 +214,7 @@ class SidebarState extends State<SideBar>{
 		return [hoverColor, hoverTextColor];
 	}
 
-	Widget _buildStandardRoute(String routeName, Icon icon, int tracker){
+	Widget _buildStandardRoute(double width, String routeName, Icon icon, int tracker){
 
 		var hoverColors = _hoverOnCurrentRoute(routeName);
 
@@ -228,7 +227,7 @@ class SidebarState extends State<SideBar>{
 				left: 20.0,
 				bottom: 10.0
 			),
-			width: widget.width,
+			width: width,
 			child: Row(
 				children: [
 					icon,
@@ -256,9 +255,9 @@ class SidebarState extends State<SideBar>{
 			decoration: BoxDecoration(
 				border: Border(
 					bottom: BorderSide(
-						width: 2.0,
-						color: Color(0xFFF8F9FF),
-						// color: Colors.grey,
+						width:1.0,
+						// color: Color(0xFFF8F9FF),
+						color: Colors.grey.withOpacity(0.1),
 						// style: BorderStyle.solid
 					)
 				)
@@ -275,6 +274,7 @@ class SidebarState extends State<SideBar>{
 								routeName,
 								style: TextStyle(
 									fontSize: fontSize,
+									color: Colors.white,
 									fontWeight: FontWeight.bold
 								),
 							),

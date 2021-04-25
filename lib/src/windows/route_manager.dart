@@ -5,8 +5,6 @@ import 'sidebar.dart';
 class RouteManager extends StatefulWidget {
 
 	final String type;
-	final double width;
-	final double height;
 	final Widget header;
 	final Color textColor;
 	final Color hoverTextColor;
@@ -28,8 +26,6 @@ class RouteManager extends StatefulWidget {
 		this.textColor,
 		this.hoverTextColor,
 		this.header,
-		this.width,
-		this.height,
 		this.bgColors,
 		this.begin,
 		this.end
@@ -63,8 +59,6 @@ class _RouteManagerState extends State<RouteManager>{
 			end: widget.end,
 			begin: widget.begin,
 			type: widget.type,
-			width: widget.width,
-			height: widget.height,
 			routes: widget.routes,
 			header: widget.header,
 			bgColors: widget.bgColors,

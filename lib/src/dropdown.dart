@@ -9,6 +9,7 @@ class DropDown extends StatefulWidget {
 	final TextStyle textStyle;
 	final Color dropdownColor;
 	final Function initCallback;
+	final Color iconEnabledColor;
 
 	DropDown({
 		@required this.items,
@@ -17,6 +18,7 @@ class DropDown extends StatefulWidget {
 		this.textStyle,
 		this.callback,
 		this.dropdownColor,
+		this.iconEnabledColor,
 		this.initCallback
 	});
 
@@ -57,6 +59,7 @@ class _DropDownState extends State<DropDown>{
 					await widget.callback(newValue);
 				}
 			},
+			iconEnabledColor: widget.iconEnabledColor,
 
 			items: widget.items
 				.map<DropdownMenuItem<String>>((dynamic value){
@@ -68,6 +71,7 @@ class _DropDownState extends State<DropDown>{
 								color: Colors.black,
 							) : widget.textStyle
 						),
+						
 					);
 				}).toList()
 		);
