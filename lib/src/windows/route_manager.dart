@@ -11,6 +11,8 @@ class RouteManager extends StatefulWidget {
 	final List<Color> bgColors;
 	final Color selectedColor;
 	final Color hoverColor;
+	final double fontSize;
+	final FontWeight fontWeight;
 	final aqua.NavigationStreamer navStreamer;
 	final Map<String, Map<String, dynamic>> routes;
 
@@ -25,6 +27,8 @@ class RouteManager extends StatefulWidget {
 		this.hoverColor,
 		this.textColor,
 		this.hoverTextColor,
+		this.fontSize,
+		this.fontWeight,
 		this.header,
 		this.bgColors,
 		this.begin,
@@ -65,7 +69,9 @@ class _RouteManagerState extends State<RouteManager>{
 			navStreamer: widget.navStreamer,
 			selectedColor: widget.selectedColor,
 			textColor: widget.textColor,
-			hoverTextColor: widget.hoverTextColor
+			hoverTextColor: widget.hoverTextColor,
+			fontSize: widget.fontSize,
+			fontWeight: widget.fontWeight,
 		);
 	}
 

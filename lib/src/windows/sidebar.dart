@@ -14,6 +14,8 @@ class SideBar extends StatefulWidget {
 	final Color selectedColor;
 	final Color textColor;
 	final Color hoverTextColor;
+	final double fontSize;
+	final FontWeight fontWeight;
 	final List<Color> bgColors;
 	final aqua.NavigationStreamer navStreamer;
 	final Map<String, Map<String, dynamic>> routes;
@@ -28,7 +30,9 @@ class SideBar extends StatefulWidget {
 		this.end,
 		this.selectedColor,
 		this.textColor,
-		this.hoverTextColor
+		this.hoverTextColor,
+		this.fontSize,
+		this.fontWeight
 	});
 
 	@override
@@ -58,7 +62,12 @@ class SidebarState extends State<SideBar>{
 			switch(widget.type){
 
 				case 'standard': {
-					route = _buildStandardRoute(width, routeName, routeInfo['icon'], tracker);
+					route = _buildStandardRoute(
+						width,
+						routeName,
+						routeInfo['icon'],
+						tracker
+					);
 					break;
 				}
 
@@ -235,9 +244,9 @@ class SidebarState extends State<SideBar>{
 					Text(
 						routeName,
 						style: TextStyle(
-							fontSize: 13.0,
+							fontSize: widget.fontSize == null ? 13.0 : widget.fontSize,
 							color: isHovering ? hoverColors[1] : widget.textColor == null ? Colors.black : widget.textColor,
-							fontWeight: FontWeight.bold
+							fontWeight: widget.fontWeight == null ? FontWeight.bold : widget.fontWeight
 						),
 					),
 				],
@@ -273,18 +282,18 @@ class SidebarState extends State<SideBar>{
 							Text(
 								routeName,
 								style: TextStyle(
-									fontSize: fontSize,
 									color: Colors.white,
-									fontWeight: FontWeight.bold
+									fontSize: widget.fontSize == null ? fontSize : widget.fontSize,
+									fontWeight: widget.fontWeight == null ? FontWeight.bold : widget.fontWeight
 								),
 							),
 							SizedBox(height: 5.0,),
 							Text(
 								extra,
 								style: TextStyle(
-									fontSize: fontSize,
 									color: Colors.grey,
-									fontWeight: FontWeight.bold
+									fontSize: widget.fontSize == null ? fontSize : widget.fontSize,
+									fontWeight: widget.fontWeight == null ? FontWeight.bold : widget.fontWeight
 								),
 							),
 						],

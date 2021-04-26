@@ -12,6 +12,8 @@ class Navigation extends StatefulWidget {
 	final Color hoverColor;
 	final Color textColor;
 	final Color hoverTextColor;
+	final double fontSize;
+	final FontWeight fontWeight;
 	final BuildContext parentContext;
 	
 	final String type;
@@ -26,6 +28,8 @@ class Navigation extends StatefulWidget {
 		this.hoverColor,
 		this.textColor,
 		this.hoverTextColor,
+		this.fontSize,
+		this.fontWeight,
 		this.bgColors,
 		this.begin,
 		this.end,
@@ -58,6 +62,8 @@ class _NavigationState extends State<Navigation> {
 			selectedColor: widget.selectedColor,
 			textColor: widget.textColor,
 			hoverTextColor: widget.hoverTextColor,
+			fontSize: widget.fontSize,
+			fontWeight: widget.fontWeight,
 			navStreamer: widget.navStreamer,
 			end: widget.end,
 			begin: widget.begin,

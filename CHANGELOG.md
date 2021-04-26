@@ -39,3 +39,6 @@
 
 ### 1.1.0+2
 - added dynamic dimensions
+
+### 1.1.0+3
+- fontSize, fontWeight properties added to aqua.Navigation
