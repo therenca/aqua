@@ -16,6 +16,7 @@ export 'src/isolate.dart';
 export 'src/dropdown.dart';
 export 'src/snackbar.dart';
 export 'src/websocket.dart';
+export 'src/validators.dart';
 export 'src/tab_header.dart';
 export 'src/dimensions.dart';
 export 'src/capitalize.dart';
