@@ -14,12 +14,10 @@ class LoadingIcon extends StatelessWidget{
 	Widget build(BuildContext context){
 		return Container(
 			color: bgColor == null ? Colors.transparent : bgColor,
-			child: Center(
-				child: spinkitWidget == null ? SpinKitWanderingCubes(
-					size: iconSize,
-					color: iconColor == null ? Colors.blue : iconColor
-				) : spinkitWidget,
-			),
+			child: spinkitWidget == null ? SpinKitWanderingCubes(
+				size: iconSize,
+				color: iconColor == null ? Colors.blue : iconColor
+			) : spinkitWidget,
 		);
 	}
 }

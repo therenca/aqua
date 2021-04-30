@@ -42,3 +42,6 @@
 
 ### 1.1.0+3
 - fontSize, fontWeight properties added to aqua.Navigation
+
+### 1.1.0+4
+- added validators
