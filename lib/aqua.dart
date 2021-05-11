@@ -12,6 +12,7 @@ export 'src/client.dart';
 export 'src/random.dart';
 export 'src/output.dart';
 export 'src/shadow.dart';
+export 'src/obscure.dart';
 export 'src/isolate.dart';
 export 'src/dropdown.dart';
 export 'src/snackbar.dart';

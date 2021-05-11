@@ -45,3 +45,6 @@
 
 ### 1.1.0+4
 - added validators
+
+### 1.1.0+5
+- added obscure text
