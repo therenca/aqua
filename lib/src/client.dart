@@ -19,6 +19,7 @@ class Client {
 	String _now;
 	final int ok = 200;
 	List<int> expectedStatusCodes; // anticipate successful response
+	String contentType;
 
 	int _statusCode;
 	String _uri;
@@ -33,7 +34,8 @@ class Client {
 			this.verbose=false,
 			this.isSecured=false,
 			this.headers,
-			this.expectedStatusCodes
+			this.expectedStatusCodes,
+			this.contentType='application/json',
 		}){
 		
 		if(expectedStatusCodes != null){
@@ -90,7 +92,7 @@ class Client {
 			pretifyOutput('[$_now][$method] $uri');
 		}
 
-		var _headers = {HttpHeaders.contentTypeHeader: 'application/json'};
+		var _headers = {HttpHeaders.contentTypeHeader: contentType};
 		if(headers != null){
 			_headers.addAll(headers);
 		}
@@ -119,7 +121,7 @@ class Client {
 						response = await http.post(
 							uri,
 							headers: _headers,
-							body: jsonEncode(query),
+							body: contentType == 'application/x-www-form-urlencoded' ? query : jsonEncode(query),
 						);
 					}
 				} catch(e){
@@ -144,7 +146,7 @@ class Client {
 					response = await http.put(
 						uri,
 						headers: _headers,
-						body: jsonEncode(query)
+						body: contentType == 'application/x-www-form-urlencoded' ? query : jsonEncode(query),
 					);
 				} catch(e){
 					error = e.toString();
@@ -168,7 +170,7 @@ class Client {
 					pretifyOutput('[$_now][HTTP ERROR] $error', color: 'red');
 					return;
 				} else {
-					pretifyOutput('[$_now][SERVER RESPONSE][${response.statusCode}] $bodyStr');
+					await pretifyOutput('[$_now][SERVER RESPONSE][${response.statusCode}] $bodyStr');
 				}
 			}
 

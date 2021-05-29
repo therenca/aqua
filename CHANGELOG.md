@@ -48,3 +48,6 @@
 
 ### 1.1.0+5
 - added obscure text
+
+### 1.1.0+6
+- added content type check
