@@ -3,7 +3,9 @@
 Utility classes/functions to help with UI development using the Flutter framework.
 
 It is recommended to use the `as` keyword with the `import` statement when importing the package to prevent name conflicts, for example...
-> `import 'package:aqua/aqua.dart' as aqua`
+```dart
+import 'package:aqua/aqua.dart' as aqua
+```
 
 To log output to file 
 ```dart

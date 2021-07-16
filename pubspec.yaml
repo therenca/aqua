@@ -1,6 +1,6 @@
 name: aqua
 description: Utility classes/functions to help with UI development using the Flutter framework.
-version: 1.1.0+6
+version: 1.1.0+7
 author: Therenca Mureithi <therencamureithi@gmail.com>
 homepage: https://github.com/therenca/aqua
 
@@ -12,9 +12,9 @@ dependencies:
     sdk: flutter
 
   http: ^0.13.0
-  intl: ^0.16.1
+  intl: ^0.17.0
   colorize: ^2.0.0
-  flutter_spinkit: ^4.1.2+1
+  flutter_spinkit: ^5.0.0
   web_socket_channel: ^1.1.0
   shared_preferences: ^2.0.3
 

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 class  TextFormFieldCustom extends StatefulWidget {
 
+	final GlobalKey key;
 	final Widget prefix;
 	final Widget prefixIcon;
 	final Widget suffixIcon;
@@ -45,12 +46,14 @@ class  TextFormFieldCustom extends StatefulWidget {
 	final IconData prefixIconData;
 	final Color prefixIconColor;
 	final Color focusedPrefixIconColor;
+	final double prefixIconSize;
 
 	final Color cursorColor;
 
 	final StreamController streamController;
 
 	TextFormFieldCustom({
+		this.key,
 		this.prefixIcon,
 		this.suffixIcon,
 		this.beforeInput,
@@ -63,6 +66,7 @@ class  TextFormFieldCustom extends StatefulWidget {
 		this.prefixIconData,
 		this.prefixIconColor=Colors.black,
 		this.focusedPrefixIconColor=Colors.black,
+		this.prefixIconSize=17.0,
 		this.borderWidth=2.0,
 		this.focusBorderWidth=2.0,
 		this.borderRadius=4.0,
@@ -138,7 +142,7 @@ class _TextFormFieldCustomState extends State<TextFormFieldCustom>{
 
 			if(widget.prefixIconData != null){
 				_prefixIcon = Icon(
-					widget.prefixIconData, size: 17.0,
+					widget.prefixIconData, size: widget.prefixIconSize,
 					color: hasFocus ? widget.focusedPrefixIconColor : widget.prefixIconColor
 				);
 			}
@@ -147,6 +151,7 @@ class _TextFormFieldCustomState extends State<TextFormFieldCustom>{
 		}
 
 		return TextFormField(
+			key: widget.key,
 			style: TextStyle(
 				fontSize: widget.fontSize,
 				color: widget.textColor

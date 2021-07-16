@@ -51,3 +51,7 @@
 
 ### 1.1.0+6
 - added content type check
+
+#### 1.1.0+7
+- added disallow glow for listviews
+- added rounded_corners for images and video assets

@@ -3,23 +3,36 @@ import 'package:flutter/material.dart';
 class TabHeader extends StatelessWidget{
 
 	final Color bgColor;
+	final double borderRadius;
 	final Color underline;
 	final List<String> tabListing;
-	final Border border;
 	final Function onTap;
 	final TabController controller;
-	final double borderRadius;
 	final TextStyle textStyle;
+	final Color unselectedLabelColor;
+	final Color labelColor;
+	final TextStyle unselectedLabelStyle;
+	final BoxDecoration decoration;
+	final Alignment alignment;
+	final EdgeInsets padding;
+
+	final double tabHeight;
 
 	TabHeader({
 		@required this.tabListing,
 		this.bgColor,
+		this.borderRadius,
 		this.underline,
-		this.border,
 		this.onTap,
 		this.controller,
-		this.borderRadius,
-		this.textStyle
+		this.textStyle,
+		this.unselectedLabelStyle,
+		this.unselectedLabelColor,
+		this.labelColor,
+		this.decoration,
+		this.alignment,
+		this.padding,
+		this.tabHeight
 	});
 
 	Widget _buildTabHeader(BuildContext context){
@@ -29,16 +42,10 @@ class TabHeader extends StatelessWidget{
 		for(int index=0; index<tabListing.length; index++){
 			Tab tab = Tab(
 				child: Container(
-					// padding: EdgeInsets.only(left: 10.0),
-					alignment: Alignment.centerLeft,
-					// decoration: underline != null ? BoxDecoration(
-					// 	border: Border(
-					// 		bottom: BorderSide(
-					// 			width: 2.0,
-					// 			color: underline
-					// 		)
-					// 	)
-					// ) : null,
+					padding: padding,
+					alignment: alignment == null ? Alignment.centerLeft : alignment,
+					height: tabHeight,
+					decoration: decoration,
 					child: Text(
 						tabListing[index],
 						style: textStyle != null ? textStyle : TextStyle(
@@ -61,6 +68,9 @@ class TabHeader extends StatelessWidget{
 				borderRadius: borderRadius != null ? BorderRadius.circular(borderRadius) : null,
 			) : null,
 			tabs: tabs,
+			unselectedLabelColor: unselectedLabelColor,
+			unselectedLabelStyle: unselectedLabelStyle,
+			labelColor: labelColor,
 			onTap: onTap != null ? onTap : null,
 		);
 
