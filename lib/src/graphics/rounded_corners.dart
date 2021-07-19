@@ -6,7 +6,7 @@ class RoundedCornersClipper extends CustomClipper<Path> {
 	double ratio;
 
 	RoundedCornersClipper({
-		this.ratio=2.0
+		this.ratio=0.2
 	});
 
 	@override
