@@ -102,6 +102,7 @@ class Client {
 				try {
 					if(multipartInfo != null || files != null){
 						var request = http.MultipartRequest('POST', uri);
+						request.headers.addAll(_headers);
 						request.fields.addAll(multipartInfo != null ? multipartInfo : <String, String>{});
 
 						if(files != null){
@@ -144,6 +145,20 @@ class Client {
 			case 'PUT': {
 				try{
 					response = await http.put(
+						uri,
+						headers: _headers,
+						body: contentType == 'application/x-www-form-urlencoded' ? query : jsonEncode(query),
+					);
+				} catch(e){
+					error = e.toString();
+				}
+
+				break;
+			}
+
+			case 'DELETE': {
+				try{
+					response = await http.delete(
 						uri,
 						headers: _headers,
 						body: contentType == 'application/x-www-form-urlencoded' ? query : jsonEncode(query),

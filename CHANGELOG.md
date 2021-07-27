@@ -55,3 +55,16 @@
 #### 1.1.0+7
 - added disallow glow for listviews
 - added rounded_corners for images and video assets
+
+#### 1.1.0+8
+- added proper ratio value for RoundedCornerClipper
+
+### 1.1.0+9
+- removed websockets thus removed package dependency
+- removed loader icon removed package dependency from spinkitt
+- added linear loader
+- added headers for Multipart Request
+
+### 1.1.1
+- added DELETE option for aqua.Client
+- added aqua.Loader
