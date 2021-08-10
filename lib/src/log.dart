@@ -1,8 +1,7 @@
 import 'dart:io';
 import 'create_file.dart';
 
-Future<void> log(String data, {
-	String logFile,
+Future<void> log(String data, String logFile, {
 	bool clear=false,
 	bool time=true
 }) async {

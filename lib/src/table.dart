@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 
 class Table extends StatefulWidget {
 
-	final TextStyle tdTextStyle;
-	final TextStyle theadTextStyle;
+	final TextStyle? tdTextStyle;
+	final TextStyle? theadTextStyle;
 	final List<String> thead;
 	final List<List<dynamic>> rows;
-	final Function onSelectRow;
-	final Function onSelectAll;
-	final List<Map<String, dynamic>> selectedRows;
+	final Function? onSelectRow;
+	final Function(bool?)? onSelectAll;
+	final List<Map<String, dynamic>>? selectedRows;
 
 	final bool sortAscending;
-	final int sortColumnIndex;
+	final int? sortColumnIndex;
 
 	Table({
 		this.thead = const ['TH1', 'TH2', 'TH3', 'TH4'],
@@ -36,9 +36,9 @@ class Table extends StatefulWidget {
 
 class _TableState extends State<Table>{
 
-	bool _isAscending;
-	List<bool> selectedRowsState;
-	List<List<dynamic>> mutableRows;
+	bool? _isAscending;
+	List<bool>? selectedRowsState;
+	List<List<dynamic>>? mutableRows;
 	@override
 	void initState(){
 		super.initState();
@@ -66,10 +66,10 @@ class _TableState extends State<Table>{
 
 	void updateSelectedRowsState(){
 		if(widget.selectedRows != null){
-			for(var index=0; index<widget.selectedRows.length; index++){
-				var savedState = widget.selectedRows[index];
+			for(var index=0; index<widget.selectedRows!.length; index++){
+				var savedState = widget.selectedRows![index];
 				var savedIndex = savedState['index'];
-				selectedRowsState[savedIndex] = true;
+				selectedRowsState![savedIndex] = true;
 
 				setState((){});
 			}
@@ -113,7 +113,7 @@ class _TableState extends State<Table>{
 									),
 									child: DataTable(
 										sortColumnIndex: widget.sortColumnIndex,
-										sortAscending: _isAscending,
+										sortAscending: _isAscending!,
 										showCheckboxColumn: widget.onSelectRow != null,
 										onSelectAll: widget.onSelectAll != null ? widget.onSelectAll : null,
 										columnSpacing: 20.0,
@@ -130,20 +130,20 @@ class _TableState extends State<Table>{
 												onSort: (columnIndex, sortAscending){
 													if(widget.sortColumnIndex != null){
 														if(columnIndex == widget.sortColumnIndex){
-															_isAscending = !_isAscending;
+															_isAscending = !_isAscending!;
 															setState((){});
 															if(sortAscending){
-																mutableRows.sort((a, b) => a[widget.sortColumnIndex].compareTo(b[widget.sortColumnIndex]));
+																mutableRows!.sort((a, b) => a[widget.sortColumnIndex!].compareTo(b[widget.sortColumnIndex!]));
 															} else {
 																// mutableRows = mutableRows.reversed.toList();
-																mutableRows.sort((a, b) => b[widget.sortColumnIndex].compareTo(a[widget.sortColumnIndex]));
+																mutableRows!.sort((a, b) => b[widget.sortColumnIndex!].compareTo(a[widget.sortColumnIndex!]));
 															}
 														}
 													}
 												}
 											);
 										}).toList(),
-										rows: mutableRows.asMap().entries.map((entry){
+										rows: mutableRows!.asMap().entries.map((entry){
 											var index = entry.key;
 											List row = entry.value; 
 
@@ -180,16 +180,16 @@ class _TableState extends State<Table>{
 														return Theme.of(context).colorScheme.primary.withOpacity(0.08);
 													// Even rows will have a grey color.
 													if (index % 2 == 0) return Colors.grey.withOpacity(0.3);
-													return null; // Use default value for other states and odd rows.
+													return Colors.transparent; // Use default value for other states and odd rows.
 												}),
-												selected: selectedRowsState[index],
-												onSelectChanged: (bool value){
+												selected: selectedRowsState![index],
+												onSelectChanged: (bool? value){
 													if(widget.onSelectRow != null){
 														// var savedValue = selectedRowsState[index];
 														// print('index: $index: $savedValue');
-														selectedRowsState[index] = value;
+														selectedRowsState![index] = value!;
 														setState((){});
-														widget.onSelectRow(index, value, widget.rows[index]);
+														widget.onSelectRow!(index, value, widget.rows[index]);
 													}
 												},
 												cells: tdListing

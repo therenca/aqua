@@ -68,3 +68,6 @@
 ### 1.1.1
 - added DELETE option for aqua.Client
 - added aqua.Loader
+
+### 1.1.2
+- upgraded to sound null safety

@@ -6,7 +6,11 @@ class Line extends StatelessWidget{
 	final double width;
 	final double height;
 
-	Line({this.color, this.width, this.height});
+	Line({
+		required this.color,
+		required this.width,
+		required this.height
+	});
 
 	@override
 	Widget build(BuildContext context){

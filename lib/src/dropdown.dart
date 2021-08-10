@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 
 class DropDown extends StatefulWidget {
 
-	final ValueKey key;
-	final String initValue;
 	final List<dynamic> items;
-	final Function callback;
-	final TextStyle textStyle;
-	final Color dropdownColor;
-	final Function initCallback;
-	final Color iconEnabledColor;
+	final ValueKey? key;
+	final String? initValue;
+	final Function? callback;
+	final TextStyle? textStyle;
+	final Color? dropdownColor;
+	final Function? initCallback;
+	final Color? iconEnabledColor;
 
 	DropDown({
-		@required this.items,
+		required this.items,
 		this.key,
 		this.initValue,
 		this.textStyle,
@@ -32,15 +32,12 @@ class _DropDownState extends State<DropDown>{
 	@override
 	void initState(){
 		super.initState();
-		widget.initCallback != null ? widget.initCallback() : print('');
+		widget.initCallback != null ? widget.initCallback!() : print('');
 	}
 
-	String selectedValue;
+	String? selectedValue;
 
 	String _getSelectedValue(){
-		// return selectedValue == null ? widget.initValue : selectedValue;
-		// return selectedValue == null ? widget.items.first : widget.items.contains(selectedValue) ? selectedValue : widget.items.first;
-
 		return selectedValue == null ? widget.initValue == null ? widget.items.first : widget.initValue : widget.items.contains(selectedValue) ? selectedValue : widget.items.first;
 	}
 
@@ -56,7 +53,7 @@ class _DropDownState extends State<DropDown>{
 				});
 
 				if(widget.callback != null){
-					await widget.callback(newValue);
+					await widget.callback!(newValue);
 				}
 			},
 			iconEnabledColor: widget.iconEnabledColor,

@@ -14,13 +14,13 @@ class Pref {
 	}
 
 	static Future<dynamic> set(String key, dynamic value) async {
-		String _value;
+		String? _value;
 		if(value != null){
 			_value = jsonEncode(value);
 		}
 		
 		SharedPreferences pref = await SharedPreferences.getInstance();
-		return await pref.setString(key, _value);
+		return await pref.setString(key, _value!);
 	}
 
 	static Future<bool> remove(String key) async {

@@ -14,8 +14,8 @@ class CustomNavigator{
 		this.replaceSingle=false,
 		this.replaceAll=false,
 		this.namedRoute='',
-		this.buildScreen,
-		this.context
+		required this.buildScreen,
+		required this.context
 	});
 
 	void navigateToPage(){

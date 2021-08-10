@@ -7,7 +7,7 @@ class BackgroundImage extends StatelessWidget {
 	final String imgStr;
 
 	BackgroundImage({
-		@required this.width, @required this.height, @required this.imgStr});
+		required this.width, required this.height, required this.imgStr});
 
 	Widget _buildBackgroundImage(BuildContext context){
 		return Container(

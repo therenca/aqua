@@ -5,23 +5,23 @@ import 'sidebar.dart';
 class RouteManager extends StatefulWidget {
 
 	final String type;
-	final Widget header;
-	final Color textColor;
-	final Color hoverTextColor;
-	final List<Color> bgColors;
-	final Color selectedColor;
-	final Color hoverColor;
-	final double fontSize;
-	final FontWeight fontWeight;
+	final Widget? header;
+	final Color? textColor;
+	final Color? hoverTextColor;
+	final List<Color>? bgColors;
+	final Color? selectedColor;
+	final Color? hoverColor;
+	final double? fontSize;
+	final FontWeight? fontWeight;
 	final aqua.NavigationStreamer navStreamer;
 	final Map<String, Map<String, dynamic>> routes;
 
-	final Alignment begin;
-	final Alignment end;
+	final Alignment? begin;
+	final Alignment? end;
 
 	RouteManager({
-		@required this.routes,
-		@required this.navStreamer,
+		required this.routes,
+		required this.navStreamer,
 		this.type='standard',
 		this.selectedColor,
 		this.hoverColor,
@@ -47,10 +47,6 @@ class RouteManager extends StatefulWidget {
 }
 
 class _RouteManagerState extends State<RouteManager>{
-
-	Color selectedColor;
-	bool isHovering = false;
-	String selectedRouteName;
 
 	@override
 	void initState(){

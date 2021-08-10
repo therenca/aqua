@@ -8,22 +8,22 @@ class WindowSwitcher {
 	Map<String, Map<String, dynamic>> routes;
 
 	WindowSwitcher({
-		this.routes,
-		this.routeName,
-		this.navStreamer,
+		required this.routes,
+		required this.routeName,
+		required this.navStreamer,
 	});
 
 	Widget switcher(){
 
 		Map<String, dynamic> selectedWidget = {
 			'routeName': routeName,
-			'window': routes[routeName]['window'],
-			'hoverColor': routes[routeName]['hoverColor'],
-			'selectedColor': routes[routeName]['selectedColor'],
+			'window': routes[routeName]!['window'],
+			'hoverColor': routes[routeName]!['hoverColor'],
+			'selectedColor': routes[routeName]!['selectedColor'],
 		};
 
-		navStreamer.controller.sink.add(selectedWidget);
+		navStreamer.controller!.sink.add(selectedWidget);
 
-		return routes[routeName]['window'];
+		return routes[routeName]!['window'];
 	}
 }

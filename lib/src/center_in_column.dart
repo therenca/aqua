@@ -6,7 +6,7 @@ class CenterInColumn extends StatelessWidget {
 	final Widget child;
 
 	CenterInColumn({
-		@required this.child,
+		required this.child,
 		this.flex=2
 	});
 

@@ -7,22 +7,22 @@ import 'helpers/switcher.dart';
 
 class SideBar extends StatefulWidget {
 
-	final String type;
-	final Widget header;
-	final Alignment begin;
-	final Alignment end;
-	final Color selectedColor;
-	final Color textColor;
-	final Color hoverTextColor;
-	final double fontSize;
-	final FontWeight fontWeight;
-	final List<Color> bgColors;
+	final String? type;
+	final Widget? header;
+	final Alignment? begin;
+	final Alignment? end;
+	final Color? selectedColor;
+	final Color? textColor;
+	final Color? hoverTextColor;
+	final double? fontSize;
+	final FontWeight? fontWeight;
+	final List<Color>? bgColors;
 	final aqua.NavigationStreamer navStreamer;
 	final Map<String, Map<String, dynamic>> routes;
 
 	SideBar({
-		@required this.routes,
-		@required this.navStreamer,
+		required this.routes,
+		required this.navStreamer,
 		this.type,
 		this.header,
 		this.bgColors,
@@ -42,7 +42,7 @@ class SideBar extends StatefulWidget {
 class SidebarState extends State<SideBar>{
 
 	bool isHovering = false;
-	String selectedRouteName;
+	String? selectedRouteName;
 
 	@override
 	void initState(){
@@ -58,7 +58,7 @@ class SidebarState extends State<SideBar>{
 		int tracker = 1;
 		List<Widget> routeWidgets = [];
 		widget.routes.forEach((routeName, routeInfo){
-			Widget route;
+			Widget? route;
 			switch(widget.type){
 
 				case 'standard': {
@@ -106,12 +106,12 @@ class SidebarState extends State<SideBar>{
 				cursor: SystemMouseCursors.click,
 				onEnter: (PointerEnterEvent event){
 					isHovering = true;
-					widget.routes[routeName]['isHovering'] = true;
+					widget.routes[routeName]!['isHovering'] = true;
 					setState((){});
 				},
 				onExit: (PointerExitEvent event){
 					isHovering = false;
-					widget.routes[routeName]['isHovering'] = false;
+					widget.routes[routeName]!['isHovering'] = false;
 					setState((){});
 				},
 				child: addGestureToRoute,
@@ -123,7 +123,7 @@ class SidebarState extends State<SideBar>{
 		});
 
 		if(widget.header != null){
-			routeWidgets.insert(0, widget.header);
+			routeWidgets.insert(0, widget.header!);
 		}
 
 		return routeWidgets;
@@ -135,7 +135,7 @@ class SidebarState extends State<SideBar>{
 				var isPositionedBottom = false;
 				List<Widget> nav = _buildRoutes(width);
 
-				Widget settings;
+				Widget? settings;
 				if(widget.type == 'standard'){
 					if(widget.header != null && nav.length > 2) {
 						isPositionedBottom = true;
@@ -145,11 +145,11 @@ class SidebarState extends State<SideBar>{
 
 				Widget background;
 				if(widget.bgColors != null){
-					if(widget.bgColors.length == 1){
+					if(widget.bgColors!.length == 1){
 						background = Container(
 							width: width,
 							height: height,
-							color: widget.bgColors[0],
+							color: widget.bgColors![0],
 						);
 					} else {
 						background = aqua.Shadow(
@@ -185,7 +185,7 @@ class SidebarState extends State<SideBar>{
 
 							widget.type == 'standard' && isPositionedBottom ? Positioned(
 								bottom: 10.0,
-								child: settings,
+								child: settings!,
 							) : Container()
 						],
 					),
@@ -201,9 +201,9 @@ class SidebarState extends State<SideBar>{
 	Color _getCurrentSelectedColor(String routeName, int tracker){
 
 		if(selectedRouteName == null && tracker == 1){
-			return widget.selectedColor;
+			return widget.selectedColor!;
 		} else if(selectedRouteName == routeName){
-			return widget.selectedColor;
+			return widget.selectedColor!;
 		} else {
 			return Colors.transparent;
 		}
@@ -212,12 +212,12 @@ class SidebarState extends State<SideBar>{
 	List<Color> _hoverOnCurrentRoute(String routeName){
 		Color hoverColor;
 		Color hoverTextColor;
-		if(widget.routes[routeName]['isHovering']){
-			hoverColor = widget.routes[routeName]['hoverColor'];
-			hoverTextColor = widget.hoverTextColor == null ? Colors.black : widget.hoverTextColor;
+		if(widget.routes[routeName]!['isHovering']){
+			hoverColor = widget.routes[routeName]!['hoverColor'];
+			hoverTextColor = widget.hoverTextColor == null ? Colors.black : widget.hoverTextColor!;
 		} else {
 			hoverColor = Colors.transparent;
-			hoverTextColor = widget.textColor == null ? Colors.black : widget.textColor;
+			hoverTextColor = widget.textColor == null ? Colors.black : widget.textColor!;
 		}
 	
 		return [hoverColor, hoverTextColor];

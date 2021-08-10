@@ -5,10 +5,10 @@ import 'output.dart';
 
 Future<Map<String, dynamic>> initIsolate(
 	String name,
-	Function callback,
+	Function(List<Object?>) callback,
 	{
-		Function onListenCallback,
-		List<dynamic> callbackArgs,
+		Function? onListenCallback,
+		List<dynamic>? callbackArgs,
 		bool verbose=false
 	}) async {
 

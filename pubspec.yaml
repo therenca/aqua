@@ -1,10 +1,10 @@
 name: aqua
 description: Utility classes/functions to help with UI development using the Flutter framework.
-version: 1.1.1
+version: 1.1.2
 homepage: https://github.com/therenca/aqua
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -12,7 +12,7 @@ dependencies:
 
   http: ^0.13.0
   intl: ^0.17.0
-  colorize: ^2.0.0
+  colorize: ^3.0.0
   shared_preferences: ^2.0.3
 
 dev_dependencies:

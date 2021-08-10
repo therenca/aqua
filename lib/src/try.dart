@@ -2,7 +2,7 @@ import 'dart:async';
 import 'output.dart';
 
 Future<dynamic> tryCatch(dynamic callback, 
-	{List<dynamic> args, bool verbose=false, dynamic onError}) async {
+	{List<dynamic>? args, bool verbose=false, dynamic onError}) async {
 	Completer completer = Completer<dynamic>();
 
 	var results;

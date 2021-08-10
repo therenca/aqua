@@ -2,24 +2,24 @@ import 'package:flutter/material.dart';
 
 class TabHeader extends StatelessWidget{
 
-	final Color bgColor;
-	final double borderRadius;
-	final Color underline;
+	final Color? bgColor;
+	final double? borderRadius;
+	final Color? underline;
 	final List<String> tabListing;
-	final Function onTap;
-	final TabController controller;
-	final TextStyle textStyle;
-	final Color unselectedLabelColor;
-	final Color labelColor;
-	final TextStyle unselectedLabelStyle;
-	final BoxDecoration decoration;
-	final Alignment alignment;
-	final EdgeInsets padding;
+	final Function(int)? onTap;
+	final TabController? controller;
+	final TextStyle? textStyle;
+	final Color? unselectedLabelColor;
+	final Color? labelColor;
+	final TextStyle? unselectedLabelStyle;
+	final BoxDecoration? decoration;
+	final Alignment? alignment;
+	final EdgeInsets? padding;
 
-	final double tabHeight;
+	final double? tabHeight;
 
 	TabHeader({
-		@required this.tabListing,
+		required this.tabListing,
 		this.bgColor,
 		this.borderRadius,
 		this.underline,
@@ -64,8 +64,8 @@ class TabHeader extends StatelessWidget{
 			controller: controller,
 			indicatorColor: underline,
 			indicator: bgColor != null ? BoxDecoration(
-				color: bgColor.withOpacity(0.6),
-				borderRadius: borderRadius != null ? BorderRadius.circular(borderRadius) : null,
+				color: bgColor!.withOpacity(0.6),
+				borderRadius: borderRadius != null ? BorderRadius.circular(borderRadius!) : null,
 			) : null,
 			tabs: tabs,
 			unselectedLabelColor: unselectedLabelColor,

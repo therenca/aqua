@@ -5,7 +5,7 @@ class DynamicDimensions extends StatelessWidget {
 	final Function renderWidget;
 
 	DynamicDimensions({
-		@required this.renderWidget
+		required this.renderWidget
 	});
 
 	@override

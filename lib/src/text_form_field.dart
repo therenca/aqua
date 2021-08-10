@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 
 class  TextFormFieldCustom extends StatefulWidget {
 
-	final GlobalKey key;
-	final Widget prefix;
-	final Widget prefixIcon;
-	final Widget suffixIcon;
+	final GlobalKey? key;
+	final Widget? prefix;
+	final Widget? prefixIcon;
+	final Widget? suffixIcon;
 	final dynamic beforeInput;
 	final double fontSize;
 	final Color textColor;
@@ -28,29 +28,29 @@ class  TextFormFieldCustom extends StatefulWidget {
 	final double horizontalPadding;
 	final TextInputType keyboardType;
 	
-	final Function onChanged;
-	final Function validator;
-	final Function onSubmitted;
+	final Function? onChanged;
+	final Function? validator;
+	final Function? onSubmitted;
 
-	final FocusNode focusNode;
-	final TextInputAction textInputAction;
-	final TextEditingController controller;
+	final FocusNode? focusNode;
+	final TextInputAction? textInputAction;
+	final TextEditingController? controller;
 
-	final TextAlign textAlign;
-	final TextStyle hintTextStyle;
-	final TextStyle labelTextStyle;
+	final TextAlign? textAlign;
+	final TextStyle? hintTextStyle;
+	final TextStyle? labelTextStyle;
 
 	final bool isFilled;
-	final Color filledColor;
+	final Color? filledColor;
 
-	final IconData prefixIconData;
+	final IconData? prefixIconData;
 	final Color prefixIconColor;
 	final Color focusedPrefixIconColor;
 	final double prefixIconSize;
 
 	final Color cursorColor;
 
-	final StreamController streamController;
+	final StreamController? streamController;
 
 	TextFormFieldCustom({
 		this.key,
@@ -108,8 +108,8 @@ class _TextFormFieldCustomState extends State<TextFormFieldCustom>{
 		super.initState();
 
 		if(widget.focusNode != null){
-			widget.focusNode.addListener((){
-				hasFocus = widget.focusNode.hasFocus;
+			widget.focusNode!.addListener((){
+				hasFocus = widget.focusNode!.hasFocus;
 				if(mounted) setState((){});
 			});
 		}
@@ -138,7 +138,7 @@ class _TextFormFieldCustomState extends State<TextFormFieldCustom>{
 		);
 
 		Widget _buildPrefixIcon(){
-			Widget _prefixIcon;
+			Widget? _prefixIcon;
 
 			if(widget.prefixIconData != null){
 				_prefixIcon = Icon(
@@ -147,7 +147,7 @@ class _TextFormFieldCustomState extends State<TextFormFieldCustom>{
 				);
 			}
 
-			return _prefixIcon;
+			return _prefixIcon!;
 		}
 
 		return TextFormField(
@@ -158,12 +158,12 @@ class _TextFormFieldCustomState extends State<TextFormFieldCustom>{
 			),
 			keyboardType: widget.keyboardType,
 			obscureText: widget.isObscureText,
-			validator: (inputValue) => widget.validator(inputValue),
+			validator: (inputValue) => widget.validator!(inputValue),
 			maxLines: widget.maxLines,
 			controller: widget.controller,
 			focusNode: widget.focusNode,
 			textInputAction: widget.textInputAction,
-			onFieldSubmitted: (inputValue) => widget.onSubmitted(inputValue),
+			onFieldSubmitted: (inputValue) => widget.onSubmitted!(inputValue),
 			decoration: InputDecoration(
 				icon: widget.beforeInput,
 				enabledBorder: widget.isOutlineBorder ? OutlineInputBorder(
@@ -196,19 +196,18 @@ class _TextFormFieldCustomState extends State<TextFormFieldCustom>{
 			onChanged: (String value){
 				// var checked;
 				if(widget.onChanged != null){
-					widget.onChanged(value, widget.controller);
+					widget.onChanged!(value, widget.controller);
 					if(widget.streamController != null){
-						widget.streamController.sink.add(value);
+						widget.streamController!.sink.add(value);
 					}
 				}
 			},
-			textAlign: widget.textAlign == null ? TextAlign.left : widget.textAlign,
+			textAlign: widget.textAlign == null ? TextAlign.left : widget.textAlign!,
 		);
 	}
 
 	@override
 	Widget build(BuildContext context) => _buildTextFormField(context);
-
 }
 
 // thoughts

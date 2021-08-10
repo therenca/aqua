@@ -5,7 +5,7 @@ class MouseInteractivity extends StatelessWidget {
 
 	final Widget child;
 
-	MouseInteractivity({@required this.child});
+	MouseInteractivity({required this.child});
 
 	Widget _buildMouseInteractivity(BuildContext context){
 		return MouseRegion(

@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:async';
 import 'package:colorize/colorize.dart';
 import 'log.dart';
@@ -7,9 +6,9 @@ Future<void> pretifyOutput(String info,
 	{
 		String color='', 
 		String bgColor='',
-		String path,
 		bool clear=false,
-		String endLine,
+		String? path,
+		String? endLine,
 	}) async {
 
 	Colorize toPretify = Colorize(info);
@@ -93,6 +92,6 @@ Future<void> pretifyOutput(String info,
 	print('$toPretify$end');
 
 	if(path != null){
-		await log(info, logFile: path, clear: clear);
+		await log(info, path, clear: clear);
 	}
 }

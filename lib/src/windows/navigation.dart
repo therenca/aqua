@@ -5,20 +5,20 @@ import 'package:aqua/aqua.dart' as aqua;
 import 'route_manager.dart';
 
 class Navigation extends StatefulWidget {
-	final Alignment end;
-	final Alignment begin;
-	final List<Color> bgColors;
-	final Color selectedColor;
-	final Color hoverColor;
-	final Color textColor;
-	final Color hoverTextColor;
-	final double fontSize;
-	final FontWeight fontWeight;
-	final BuildContext parentContext;
+	final Alignment? end;
+	final Alignment? begin;
+	final List<Color>? bgColors;
+	final Color? selectedColor;
+	final Color? hoverColor;
+	final Color? textColor;
+	final Color? hoverTextColor;
+	final double? fontSize;
+	final FontWeight? fontWeight;
+	final BuildContext? parentContext;
 	
 	final String type;
 
-	final Widget header;
+	final Widget? header;
 	final Map<String, Map<String, dynamic>> routes;
 
 	final NavigationStreamer navStreamer;
@@ -38,8 +38,8 @@ class Navigation extends StatefulWidget {
 		this.parentContext,
 		this.type='standard',
 		
-		@required this.routes,
-		@required this.navStreamer
+		required this.routes,
+		required this.navStreamer
 	});
 
 	@override
@@ -48,7 +48,7 @@ class Navigation extends StatefulWidget {
 
 class _NavigationState extends State<Navigation> {
 
-	BuildContext currentContext;
+	BuildContext? currentContext;
 
 	Widget _buildNavigation(BuildContext context){
 		currentContext = context;
@@ -76,9 +76,9 @@ class _NavigationState extends State<Navigation> {
 
 class NavigationStreamer {
 	
-	Function onDone;
-	Function onError;
-	StreamController<Map<String, dynamic>> _controller;
+	Function()? onDone;
+	Function? onError;
+	StreamController<Map<String, dynamic>>? _controller;
 
 	NavigationStreamer({this.onDone, this.onError}){
 		_controller = StreamController.broadcast();
@@ -86,11 +86,11 @@ class NavigationStreamer {
 
 
 
-	StreamController get controller => _controller;
-	Stream get stream => _controller.stream;
+	StreamController? get controller => _controller;
+	Stream? get stream => _controller!.stream;
 
 	StreamSubscription listen(Function listenCallback){
-		StreamSubscription sub = _controller.stream.distinct().listen(
+		StreamSubscription sub = _controller!.stream.distinct().listen(
 			(data){
 				listenCallback(data);
 			},
@@ -107,6 +107,7 @@ class NavigationStreamer {
 	}
 
 	void close(){
-		_controller.close();
+		_controller!.close();
+		// _controller!.sink.close();
 	}
 }
