@@ -9,18 +9,24 @@ import 'package:aqua/aqua.dart' as aqua
 
 To log output to file 
 ```dart
-await aqua.log('data to log', logFile: 'path/to/file', clear: true, time: true);
+await aqua.log('data to log', 'path/to/file', clear: true, time: true);
 ```
 
 To save data to device
 ```dart
 Future<void> save() async {
-	var id = 'id';
-	var _value = 1920;
-	await aqua.Pref.set(id, value);
-	var value = await aqua.Pref.get(id);
+  var id = 'id';
+  var _value = 1920;
+  await aqua.Pref.set(id, value);
+  var value = await aqua.Pref.get(id);
 }
 ```
+
+Show time in terms of hours and minutes and days ago
+```dart
+var time = aqua.readTimestamp(DateTime.now().millisecondsSinceEpoch / 1000);
+```
+
 To put a block of code in a try catch
 ```dart
 
@@ -28,66 +34,106 @@ To put a block of code in a try catch
 
 // as a function
 Widget  _buildWidget(){
-	// may fail to build for some reason
+  // may fail to build for some reason
 }
-var child = await aqua.tryCatch(_buildWidget());
+var child = await aqua.tryCatch(_buildWidget(), verbose: true);
 
 // as a future
 Future<Widget> _buildWidget() async {
-	// may fail to build for some reason
+  // may fail to build for some reason
 }
 
 var future = _buildWidget();
-var child = await aqua.tryCatch(future);
+var child = await aqua.tryCatch(future, verbose: true);
 
 
 if(child != null){
-	// proceed
+  // proceed
 }
 
 ```
 
-When fetching data from server in json, or posting a query to server in json
+Interacting with APIs from remote locations
 ```dart
 // posting to an endpoint
 var fromServer = await aqua.Client(
-	'192.168.1.100', //ip
-	8080, // port
-	'/test', // endpoint
-	query: {
-		'id': 1,
-	}, // post parameters
-	// verbose: true
+  '192.168.1.100', //ip
+  8080, // port
+  '/test', // endpoint
+  query: {
+    'id': 1,
+  }, // post parameters
+  verbose: true
 ).getResponse();
+
+// or
+
+var client = aqua.Client(
+  '192.168.1.100', //ip
+  8080, // port
+  '/test', // endpoint
+  query: {
+    'id': 1,
+  }, // post parameters
+  verbose: true
+);
+
+var fromServer = await client.getResponse(); // defaults to POST
+if(client.statusCode == 200){
+  // some code
+}
 
 // a real end point would look like this
 // the end point is free to use
 // you can find the rest of the endpoints here: https://www.coingecko.com/en/api
 var fromServer = await aqua.Client(
-	'api.coingecko.com',
-	443,
-	'/api/v3/coins/markets',
-	isSecured: true,
-	query: {
-		'vs_currency': 'usd',
-		'order': 'market_cap_desc',
-		'per_page': '20',
-		'page': '1',
-		'sparkline': 'true'
-	}
+  'api.coingecko.com',
+  443,
+  '/api/v3/coins/markets',
+  isSecured: true,
+  query: {
+    'vs_currency': 'usd',
+    'order': 'market_cap_desc',
+    'per_page': '20',
+    'page': '1',
+    'sparkline': 'true'
+  },
+  verbose: true
 ).getResponse(method: 'GET');
+
+// other parameters include
+var client = aqua.Client(
+  '192.168.1.2',
+  8080,
+  '/test',
+  headers: <String, String>{
+    'Authorization': 'Bearer $yourtoken'
+  },
+  query: {
+    'id': 1
+  }
+  isSecured: true,
+  verbose: constants.Api.verbose,
+  expectedStatusCodes: [201] // not a must, assumes you know your status codes for api
+);
+
+var fromServer = await client.getResponse(); //defaults to POST, others include GET, PUT, DELETE
+if(client.statusCode == 201){
+  // some code
+}
+
 ```
 
 **`DESKTOP ONLY`** To allow for mouse pointers to change to click icons on hovering on a clickable widget
 ```dart
 @override
 Widget build(BuildContext context){
-	
-	// some code
-	// then
-	return aqua.MouseInteractivity(
-		child: child
-	);
+  
+  // some code
+  // then
+  return aqua.MouseInteractivity(
+    child: child
+  );
 }
 ```
 
@@ -103,19 +149,44 @@ aqua.pretifyOutput('to print on screen'); // will print in green
 aqua.pretifyOutput('to print on screen', color: 'red');
 ```
 
+To obscure text
+```dart
+var obscured = aqua.obscureText('obscured');
+```
+
+show snackbar
+```dart
+aqua.showSnackbar(
+  'info',
+  context,
+  color: Colors.red,
+  bgColor: Colors.black,
+  mounted=mounted // flutter value,
+  seconds=1
+);
+```
+
+Check for email syntax or digits without characters
+```dart
+var isEmail = aqua.Validators.isEmail('email');
+var isNumber = aqua.Validartors.isNumber('1234132');
+```
+
+Disallow listview glow
+```dart
+@override
+Widget build(BuildContext context){
+  return aqua.disallowGlow(ListView());
+}
+```
+
 To add a shadowy effect on an image
 ```dart
 @override
 Widget build(BuildContext context){
-	return Stack(
-		children: [
-			_buildImage(),
-			aqua.Shadow(
-				width: width,
-				height: height,
-			)
-		]
-	);
+  return aqua.Shadow(
+    child: Image(image: AssetImage('/path/to/asset'))
+  );
 }
 ```
 
@@ -123,10 +194,10 @@ A quick drop down widget
 ```dart
 @override
 Widget build(BuildContext context){
-	return aqua.DropDown(
-		initValue: 'one',
-		items: ['one', 'two', 'three', 'four', 'five', 'six']
-	);
+  return aqua.DropDown(
+    initValue: 'one',
+    items: ['one', 'two', 'three', 'four', 'five', 'six']
+  );
 }
 ```
 
@@ -134,28 +205,28 @@ A quick TabBar. Tabs without scaffold...
 ```dart
 @override
 Widget build(BuildContext context){
-	return Material(
-		child: DefaultTabController(
-			length: 3,
-			child: Column(
-				children: [
-					aqua.TabHeader(
-						tabListing: ['car', 'transit', 'bike'],
-					),
+  return Material(
+    child: DefaultTabController(
+      length: 3,
+      child: Column(
+        children: [
+          aqua.TabHeader(
+            tabListing: ['car', 'transit', 'bike'],
+          ),
 
-					Expanded(
-						child: TabBarView(
-							children: [
-								Icon(Icons.directions_car),
-								Icon(Icons.directions_transit),
-								Icon(Icons.directions_bike),
-							],
-						),
-					)
-				],
-			),
-		)
-	);
+          Expanded(
+            child: TabBarView(
+              children: [
+                Icon(Icons.directions_car),
+                Icon(Icons.directions_transit),
+                Icon(Icons.directions_bike),
+              ],
+            ),
+          )
+        ],
+      ),
+    )
+  );
 }
 ```
 
@@ -164,13 +235,36 @@ To get screen dimensions in scale
 @override
 Widget build(BuildContext context){
 
-	aqua.Dimensions().init(context);
+  aqua.Dimensions().init(context);
 
-	return Container(
-		width: aqua.Dimensions.width, // full width of screen
-		height: aqua.Dimensions.height, // full height of screen
-		color: Colors.red
-	);
+  return Container(
+    width: aqua.Dimensions.width, // full width of screen
+    height: aqua.Dimensions.height, // full height of screen
+    color: Colors.red
+  );
+}
+```
+
+To get height and width for an expanded widget
+```dart
+@override
+Widget build(BuildContext context){
+  return Column(
+    children: [
+      Expanded(
+        child: aqua.DynamicDimensions(
+          renderWidget: (double width, double height){
+            return Container(
+              width: width,
+              height: height
+              color: Colors.red,
+            );
+          }
+        ),
+      ),
+      SizedBox(height: 10.0),
+    ]
+  );
 }
 ```
 
@@ -200,60 +294,51 @@ To navigate
 
 aqua.Dimensions().init(context);
 Widget viewOne = Container(
-	width: aqua.Dimensions.width,
-	height: aqua.Dimensions.height
-	color: Colors.blue
+  width: aqua.Dimensions.width,
+  height: aqua.Dimensions.height
+  color: Colors.blue
 );
 Widget viewTwo = Container(
-	width: aqua.Dimensions.width,
-	height: aqua.Dimensions.height
-	color: Colors.red
+  width: aqua.Dimensions.width,
+  height: aqua.Dimensions.height
+  color: Colors.red
 );
 
 // to navigate to the next view without erasing the previous view from state
 aqua.CustomNavigator(
-	context: context,
-	buildScreen: () = > viewOne
+  context: context,
+  buildScreen: () = > viewOne
 ).navigateToPage();
 
 // to navigate to the next view and erase the previous view from state
 aqua.CustomNavigator(
-	context: context,
-	replaceSingle: true,
-	buildScreen: () = > viewOne
+  context: context,
+  replaceSingle: true,
+  buildScreen: () = > viewOne
 ).navigateToPage();
 
 // to navigate to the next view and erase ALL the previous views from state
 aqua.CustomNavigator(
-	context: context,
-	replaceAll: true,
-	buildScreen: () = > viewOne
+  context: context,
+  replaceAll: true,
+  buildScreen: () = > viewOne
 ).navigateToPage();
 
 // to navigate to the next view using a named route
 aqua.CustomNavigator(
-	context: context,
-	namedRoute: '/home',
-	buildScreen: () = > viewOne
+  context: context,
+  namedRoute: '/home',
+  buildScreen: () = > viewOne
 ).navigateToPage();
 ```
 
-To display loading icon
+To display loader
 ```dart
 
-// render this widget as you see fit
-Widget loadingIcon = aqua.LoadingIcon();
-
-// to specify a loading type: check the different loading icons at this location
-// https://github.com/jogboms/flutter_spinkit
-
-import 'package:flutter_spinkit/flutter_spinkit.dart' as spinkitt;
-
-Widget loadingIcon = aqua.LoadingIcon(
-	spinkitWidget: spinkitt.SpinKitWave(
-		color: Colors.blue,
-		size: 40.0,
-	),
+Widget loader = aqua.Loader(
+  width: width,
+  height: height,
+  color: color
 );
 ```
 
@@ -261,12 +346,12 @@ To request focus from another widget
 ```dart
 @override
 Widget build(BuildContext context){
-	
-	// some code
-	// then
-	Widget withFocus = aqua.requestFocus(child, context: context);
+  
+  // some code
+  // then
+  Widget withFocus = aqua.requestFocus(child, context);
 
-	// make sure to return a widget
+  // make sure to return a widget
 }
 ```
 
@@ -280,14 +365,14 @@ To clip images into a circular widget
 ```dart
 @override
 Widget build(BuildContext context){
-	// some code
-	// then
-	Widget clippedImage = aqua.ClippedCircle(
-		child: child // some widget, could be an image, wrapped in a container,
-		color: Colors.blue // border of the circle
-	);
+  // some code
+  // then
+  Widget clippedImage = aqua.ClippedCircle(
+    child: child // some widget, could be an image, wrapped in a container,
+    color: Colors.blue // border of the circle
+  );
 
-	// make sure to return a widget
+  // make sure to return a widget
 }
 ```
 
@@ -296,49 +381,46 @@ Custom Text Form Widget
 
 class Play extends StatefulWidget {
 
-	@override
-	PlayState createState() => PlayState();
+  @override
+  PlayState createState() => PlayState();
 
 }
 
 class PlayState extends State<Play>{
 
-	FocusNode focusNode;
-	TextEditingController textEditingController;
+  FocusNode focusNode;
+  TextEditingController textEditingController;
 
-	@override
-	void initState(){
-		super.initState();
+  @override
+  void initState(){
+    super.initState();
 
-		focusNode = FocusNode();
-		textEditingController = TextEditingController();
-	}
+    focusNode = FocusNode();
+    textEditingController = TextEditingController();
+  }
 
-	@override
-	void dispose(){
-		focusNode?.dispose();
-		textEditingController?.dispose();
+  @override
+  void dispose(){
+    focusNode?.dispose();
+    textEditingController?.dispose();
 
-		super.dispose();
-	}
+    super.dispose();
+  }
 
-	@override
-	Widget build(BuildContext context){
-		aqua.Dimensions().init(context);
+  @override
+  Widget build(BuildContext context){
+    aqua.Dimensions().init(context);
 
-		// more on this later ... 
-		// check source code :)
-
-		return SizedBox(
-			width: aqua.Dimensions.width,
-			height: 100.0,
-			child: aqua.TextFormFieldCustom(
-				isOutlineBorder: true, // or false
-				focusNode: focusNode
-				controller: textEditingController,
-			)
-		);
-	}
+    return SizedBox(
+      width: aqua.Dimensions.width,
+      height: 100.0,
+      child: aqua.TextFormFieldCustom(
+        isOutlineBorder: true, // or false
+        focusNode: focusNode
+        controller: textEditingController,
+      )
+    );
+  }
 
 }
 ```
@@ -357,190 +439,165 @@ import 'package:aqua/aqua.dart' as aqua;
 
 class Shell extends StatefulWidget {
 
-	@override
-	ShellState createState() => ShellState();
+  @override
+  ShellState createState() => ShellState();
 }
 
 class ShellState extends State<Shell>{
 
-	Widget selectedWidget;
-	aqua.NavigationStreamer mainNavStreamer;
-	StreamSubscription mainNavStreamSubscription;
+  Widget selectedWidget;
+  aqua.NavigationStreamer mainNavStreamer;
+  StreamSubscription mainNavStreamSubscription;
 
-	@override
-	void initState(){
-		super.initState();
-		mainNavStreamer = aqua.NavigationStreamer();
+  @override
+  void initState(){
+    super.initState();
+    mainNavStreamer = aqua.NavigationStreamer();
 
-		mainNavStreamSubscription = mainNavStreamer.listen((data){
-			aqua.pretifyOutput('[SHELL] data from nav stream: $data');
+    mainNavStreamSubscription = mainNavStreamer.listen((data){
+      aqua.pretifyOutput('[SHELL] data from nav stream: $data');
 
-			selectedWidget = data['window'];
-			setState((){});
-		});
-	}
+      selectedWidget = data['window'];
+      setState((){});
+    });
+  }
 
-	@override
-	void dispose(){
-		mainNavStreamSubscription.cancel();
-		mainNavStreamer.close();
-		super.dispose();
-	}
+  @override
+  void dispose(){
+    mainNavStreamSubscription.cancel();
+    mainNavStreamer.close();
+    super.dispose();
+  }
 
-	Widget _buildShell(BuildContext context){
-		aqua.Dimensions().init(context);
-		double navWidth = aqua.Dimensions.width * 0.15;
-		double contentWindowWidth = aqua.Dimensions.width - navWidth;
+  Widget _buildShell(BuildContext context){
+    Map<String, Map<String, dynamic>> generatedRoutes = _buildGeneratedRoutes(
+      contentWindowWidth,
+      aqua.Dimensions.height
+    );
 
-		Map<String, Map<String, dynamic>> generatedRoutes = _buildGeneratedRoutes(
-			contentWindowWidth,
-			aqua.Dimensions.height
-		);
+    var textStyle = TextStyle(
+      fontSize: 30.0,
+      color: Colors.white,
+      fontWeight: FontWeight.bold
+    );
 
-		var textStyle = TextStyle(
-			fontSize: 30.0,
-			color: Colors.white,
-			fontWeight: FontWeight.bold
-		);
+    Widget firstWidget = Container(
+      width: contentWindowWidth,
+      height: aqua.Dimensions.height,
+      color: Colors.purple,
+      child: Center(
+        child: Text(
+          'Home',
+          style: textStyle
+        )
+      ),
+    );
 
-		Widget firstWidget = Container(
-			width: contentWindowWidth,
-			height: aqua.Dimensions.height,
-			color: Colors.purple,
-			child: Center(
-				child: Text(
-					'Home',
-					style: textStyle
-				)
-			),
-		);
+    return Scaffold(
+      appBar: null,
+      body: SingleChildScrollView(
+        child: Container(
+          child: Row(
 
-		return Scaffold(
-			appBar: null,
-			body: SingleChildScrollView(
-				child: Container(
-					child: Row(
+            children: [
 
-						children: [
+              Expanded(
+                child: aqua.Navigation(
+                  header: Container(
+                    width: navWidth,
+                    height: 100.0,
+                    color: Colors.red,
+                    child: Center(
+                      child: Text(
+                        'Header',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold
+                        ),
+                      ),
+                    ),
+                  ),
+                  routes: generatedRoutes,
+                  bgColors: <Color>[
+                    Colors.blue,
+                    Colors.blueAccent
+                  ],
+                  hoverColor: Colors.brown.withOpacity(0.5),
+                  selectedColor: Colors.white.withOpacity(0.5),
+                  navStreamer: mainNavStreamer,
+                ),
+              ),
 
-							aqua.Navigation(
-								width: navWidth,
-								height: aqua.Dimensions.height,
-								header: Container(
-									width: navWidth,
-									height: 100.0,
-									color: Colors.red,
-									child: Center(
-										child: Text(
-											'Header',
-											style: TextStyle(
-												color: Colors.white,
-												fontWeight: FontWeight.bold
-											),
-										),
-									),
-								),
-								routes: generatedRoutes,
-								bgColors: <Color>[
-									Colors.blue,
-									Colors.blueAccent
-								],
-								hoverColor: Colors.brown.withOpacity(0.5),
-								selectedColor: Colors.white.withOpacity(0.5),
-								navStreamer: mainNavStreamer,
-							),
+              Expanded(
+                flex: 6,
+                child: selectedWidget == null ? aqua.requestFocus(
+                  firstWidget,
+                  context
+                ) : aqua.requestFocus(
+                  selectedWidget,
+                  context
+                )
+              ),
+            ]
+          )
+        ),
+      ),
+    );
+  }
 
-							Container(
-								child: Column(
-									mainAxisAlignment: MainAxisAlignment.start,
-									children: [
-										selectedWidget == null ? aqua.requestFocus(
-											firstWidget,
-											context: context
-										) : aqua.requestFocus(
-											selectedWidget,
-											context: context
-										)
-									],
-								),
-							)
-						]
-					)
-				),
-			),
-		);
-	}
+  @override
+  Widget build(BuildContext context) => _buildShell(context);
 
-	@override
-	Widget build(BuildContext context) => _buildShell(context);
+  Map<String, Map<String, dynamic>> _buildGeneratedRoutes(){
 
-	Map<String, Map<String, dynamic>> _buildGeneratedRoutes(double windowWidth, double windowHeight){
+    var textStyle = TextStyle(
+      fontSize: 30.0,
+      color: Colors.white,
+      fontWeight: FontWeight.bold
+    );
 
-		var textStyle = TextStyle(
-			fontSize: 30.0,
-			color: Colors.white,
-			fontWeight: FontWeight.bold
-		);
+    Function _buildIconHelper = (IconData iconData){
+      return Icon(iconData, color: Colors.black, size: 15.0,);
+    };
 
-		Function _buildIconHelper = (IconData iconData){
-			return Icon(iconData, color: Colors.black, size: 15.0,);
-		};
-
-		return {
-			'Home': {
-				'window': Container(
-					width: windowWidth,
-					height: windowHeight,
-					color: Colors.purple,
-					child: Center(
-						child: Text(
-							'Home',
-							style: textStyle
-						)
-					),
-				),
-				'icon': _buildIconHelper(Icons.home)
-			},
-			'Search': {
-				'window': Container(
-					width: windowWidth,
-					height: windowHeight,
-					child: Stack(
-						children: [
-							aqua.Shadow(
-								height: windowWidth,
-								width: windowHeight,
-								colors: [
-									Colors.green,
-									Colors.teal
-								],
-							),
-							Center(
-								child: Text(
-									'Search',
-									style: textStyle
-								)
-							),
-						],
-					)
-				),
-				'icon': _buildIconHelper(Icons.search)
-			},
-			'Settings': {
-				'window': Container(
-					width: windowWidth,
-					height: windowHeight,
-					color: Colors.indigo,
-					child: Center(
-						child: Text(
-							'Settings',
-							style: textStyle
-						)
-					),
-				),
-				'icon': _buildIconHelper(Icons.settings)
-			}
-		};
-	}
+    return {
+      'Home': {
+        'window': aqua.DynammicDimensions(
+          renderWidget: (double width, double height){
+            return Container(
+              width: width,
+              height: height,
+              color: Colors.purple
+            );
+          }
+        ),
+        'icon': _buildIconHelper(Icons.home)
+      },
+      'Search': {
+        'window': aqua.DynammicDimensions(
+          renderWidget: (double width, double height){
+            return Container(
+              width: width,
+              height: height,
+              color: Colors.red
+            );
+          }
+        ),
+        'icon': _buildIconHelper(Icons.search)
+      },
+      'Settings': {
+        'window': aqua.DynammicDimensions(
+          renderWidget: (double width, double height){
+            return Container(
+              width: width,
+              height: height,
+              color: Colors.blue
+            );
+          }
+        ),,
+        'icon': _buildIconHelper(Icons.settings)
+      }
+    };
+  }
 }
 ```

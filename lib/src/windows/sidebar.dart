@@ -153,8 +153,6 @@ class SidebarState extends State<SideBar>{
 						);
 					} else {
 						background = aqua.Shadow(
-							width: width,
-							height: height,
 							colors: widget.bgColors,
 							begin: widget.begin,
 							end: widget.end,

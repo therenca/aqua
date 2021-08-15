@@ -71,3 +71,6 @@
 
 ### 1.1.2
 - upgraded to sound null safety
+
+### 1.1.2+1
+- updated readme, and textformfield
