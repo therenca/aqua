@@ -10,6 +10,7 @@ class DropDown extends StatefulWidget {
 	final Color? dropdownColor;
 	final Function? initCallback;
 	final Color? iconEnabledColor;
+	final bool? isExpanded;
 
 	DropDown({
 		required this.items,
@@ -19,7 +20,8 @@ class DropDown extends StatefulWidget {
 		this.callback,
 		this.dropdownColor,
 		this.iconEnabledColor,
-		this.initCallback
+		this.initCallback,
+		this.isExpanded=false
 	});
 
 	@override
@@ -32,7 +34,9 @@ class _DropDownState extends State<DropDown>{
 	@override
 	void initState(){
 		super.initState();
-		widget.initCallback != null ? widget.initCallback!() : print('');
+		if(widget.initCallback != null){
+			widget.initCallback!();
+		}
 	}
 
 	String? selectedValue;
@@ -44,6 +48,7 @@ class _DropDownState extends State<DropDown>{
 	Widget _buildDropDown(BuildContext context){
 		return DropdownButton<dynamic>(
 			key: widget.key,
+			isExpanded: widget.isExpanded ?? false,
 			dropdownColor: widget.dropdownColor,
 			value: _getSelectedValue(),
 			underline: Container(),

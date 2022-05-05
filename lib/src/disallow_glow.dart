@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-Widget disallowGlow(ListView child) => NotificationListener<OverscrollIndicatorNotification>(
+Widget disallowGlow(Widget child) => NotificationListener<OverscrollIndicatorNotification>(
 	onNotification: (overscroll){
-		overscroll.disallowGlow();
+		overscroll.disallowIndicator();
 		return false;
 	},
 	child: child

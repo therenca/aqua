@@ -78,6 +78,7 @@ class NavigationStreamer {
 	
 	Function()? onDone;
 	Function? onError;
+	// ignore: close_sinks
 	StreamController<Map<String, dynamic>>? _controller;
 
 	NavigationStreamer({this.onDone, this.onError}){

@@ -7,16 +7,12 @@ class ClippedCircle extends StatelessWidget {
 
 	final Widget child;
 	final Color color;
-	final double? ratio;
-	final Color? ratioColor;
 	final double? strokeWidth;
 
 	ClippedCircle({
 		required this.child,
 		this.color=Colors.white,
 		this.strokeWidth=2.0,
-		this.ratio,
-		this.ratioColor
 	});
 
 	Widget _buildClippedWidget() => ClipPath(
@@ -27,8 +23,6 @@ class ClippedCircle extends StatelessWidget {
 	Widget _addPathColorToClippedWidget(child) => CustomPaint(
 		painter: _ClipperBorderPainter(
 			color: color,
-			ratio: ratio,
-			ratioColor: ratioColor,
 			strokeWidth: strokeWidth,
 			clipper: ColoredBorderClipper()
 		),
@@ -67,12 +61,10 @@ class _ClipperBorderPainter extends CustomPainter {
 
 	final Color color;
 	final double? strokeWidth;
-	final double? ratio;
-	final Color? ratioColor;
 	final CustomClipper clipper;
 
 	_ClipperBorderPainter({
-		required this.clipper, this.color=Colors.white, this.ratio, this.ratioColor, this.strokeWidth});
+		required this.clipper, this.color=Colors.white, this.strokeWidth});
 
 	@override
 	void paint(Canvas canvas, Size size){
@@ -84,22 +76,7 @@ class _ClipperBorderPainter extends CustomPainter {
 		Path path = clipper.getClip(size);
 		canvas.drawPath(path, paint);
 		path.close();
-
-		if(ratio != null){
-			var deg = ratio! * 360;
-			var radians = deg * degrees2Radians;
-			Path _path = Path();
-			_path.addArc(Rect.fromCircle(
-				center: Offset(size.width * 0.5, size.height * 0.5),
-				radius: size.width * 0.5,
-			), 0.0, radians);
-			Paint _paint = Paint()
-				..style = PaintingStyle.stroke
-				..strokeWidth = 4.0
-				..color = ratioColor == null ? Colors.red : ratioColor!;
-			canvas.drawPath(_path, _paint);
-			_path.close();
-		}
+	
 	}
 
 	@override

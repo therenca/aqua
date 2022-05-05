@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter/rendering.dart';
 import 'package:aqua/aqua.dart' as aqua;
 
 import 'helpers/switcher.dart';
