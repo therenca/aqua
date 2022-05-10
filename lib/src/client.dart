@@ -98,34 +98,34 @@ class Client {
 		
 		switch(method){
 			case 'POST': {
-				try {
-					if(multipartInfo != null || files != null){
-						var request = http.MultipartRequest('POST', uri);
-						request.headers.addAll(_headers);
-						request.fields.addAll(multipartInfo != null ? multipartInfo : <String, String>{});
-
-						if(files != null){
-							files.forEach((String fileName, String filePath) async {
-								var file = await http.MultipartFile.fromPath(
-									fileName,
-									filePath
-								);
-								request.files.add(file);
-							});
-						}
-
-						response = await request.send();
-						
-					} else {
-
-						response = await http.post(
-							uri,
-							headers: _headers,
-							body: contentType == 'application/x-www-form-urlencoded' ? query : jsonEncode(query),
-						);
+				if(multipartInfo != null || files != null){
+					var request = http.MultipartRequest('POST', uri);
+					_headers[HttpHeaders.contentTypeHeader] = 'multipart/form-data';
+					request.headers.addAll(_headers);
+					request.fields.addAll(multipartInfo != null ? multipartInfo : <String, String>{});
+					if(query != null){
+						Map<String, String> _query = query!.map((key, value) => MapEntry(key, value.toString()));
+						request.fields.addAll(_query);
 					}
-				} catch(e){
-					error = e.toString();
+
+					if(files != null){
+						files.forEach((String fileName, String filePath) async {
+							var file = await http.MultipartFile.fromPath(
+								fileName,
+								filePath
+							);
+							request.files.add(file);
+						});
+					}
+
+					response = await request.send();
+					
+				} else {
+					response = await http.post(
+						uri,
+						headers: _headers,
+						body: contentType == 'application/x-www-form-urlencoded' ? query : jsonEncode(query),
+					);
 				}
 
 				break;
