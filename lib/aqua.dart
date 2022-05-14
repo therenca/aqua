@@ -35,3 +35,4 @@ export 'src/dynamic_dimensions.dart';
 export 'src/windows/navigation.dart';
 export 'src/graphics/smooth_corner.dart';
 export 'src/graphics/rounded_corners.dart';
+export 'src/graphics/skeleton_animation.dart';
