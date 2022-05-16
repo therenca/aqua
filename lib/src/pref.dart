@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Pref {
-
 	static Future<dynamic> get(String key) async {
 		SharedPreferences pref = await SharedPreferences.getInstance();
 		dynamic value =  pref.get(key);

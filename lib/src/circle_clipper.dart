@@ -1,10 +1,6 @@
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
-const double degrees2Radians = math.pi / 180.0;
-
 class ClippedCircle extends StatelessWidget {
-
 	final Widget child;
 	final Color color;
 	final double? strokeWidth;
@@ -40,7 +36,6 @@ class ClippedCircle extends StatelessWidget {
 }
 
 class _ColoredBorderClipper extends CustomClipper<Path> {
-
 	@override
 	Path getClip(Size size){
 		Path path = Path();
@@ -54,11 +49,9 @@ class _ColoredBorderClipper extends CustomClipper<Path> {
 
 	@override
 	bool shouldReclip(CustomClipper<Path> oldClipper) => true;
-
 }
 
 class _ClipperBorderPainter extends CustomPainter {
-
 	final Color color;
 	final double? strokeWidth;
 	final CustomClipper clipper;
@@ -81,5 +74,4 @@ class _ClipperBorderPainter extends CustomPainter {
 
 	@override
 	bool shouldRepaint(CustomPainter oldPainter) => false;
-
 }

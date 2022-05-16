@@ -30,9 +30,7 @@ Future<dynamic> tryCatch(dynamic callback,
 
 			if(onError is Function){
 				onError();
-			}
-			
-			onError();
+			}		
 		}
 	}
 

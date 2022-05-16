@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class CenterInColumn extends StatelessWidget {
-
 	final int flex;
 	final Widget child;
 
@@ -12,28 +11,21 @@ class CenterInColumn extends StatelessWidget {
 
 	@override
 	Widget build(BuildContext context){
-
 		return Row(
 			children: [
-
 				Expanded(
 					flex: 1,
 					child: Container(),
 				),
-
 				Expanded(
 					flex: flex,
 					child: child,
 				),
-
 				Expanded(
 					flex: 1,
 					child: Container(),
 				),
-
 			],
 		);
-
 	}
-
 }
