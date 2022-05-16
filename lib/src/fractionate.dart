@@ -1,5 +1,5 @@
 List<List<dynamic>> fractionate(List<dynamic> listing, int pieces){
-
+	assert(listing.length > 3);
 	var listingF = <List<dynamic>>[];
 	var distribution = listing.length ~/ pieces;
 
