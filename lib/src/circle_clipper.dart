@@ -16,7 +16,7 @@ class ClippedCircle extends StatelessWidget {
 	});
 
 	Widget _buildClippedWidget() => ClipPath(
-		clipper: ColoredBorderClipper(),
+		clipper: _ColoredBorderClipper(),
 		child: child,
 	);
 
@@ -24,7 +24,7 @@ class ClippedCircle extends StatelessWidget {
 		painter: _ClipperBorderPainter(
 			color: color,
 			strokeWidth: strokeWidth,
-			clipper: ColoredBorderClipper()
+			clipper: _ColoredBorderClipper()
 		),
 		child: child,
 	);
@@ -39,7 +39,7 @@ class ClippedCircle extends StatelessWidget {
 
 }
 
-class ColoredBorderClipper extends CustomClipper<Path> {
+class _ColoredBorderClipper extends CustomClipper<Path> {
 
 	@override
 	Path getClip(Size size){
