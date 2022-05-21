@@ -40,17 +40,12 @@ class _DropDownState extends State<DropDown>{
 	}
 
 	String? selectedValue;
-
-	String _getSelectedValue(){
-		return selectedValue == null ? widget.initValue == null ? widget.items.first : widget.initValue : widget.items.contains(selectedValue) ? selectedValue : widget.items.first;
-	}
-
 	Widget _buildDropDown(BuildContext context){
 		return DropdownButton<dynamic>(
 			key: widget.key,
 			isExpanded: widget.isExpanded ?? false,
 			dropdownColor: widget.dropdownColor,
-			value: _getSelectedValue(),
+			value: selectedValue ?? widget.initValue ?? widget.items.first,
 			underline: Container(),
 			onChanged: (dynamic newValue) async {
 				setState(() {
@@ -80,5 +75,4 @@ class _DropDownState extends State<DropDown>{
 	}
 
 	Widget build(BuildContext context) => _buildDropDown(context);
-
 }
