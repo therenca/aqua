@@ -223,30 +223,23 @@ class Client {
 		}
 
 		switch(size){
-
 			case 'small': {
 				binary =  await response.stream.toBytes();
 				file != null ? await file.writeAsBytes(binary) : file = null;
 				break;
 			}
-
 			case 'large': {
-
 				if(filePath.isNotEmpty){
-
 					var received = 0;
 					var length = response.contentLength;
-					
 					var sink = file.openWrite();
 					List<int> fullBytes = [];
 					await response.stream.map((List<int> bytes){
 						received += bytes.length;
 						fullBytes += bytes;
-
 						if(verbose){
 							pretifyOutput('[DOWNLOAD | $size] $received / $length');
 						}
-
 						if(controller != null){
 							var downloadProgress = received / length!;
 							controller.sink.add(downloadProgress);
@@ -255,18 +248,15 @@ class Client {
 								controller.close();
 							}
 						}
-
 						return bytes;
 					}).pipe(sink);
 
 					sink.close();
 					binary = Uint8List.fromList(fullBytes);
 				}
-
 				break;
 			}
 		}
-
 		return binary;
 	}
 }
