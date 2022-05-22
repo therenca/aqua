@@ -16,6 +16,8 @@ class Client {
 	Map <String, dynamic>? query;
 	Map<String, String>? headers;
 	List<int>? expectedStatusCodes; // anticipate successful response
+	int timeout;
+	Function? onTimeout;
 
 	String? _now;
 	String? _uri;
@@ -35,6 +37,8 @@ class Client {
 			this.headers,
 			this.expectedStatusCodes,
 			this.contentType='application/json',
+			this.timeout=5000,
+			this.onTimeout
 		}){
 		
 		if(expectedStatusCodes != null){
@@ -73,11 +77,10 @@ class Client {
 		return uri;
 	}
 
+
 	Future<dynamic> getResponse({String method='POST', Map<String, String>? multipartInfo, Map<String, String>? files}) async {
 		
-		String? error;
-		// http.Response response;
-		var response;
+		Future? responseFuture;
 
 		var uri;
 		if(isSecured){
@@ -117,11 +120,9 @@ class Client {
 							request.files.add(file);
 						});
 					}
-
-					response = await request.send();
-					
+					responseFuture = request.send();
 				} else {
-					response = await http.post(
+					responseFuture = http.post(
 						uri,
 						headers: _headers,
 						body: contentType == 'application/x-www-form-urlencoded' ? query : jsonEncode(query),
@@ -132,73 +133,74 @@ class Client {
 			}
 
 			case 'GET': {
-				
-				try {
-					response = await http.get(uri, headers: _headers);
-				} catch(e){
-					error = e.toString();
-				}
+				responseFuture = http.get(uri, headers: _headers);
 				break;
 			}
 
 			case 'PUT': {
-				try{
-					response = await http.put(
-						uri,
-						headers: _headers,
-						body: contentType == 'application/x-www-form-urlencoded' ? query : jsonEncode(query),
-					);
-				} catch(e){
-					error = e.toString();
-				}
-
+				responseFuture = http.put(
+					uri,
+					headers: _headers,
+					body: contentType == 'application/x-www-form-urlencoded' ? query : jsonEncode(query),
+				);
 				break;
 			}
 
 			case 'DELETE': {
-				try{
-					response = await http.delete(
-						uri,
-						headers: _headers,
-						body: contentType == 'application/x-www-form-urlencoded' ? query : jsonEncode(query),
-					);
-				} catch(e){
-					error = e.toString();
-				}
-
+				responseFuture = http.delete(
+					uri,
+					headers: _headers,
+					body: contentType == 'application/x-www-form-urlencoded' ? query : jsonEncode(query),
+				);
 				break;
 			}
 		}
 
-		var bodyStr;
-		if(response != null){
-
-			if(response is http.StreamedResponse){
-				bodyStr = await response.stream.bytesToString();
+		FutureOr<http.Response> Function() _onTimeout = (){
+			if(onTimeout != null){
+				onTimeout!();
 			} else {
-				bodyStr = response.body;
+				throw TimeoutException('Connection timed out, current timeout is set to $timeout, try increasing the timeout or proof check your internet connection / resource availability. Set a onTimeout callback for such scenarios when creating your aqua.Client object');
 			}
+			return Future.value(http.Response(
+				method,
+				HttpStatus.gatewayTimeout
+			));
+		};
 
-			if(verbose){
-				if(error != null){
-					pretifyOutput('[$_now][HTTP ERROR] $error', color: 'red');
-					return;
-				} else {
-					await pretifyOutput('[$_now][SERVER RESPONSE][${response.statusCode}] $bodyStr');
-				}
-			}
+		var bodyStr;
+		Completer<dynamic> completer = Completer();
+		if(responseFuture != null){
 
-			_statusCode = response.statusCode;
-			if(expectedStatusCodes!.contains(_statusCode)){
-				// thoughts
-				// we are using contain because the full header could return 
-				// e.g 'application/json; charset=utf-8
-				if(response.headers['content-type'].contains('application/json')){
-					return jsonDecode(bodyStr);
+			responseFuture.timeout(Duration(milliseconds: timeout), onTimeout: _onTimeout).then((_res) async {
+				if(_res != null){
+					if(_res is http.StreamedResponse){
+						bodyStr = await _res.stream.bytesToString();
+					} else {
+						bodyStr = _res.body;
+					}
+
+					if(verbose){
+						await pretifyOutput('[$_now][SERVER RESPONSE][${_res.statusCode}] $bodyStr');
+					}
+
+					_statusCode = _res.statusCode;
+					if(expectedStatusCodes!.contains(_statusCode)){
+						// thoughts
+						// we are using contain because the full header could return 
+						// e.g 'application/json; charset=utf-8
+						if(_res.headers['content-type'].contains('application/json')){
+							// return jsonDecode(bodyStr);
+							completer.complete(jsonDecode(bodyStr));
+						} else {
+							completer.complete(bodyStr);
+						}
+					}
 				} else {
-					return bodyStr;
+					completer.complete(null);
 				}
-			}
+			});
+			return completer.future;
 		}
 	}
 
