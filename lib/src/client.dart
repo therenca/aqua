@@ -81,6 +81,7 @@ class Client {
 	Future<dynamic> getResponse({String method='POST', Map<String, String>? multipartInfo, Map<String, String>? files}) async {
 		
 		Future? responseFuture;
+		bool isStreamedResponse = false;
 
 		var uri;
 		if(isSecured){
@@ -120,6 +121,8 @@ class Client {
 							request.files.add(file);
 						});
 					}
+
+					isStreamedResponse = true;
 					responseFuture = request.send();
 				} else {
 					responseFuture = http.post(
@@ -156,11 +159,11 @@ class Client {
 			}
 		}
 
-		FutureOr<http.Response> Function() _onTimeout = (){
+		FutureOr<http.Response> Function() _onTimeoutResponse = (){
 			if(onTimeout != null){
 				onTimeout!();
 			} else {
-				throw TimeoutException('Connection timed out, current timeout is set to $timeout, try increasing the timeout or proof check your internet connection / resource availability. Set a onTimeout callback for such scenarios when creating your aqua.Client object');
+				throw TimeoutException('[$_uri]Connection timed out, current timeout is set to $timeout, try increasing the timeout or proof check your internet connection / resource availability. Set a onTimeout callback for such scenarios when creating your aqua.Client object');
 			}
 			return Future.value(http.Response(
 				method,
@@ -168,11 +171,23 @@ class Client {
 			));
 		};
 
+		FutureOr<http.StreamedResponse> Function() _onTimeoutStreamedResponse = (){
+			if(onTimeout != null){
+				onTimeout!();
+			} else {
+				throw TimeoutException('[$_uri]Connection timed out, current timeout is set to $timeout, try increasing the timeout or proof check your internet connection / resource availability. Set a onTimeout callback for such scenarios when creating your aqua.Client object');
+			}
+			Stream<List<int>> stream = Stream.empty();
+			return Future.value(http.StreamedResponse(
+				stream,
+				HttpStatus.gatewayTimeout
+			));
+		};
+
 		var bodyStr;
 		Completer<dynamic> completer = Completer();
 		if(responseFuture != null){
-
-			responseFuture.timeout(Duration(milliseconds: timeout), onTimeout: _onTimeout).then((_res) async {
+			responseFuture.timeout(Duration(milliseconds: timeout), onTimeout: isStreamedResponse ? _onTimeoutStreamedResponse : _onTimeoutResponse).then((_res) async {
 				if(_res != null){
 					if(_res is http.StreamedResponse){
 						bodyStr = await _res.stream.bytesToString();

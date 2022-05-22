@@ -4,9 +4,17 @@ import 'smooth_corner.dart';
 class RoundedCornersClipper extends CustomClipper<Path> {
 
 	double ratio;
+	bool? topLeft = true;
+	bool? topRight = true;
+	bool? bottomLeft = true;
+	bool? bottomRight = true;
 
 	RoundedCornersClipper({
-		this.ratio=0.2
+		this.ratio=0.2,
+		this.bottomLeft,
+		this.bottomRight,
+		this.topLeft,
+		this.topRight
 	});
 
 	@override

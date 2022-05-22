@@ -74,3 +74,11 @@
 
 ### 1.1.2+1
 - updated readme, and textformfield
+
+### 1.1.2+2
+- added skeletal loader
+- able to send files to server
+- added fractionate to break down large lists into smaller chunks
+- updated isolate initialization to reflect its usage
+- aqua.Client, able to set timeouts and an onTimeout callback
+- added palette generator
