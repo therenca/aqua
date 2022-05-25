@@ -20,6 +20,7 @@ class CustomNavigator{
 	});
 
 	Future<dynamic> navigateToPage() async {
+		dynamic results;
 		Completer<dynamic> completer = Completer();
 		if(forward){
 			if(namedRoute.isNotEmpty){
@@ -27,11 +28,10 @@ class CustomNavigator{
 				// routes already defined at the root of the application
 
 				if(replaceSingle){
-					var results = await Navigator.pushReplacementNamed(
+					results = await Navigator.pushReplacementNamed(
 						context,
 						namedRoute
 					);
-					completer.complete(results);
 				} else if(replaceAll){
 
 					// to remove all the routes below this route
@@ -39,20 +39,18 @@ class CustomNavigator{
 					// otherwise use ModalRoute.withName('/) to match
 					// to a certain route
 
-					var results = Navigator.pushNamedAndRemoveUntil(
+					results = await Navigator.pushNamedAndRemoveUntil(
 						context,
 						namedRoute,
 						// ModalRoute.withName('/'),
 						(Route<dynamic> route) => false
 					);
-					completer.complete(results);
 
 				} else {
-					var results = Navigator.pushNamed(
+					results = await Navigator.pushNamed(
 						context,
 						namedRoute
 					);
-					completer.complete(results);
 				}
 			} else {
 
@@ -61,16 +59,15 @@ class CustomNavigator{
 
 				if(replaceSingle){
 
-					var results = Navigator.pushReplacement(
+					results = await Navigator.pushReplacement(
 						context,
 						MaterialPageRoute(
 							maintainState: false,
 							builder: (BuildContext context) => buildScreen()
 						)
 					);
-					completer.complete(results);
 				} else if(replaceAll){
-					var results = Navigator.pushAndRemoveUntil(
+					results = await Navigator.pushAndRemoveUntil(
 						context, 
 						MaterialPageRoute(
 							maintainState: false,
@@ -78,21 +75,21 @@ class CustomNavigator{
 						),
 						(Route<dynamic> route) => false
 					);
-					completer.complete(results);
 				} else {
-					var results = Navigator.push(
+					results = await Navigator.push(
 						context,
 						MaterialPageRoute(
 							maintainState: true,
 							builder: (BuildContext context) => buildScreen()
 						)
 					);
-					completer.complete(results);
 				}
 			}
 		} else {
 			Navigator.pop(context);
 		}
+
+		completer.complete(results);
 
 		return completer.future;
 	}
