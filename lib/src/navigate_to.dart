@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 
 class CustomNavigator{
@@ -18,17 +19,19 @@ class CustomNavigator{
 		required this.context
 	});
 
-	void navigateToPage(){
+	Future<dynamic> navigateToPage() async {
+		Completer<dynamic> completer = Completer();
 		if(forward){
 			if(namedRoute.isNotEmpty){
 				// named route
 				// routes already defined at the root of the application
 
 				if(replaceSingle){
-					Navigator.pushReplacementNamed(
+					var results = await Navigator.pushReplacementNamed(
 						context,
 						namedRoute
 					);
+					completer.complete(results);
 				} else if(replaceAll){
 
 					// to remove all the routes below this route
@@ -36,18 +39,20 @@ class CustomNavigator{
 					// otherwise use ModalRoute.withName('/) to match
 					// to a certain route
 
-					Navigator.pushNamedAndRemoveUntil(
+					var results = Navigator.pushNamedAndRemoveUntil(
 						context,
 						namedRoute,
 						// ModalRoute.withName('/'),
 						(Route<dynamic> route) => false
 					);
+					completer.complete(results);
 
 				} else {
-					Navigator.pushNamed(
+					var results = Navigator.pushNamed(
 						context,
 						namedRoute
 					);
+					completer.complete(results);
 				}
 			} else {
 
@@ -56,16 +61,16 @@ class CustomNavigator{
 
 				if(replaceSingle){
 
-					Navigator.pushReplacement(
+					var results = Navigator.pushReplacement(
 						context,
 						MaterialPageRoute(
 							maintainState: false,
 							builder: (BuildContext context) => buildScreen()
 						)
 					);
-
+					completer.complete(results);
 				} else if(replaceAll){
-					Navigator.pushAndRemoveUntil(
+					var results = Navigator.pushAndRemoveUntil(
 						context, 
 						MaterialPageRoute(
 							maintainState: false,
@@ -73,19 +78,22 @@ class CustomNavigator{
 						),
 						(Route<dynamic> route) => false
 					);
+					completer.complete(results);
 				} else {
-					Navigator.push(
+					var results = Navigator.push(
 						context,
 						MaterialPageRoute(
 							maintainState: true,
 							builder: (BuildContext context) => buildScreen()
 						)
 					);
+					completer.complete(results);
 				}
 			}
 		} else {
 			Navigator.pop(context);
 		}
-	}
 
+		return completer.future;
+	}
 }
