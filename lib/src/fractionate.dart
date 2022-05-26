@@ -28,3 +28,22 @@ List<List<dynamic>> fractionate(List<dynamic> listing, int pieces){
 
 	return listingF;
 }
+
+List<List<dynamic>> rowOfTwoInList(List<dynamic> listing){
+	List<List<dynamic>> formatted = [];
+	int firstIndex = 0;
+	int secondIndex = 0;
+	int trips = (listing.length / 2).round();
+	for(int index=0; index<trips; index++){
+		secondIndex = firstIndex + 1;
+		if(firstIndex <= (listing.length - 2)){
+			formatted.add([listing[firstIndex], listing[secondIndex]]);
+		} else if(firstIndex == (listing.length -1)){
+			formatted.add([listing[firstIndex]]);
+			break;
+		}
+		firstIndex = secondIndex + 1;
+	}
+
+	return formatted;
+}
