@@ -21,6 +21,7 @@ export 'src/validators.dart';
 export 'src/tab_header.dart';
 export 'src/dimensions.dart';
 export 'src/capitalize.dart';
+export 'src/dotted_line.dart';
 export 'src/create_file.dart';
 export 'src/fractionate.dart';
 export 'src/generate_id.dart';
