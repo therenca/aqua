@@ -210,6 +210,8 @@ class Client {
 						} else {
 							completer.complete(bodyStr);
 						}
+					} else {
+						completer.complete(null);
 					}
 				} else {
 					completer.complete(null);

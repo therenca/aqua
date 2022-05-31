@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'package:aqua/aqua.dart' as aqua;
 
-void delay(int milliseconds, Function callback, {bool verbose=false}){
-	Future.delayed(Duration(milliseconds: milliseconds), () async {
-		// callback();
+Future<void> delay(int milliseconds, {Function? callback, bool verbose=false}) async {
+	await Future.delayed(Duration(milliseconds: milliseconds));
+	if(callback != null){
 		await aqua.tryCatch(callback, verbose: verbose);
-	});
+	}
 }
