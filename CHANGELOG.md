@@ -82,3 +82,7 @@
 - updated isolate initialization to reflect its usage
 - aqua.Client, able to set timeouts and an onTimeout callback
 - added palette generator
+
+### 1.1.2+3
+- added dotted line
+- added stepped progress

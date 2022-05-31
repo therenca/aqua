@@ -124,6 +124,32 @@ if(client.statusCode == 201){
 
 ```
 
+set timeouts when interacting with remote Apis, and onTimeout callbacks for when timeout is reached;
+timeout is in milliseconds
+```dart
+var fromServer = await aqua.Client(
+  'api.coingecko.com',
+  443,
+  '/api/v3/coins/markets',
+  isSecured: true,
+  query: {
+    'vs_currency': 'usd',
+    'order': 'market_cap_desc',
+    'per_page': '20',
+    'page': '1',
+    'sparkline': 'true'
+  },
+  verbose: true,
+  timeout: 300,
+  onTimeout: (){
+    // callback to handle this scenario
+    //eg inform widget of the timeout, and perharps retry
+    // how you retry this request is up to you
+    streamController.sink.add('/api/v3/coins/markets timeout out');
+  }
+).getResponse(method: 'GET');
+```
+
 **`DESKTOP ONLY`** To allow for mouse pointers to change to click icons on hovering on a clickable widget
 ```dart
 @override
@@ -146,7 +172,7 @@ To output info on screen with different colors
 ```dart
 
 aqua.pretifyOutput('to print on screen'); // will print in green
-aqua.pretifyOutput('to print on screen', color: 'red');
+aqua.pretifyOutput('to print on screen', color: 'red'); // white, red, magenta, yellow, cyan, blue, defaults to green
 ```
 
 To obscure text
@@ -154,7 +180,7 @@ To obscure text
 var obscured = aqua.obscureText('obscured');
 ```
 
-show snackbar
+show snackbar; must use a scaffold for this to work
 ```dart
 aqua.showSnackbar(
   'info',
@@ -375,6 +401,22 @@ Widget build(BuildContext context){
   // make sure to return a widget
 }
 ```
+Sometimes the clipped image might not expand into the container as expected, to force it do so:
+```dart
+@override
+Widget build(BuildContext context){
+  // some code
+  // then
+  Widget clippedImage = aqua.ClippedCircle(
+    child: aqua.ImageFit(
+      child: child // Image.asset(path/to/file) or even a network image
+    ) // some widget, could be an image, wrapped in a container,
+    color: Colors.blue // border of the circle
+  );
+
+  // make sure to return a widget
+}
+```
 
 Custom Text Form Widget
 ```dart
@@ -410,18 +452,85 @@ class PlayState extends State<Play>{
   @override
   Widget build(BuildContext context){
     aqua.Dimensions().init(context);
+    return Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: aqua.TextFormFieldCustom(
+                borderRadius: 20,
+                isOutlineBorder: true, //false
+                verticalPadding: 15.0,
+                horizontalPadding: 15.0,
+                keyboardType: TextInputType.text,
+                borderColor: Colors.grey.withOpacity(0.5),
+                focusedBorderColor: conf.Colors.orange1,
+                cursorColor: conf.Colors.orange1,
+                borderWidth: 2,
+                hintText: 'hint text',
+                hintTextstyle: const TextStyle(
+                  color: Colors.black,
+                  fontStyle: FontStyle.italic
+                ),
+                labelTextStyle: const TextStyle(
+                  color: Colors.black,
+                  fontStyle: FontStyle.italic
+                ),
+                labelText: 'label',
+                focusNode: FocusNode(),
+                controller: TextEditingController(),
+                prefixIconData: Icons.message,
+                prefixIconColor: Colors.grey,
+                focusedPrefixIconColor: Colors.green,
+                onChanged: (String value, TextEditingController controller){
 
-    return SizedBox(
-      width: aqua.Dimensions.width,
-      height: 100.0,
-      child: aqua.TextFormFieldCustom(
-        isOutlineBorder: true, // or false
-        focusNode: focusNode
-        controller: textEditingController,
-      )
+                },
+                isObscureText: true, //false
+                prefixIcon: Container() //widget,
+                maxLines: 2, // any int,
+                streamController: StreamController() // to send back changed values to listeners
+              )
+            )
+          ]
+        ),
+      ]
     );
   }
+}
+```
 
+Dotted Line; Separator
+```dart
+@override
+Widget build(BuildContext context){
+  // some code
+  // then
+  Widget separator = Row(
+    children: [
+      Expanded(
+        child: aqua.DottedLine()
+      )
+    ]
+  );
+  // make sure to return a widget
+}
+```
+
+Stepped Progresser; To track progress of an ongoing step by step instructive activity;
+It scales to any number of steps; Will render something like this: <br/>
+![Stepped Progress Bar](readme/stepped_progress.png)
+```dart
+@override
+Widget build(BuildContext context){
+  // some code
+  // then
+  Widget = progress = aqua.SteppedProgress(
+    steps: ['Step 1', 'Step 2', 'Step 3'],
+    thickness: 1.5,
+    dashWidth: 5,
+    currentStep: 2,
+  );
+  // make sure to return a widget
 }
 ```
 
@@ -470,10 +579,7 @@ class ShellState extends State<Shell>{
   }
 
   Widget _buildShell(BuildContext context){
-    Map<String, Map<String, dynamic>> generatedRoutes = _buildGeneratedRoutes(
-      contentWindowWidth,
-      aqua.Dimensions.height
-    );
+    Map<String, Map<String, dynamic>> generatedRoutes = _buildGeneratedRoutes();
 
     var textStyle = TextStyle(
       fontSize: 30.0,
@@ -482,8 +588,6 @@ class ShellState extends State<Shell>{
     );
 
     Widget firstWidget = Container(
-      width: contentWindowWidth,
-      height: aqua.Dimensions.height,
       color: Colors.purple,
       child: Center(
         child: Text(
