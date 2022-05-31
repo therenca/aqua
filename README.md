@@ -524,7 +524,7 @@ It scales to any number of steps; Will render something like this: <br/>
 Widget build(BuildContext context){
   // some code
   // then
-  Widget = progress = aqua.SteppedProgress(
+  Widget progress = aqua.SteppedProgress(
     steps: ['Step 1', 'Step 2', 'Step 3'],
     thickness: 1.5,
     dashWidth: 5,
