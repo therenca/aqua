@@ -96,7 +96,7 @@ class NavigationStreamer {
 				listenCallback(data);
 			},
 			onError: onError == null ? (err){
-				aqua.pretifyOutput('[NAV STREAM|Error] $err', color: 'red');
+				aqua.pretifyOutput('[NAV STREAM|Error] $err', color: aqua.Color.red);
 			} : onError,
 			cancelOnError: false,
 			onDone: onDone == null ? (){
