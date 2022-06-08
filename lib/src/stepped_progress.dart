@@ -96,7 +96,6 @@ class _SteppedProgressState extends State<SteppedProgress> {
 	}
 
 	Widget _buildPoint(int index, int step, bool isHighlighted){		
-		aqua.pretifyOutput('index: $index, step: $step');
 		var innerSize = isHighlighted ? 12.0 : 8.0;
 		// aqua.pretifyOutput('key: ${plottedToReal[index]} ==> ${widget.steps[plottedToReal[index]! -1]} ==> ${stepKeys[index]}');
 		return Container(

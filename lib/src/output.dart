@@ -5,8 +5,8 @@ import 'log.dart';
 
 Future<void> pretifyOutput(String info,
 	{
-		Color color=Color.green, 
-		Color? bgColor,
+		AqColor color=AqColor.green, 
+		AqColor? bgColor,
 		String? path,
 		bool clear=false,
 		String? endLine,
@@ -15,37 +15,37 @@ Future<void> pretifyOutput(String info,
 	Colorize toPretify = Colorize(info);
 
 	switch(color){
-		case Color.white: {
+		case AqColor.white: {
 			toPretify.white();
 			break;
 		}
 
-		case Color.red: {
+		case AqColor.red: {
 			toPretify.red();
 			break;
 		}
 
-		case Color.yellow: {
+		case AqColor.yellow: {
 			toPretify.yellow();
 			break;
 		}
 
-		case Color.magenta: {
+		case AqColor.magenta: {
 			toPretify.magenta();
 			break;
 		}
 
-		case Color.cyann: {
+		case AqColor.cyann: {
 			toPretify.cyan();
 			break;
 		}
 
-		case Color.blue: {
+		case AqColor.blue: {
 			toPretify.blue();
 			break;
 		}
 
-		case Color.green: {
+		case AqColor.green: {
 			toPretify.green();
 			break;
 		}
@@ -58,37 +58,37 @@ Future<void> pretifyOutput(String info,
 
 	if(bgColor != null){
 		switch(bgColor){
-			case Color.white: {
+			case AqColor.white: {
 				toPretify.bgWhite();
 				break;
 			}
 
-			case Color.red: {
+			case AqColor.red: {
 				toPretify.bgRed();
 				break;
 			}
 
-			case Color.yellow: {
+			case AqColor.yellow: {
 				toPretify.bgYellow();
 				break;
 			}
 
-			case Color.magenta: {
+			case AqColor.magenta: {
 				toPretify.bgMagenta();
 				break;
 			}
 
-			case Color.cyann: {
+			case AqColor.cyann: {
 				toPretify.bgCyan();
 				break;
 			}
 
-			case Color.blue: {
+			case AqColor.blue: {
 				toPretify.bgBlue();
 				break;
 			}
 
-			case Color.green: {
+			case AqColor.green: {
 				toPretify.bgGreen();
 				break;
 			}
@@ -96,15 +96,15 @@ Future<void> pretifyOutput(String info,
 	}
 
 	var end = endLine ?? '\n';
-	stdout.write('$toPretify$end');
-	// print('$toPretify$end');
+	// stdout.write('$toPretify$end');
+	print('$toPretify$end');
 
 	if(path != null){
 		await log(info, path, clear: clear);
 	}
 }
 
-enum Color {
+enum AqColor {
 	green,
 	white,
 	red,

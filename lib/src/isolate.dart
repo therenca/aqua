@@ -22,7 +22,7 @@ Future<SpawnedIsolate> initIsolate(
 	isolateParts['isolate'] = isolate;
 	isolateParts['receiver'] = receivePort;
 	if(verbose){
-		pretifyOutput('$isolateName ----- started ---- ', color: Color.cyann);
+		pretifyOutput('$isolateName ----- started ---- ', color: AqColor.cyann);
 	}
 
 	receivePort.listen((data) async {
@@ -38,7 +38,7 @@ Future<SpawnedIsolate> initIsolate(
 		} else if(data == 'done'){
 			receivePort.close();
 			if(verbose){
-				pretifyOutput('$isolateName ------ ended -----', color: Color.red);
+				pretifyOutput('$isolateName ------ ended -----', color: AqColor.red);
 			}
 		} else {
 			if(verbose){
