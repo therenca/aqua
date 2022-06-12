@@ -126,15 +126,6 @@ class Client {
 					isStreamedResponse = true;
 					responseFuture = request.send();
 				} else {
-					// try {
-					// 	responseFuture = http.post(
-					// 		uri,
-					// 		headers: _headers,
-					// 		body: contentType == 'application/x-www-form-urlencoded' ? query : jsonEncode(query),
-					// 	);
-					// }catch(e){
-					// 	pretifyOutput('[ERROR]${e.toString()}', color: AqColor.red);
-					// }
 					responseFuture = http.post(
 						uri,
 						headers: _headers,

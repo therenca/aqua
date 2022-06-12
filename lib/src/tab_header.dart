@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 
-class TabHeader extends StatelessWidget{
-
+class TabHeader extends StatefulWidget{
 	final Color? bgColor;
 	final double? borderRadius;
 	final Color? underline;
 	final List<String> tabListing;
 	final Function(int)? onTap;
-	final TabController? controller;
+	final TabController controller;
 	final TextStyle? textStyle;
-	final Color? unselectedLabelColor;
-	final Color? labelColor;
-	final TextStyle? unselectedLabelStyle;
+	final TextStyle? selectedTextStyle;
 	final BoxDecoration? decoration;
 	final Alignment? alignment;
 	final EdgeInsets? padding;
@@ -20,38 +17,58 @@ class TabHeader extends StatelessWidget{
 
 	TabHeader({
 		required this.tabListing,
+		required this.controller,
 		this.bgColor,
 		this.borderRadius,
 		this.underline,
 		this.onTap,
-		this.controller,
 		this.textStyle,
-		this.unselectedLabelStyle,
-		this.unselectedLabelColor,
-		this.labelColor,
 		this.decoration,
 		this.alignment,
 		this.padding,
-		this.tabHeight
+		this.tabHeight,
+		this.selectedTextStyle
 	});
 
-	Widget _buildTabHeader(BuildContext context){
-		
-		List<Widget> tabs = [];
+	@override
+	TabHeaderState createState() => TabHeaderState();
 
-		for(int index=0; index<tabListing.length; index++){
-			Tab tab = Tab(
-				child: Container(
-					padding: padding,
-					alignment: alignment == null ? Alignment.centerLeft : alignment,
-					height: tabHeight,
-					decoration: decoration,
-					child: Text(
-						tabListing[index],
-						style: textStyle != null ? textStyle : TextStyle(
-							fontSize: 15.0,
-							color: Colors.black,
-							fontWeight: FontWeight.bold
+}
+
+class TabHeaderState extends State<TabHeader>{
+	int selectedIndex = 0;
+
+	@override
+	void initState(){
+		super.initState();
+
+		widget.controller.animation!.addListener(() {
+			setState(() => selectedIndex = widget.controller.animation!.value.round());
+		});
+	}
+
+	Widget _buildTabHeader(BuildContext context){		
+		List<Widget> tabs = [];
+		for(int index=0; index<widget.tabListing.length; index++){
+			Widget tab = SizedBox(
+				height: widget.tabHeight,
+				child: Tab(
+					child: Container(
+						padding: widget.padding,
+						alignment: widget.alignment ?? Alignment.centerLeft,
+						height: widget.tabHeight,
+						decoration: widget.decoration,
+						child: Text(
+							widget.tabListing[index],
+							style: index != selectedIndex ? widget.textStyle ?? TextStyle(
+								fontSize: 15.0,
+								color: Colors.black,
+								fontWeight: FontWeight.bold
+							) : widget.selectedTextStyle ?? TextStyle(
+								fontSize: 15.0,
+								color: Colors.white,
+								fontWeight: FontWeight.bold
+							),
 						),
 					),
 				),
@@ -61,19 +78,20 @@ class TabHeader extends StatelessWidget{
 		}		
 
 		return TabBar(
-			controller: controller,
-			indicatorColor: underline,
-			indicator: bgColor != null ? BoxDecoration(
-				color: bgColor!.withOpacity(0.6),
-				borderRadius: borderRadius != null ? BorderRadius.circular(borderRadius!) : null,
-			) : null,
+			controller: widget.controller,
+			indicatorColor: widget.underline,
+			indicator: BoxDecoration(
+				color: widget.bgColor,
+				borderRadius: BorderRadius.circular(widget.borderRadius ?? 0),
+			),
 			tabs: tabs,
-			unselectedLabelColor: unselectedLabelColor,
-			unselectedLabelStyle: unselectedLabelStyle,
-			labelColor: labelColor,
-			onTap: onTap != null ? onTap : null,
+			onTap:(int index){
+				setState(() => selectedIndex = index);
+				if(widget.onTap != null){
+					widget.onTap!(index);
+				}
+			},
 		);
-
 	}
 
 	@override

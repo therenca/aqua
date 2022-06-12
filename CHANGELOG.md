@@ -86,3 +86,5 @@
 ### 1.1.2+3
 - added dotted line
 - added stepped progress
+[TOODS]
+- show loader within textformfield to indicate error or input control successful
