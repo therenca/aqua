@@ -2,17 +2,19 @@ import 'delay.dart';
 import 'output.dart';
 
 class Timeout {
-	static Future<dynamic> until(int retries, Future future, {int? milliseconds, bool verbose=true}) async {
+	static Future<dynamic> until(int retries, Function callback, {int? milliseconds, bool verbose=true}) async {
 		int count = 0;
-		dynamic value = await future;
-		while(count < retries && value == null){
+		dynamic value = await callback();
+		while(retries == 0 ||(count < retries && value == null)){
 			if(verbose){
 				pretifyOutput('[${count+1}/$retries] $value', color: AqColor.cyann);
 			}
-			value = await future;
+			value = await callback();
 			if(value == null){
-				await delay(milliseconds ?? 3000);
+				await delay(milliseconds ?? 1000);
 				count++;
+			} else {
+				break;
 			}
 		}
 
