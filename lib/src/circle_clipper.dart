@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class ClippedCircle extends StatelessWidget {
+class ClippedCircle extends StatefulWidget {
 	final Widget child;
 	final Color color;
 	final double? strokeWidth;
@@ -11,28 +11,29 @@ class ClippedCircle extends StatelessWidget {
 		this.strokeWidth=2.0,
 	});
 
-	Widget _buildClippedWidget() => ClipPath(
-		clipper: _ColoredBorderClipper(),
-		child: child,
-	);
-
-	Widget _addPathColorToClippedWidget(child) => CustomPaint(
-		painter: _ClipperBorderPainter(
-			color: color,
-			strokeWidth: strokeWidth,
-			clipper: _ColoredBorderClipper()
-		),
-		child: child,
-	);
-
-	Widget _buildClippedCircle(BuildContext context){
-		Widget widget = _buildClippedWidget();
-		return _addPathColorToClippedWidget(widget);
-	}
-
 	@override
-	Widget build(BuildContext context) => _buildClippedCircle(context);
+	ClippedCircleState createState() => ClippedCircleState();
 
+}
+
+class ClippedCircleState extends State<ClippedCircle>{
+
+	
+	@override
+	Widget build(BuildContext context){
+		Widget clipped = ClipPath(
+			clipper: _ColoredBorderClipper(),
+			child: widget.child,
+		);
+		return CustomPaint(
+			painter: _ClipperBorderPainter(
+				color: widget.color,
+				strokeWidth: widget.strokeWidth,
+				clipper: _ColoredBorderClipper()
+			),
+			child: clipped,
+		);
+	}
 }
 
 class _ColoredBorderClipper extends CustomClipper<Path> {
@@ -69,9 +70,8 @@ class _ClipperBorderPainter extends CustomPainter {
 		Path path = clipper.getClip(size);
 		canvas.drawPath(path, paint);
 		path.close();
-	
 	}
 
 	@override
-	bool shouldRepaint(CustomPainter oldPainter) => false;
+	bool shouldRepaint(CustomPainter oldPainter) => true;
 }

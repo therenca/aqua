@@ -5,7 +5,6 @@ import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 
 import 'output.dart';
-import 'package:colorize/colorize.dart';
 
 class Client {
 

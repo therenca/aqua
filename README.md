@@ -52,6 +52,12 @@ if(child != null){
 }
 
 ```
+Run future as many times as specified with
+```dart
+int retries = 5;
+var future = callback();
+var result = await aqua.Timeout.until(retries, future, verbose: true);
+```
 
 Interacting with APIs from remote locations
 ```dart
@@ -191,7 +197,6 @@ aqua.showSnackbar(
   seconds=1
 );
 ```
-
 Check for email syntax or digits without characters
 ```dart
 var isEmail = aqua.Validators.isEmail('email');

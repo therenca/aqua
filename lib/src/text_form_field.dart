@@ -19,6 +19,7 @@ class  TextFormFieldCustom extends StatefulWidget {
 	final double borderRadius;
 	final String labelText;
 	final String hintText;
+	final FloatingLabelBehavior floatingLabelBehavior;
 
 	final bool isOutlineBorder;
 	final bool isObscureText;
@@ -91,7 +92,8 @@ class  TextFormFieldCustom extends StatefulWidget {
 		this.filledColor,
 		this.cursorColor=Colors.red,
 		this.streamController,
-		this.textAlign
+		this.textAlign,
+		this.floatingLabelBehavior=FloatingLabelBehavior.auto
 	});
 
 	@override
@@ -168,6 +170,7 @@ class _TextFormFieldCustomState extends State<TextFormFieldCustom>{
 			onFieldSubmitted: (inputValue) => widget.onSubmitted!(inputValue),
 			decoration: InputDecoration(
 				icon: widget.beforeInput,
+				floatingLabelBehavior: widget.floatingLabelBehavior,
 				enabledBorder: widget.isOutlineBorder ? OutlineInputBorder(
 					borderSide: borderSide,
 					borderRadius: BorderRadius.circular(widget.borderRadius)
@@ -199,9 +202,9 @@ class _TextFormFieldCustomState extends State<TextFormFieldCustom>{
 				// var checked;
 				if(widget.onChanged != null){
 					widget.onChanged!(value, widget.controller);
-					if(widget.streamController != null){
-						widget.streamController!.sink.add(value);
-					}
+				}
+				if(widget.streamController != null){
+					widget.streamController!.sink.add(value);
 				}
 			},
 			textAlign: widget.textAlign == null ? TextAlign.left : widget.textAlign!,
