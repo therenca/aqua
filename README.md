@@ -52,11 +52,13 @@ if(child != null){
 }
 
 ```
-Run future as many times as specified with
+put your future in a callback and run it as many times as specified
+if you want it to run until their is a value other than null, set retries to 0
 ```dart
+/// int retries = 0; allows it to run until value other than null is produced
 int retries = 5;
-var future = callback();
-var result = await aqua.Timeout.until(retries, future, verbose: true);
+callback() async => await yourFuture();
+var result = await aqua.Timeout.until(retries, callback, verbose: true);
 ```
 
 Interacting with APIs from remote locations

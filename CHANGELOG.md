@@ -88,5 +88,7 @@
 - added stepped progress
 ### 1.1.2+4
 - added Timeout.until
+### 1.1.2+5
+- updated Timeout.until
 [TOODS]
 - show loader within textformfield to indicate error or input control successful
