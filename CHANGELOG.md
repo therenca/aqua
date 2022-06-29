@@ -90,5 +90,7 @@
 - added Timeout.until
 ### 1.1.2+5
 - updated Timeout.until
+### 1.1.2+6
+- aqua.Client, timeout optional
 [TOODS]
 - show loader within textformfield to indicate error or input control successful
