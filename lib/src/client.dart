@@ -217,6 +217,11 @@ class Client {
 				} else {
 					completer.complete(null);
 				}
+			}, onError: (error){
+				if(verbose){
+					pretifyOutput('error: ${error.toString()}', color: AqColor.red);
+				}
+				completer.complete(null);
 			});
 			return completer.future;
 		}
