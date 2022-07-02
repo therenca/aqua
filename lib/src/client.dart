@@ -163,7 +163,7 @@ class Client {
 			if(onTimeout != null){
 				onTimeout!();
 			} else {
-				throw TimeoutException('[$_uri]Connection timed out, current timeout is set to $timeout, try increasing the timeout or proof check your internet connection / resource availability. Set a onTimeout callback for such scenarios when creating your aqua.Client object');
+				throw TimeoutException('[$_uri] Connection timed out, current timeout is set to $timeout, try increasing the timeout or proof check your internet connection / resource availability. Set a onTimeout callback for such scenarios when creating your aqua.Client object');
 			}
 			return Future.value(http.Response(
 				method,
@@ -175,7 +175,7 @@ class Client {
 			if(onTimeout != null){
 				onTimeout!();
 			} else {
-				throw TimeoutException('[$_uri]Connection timed out, current timeout is set to $timeout, try increasing the timeout or proof check your internet connection / resource availability. Set a onTimeout callback for such scenarios when creating your aqua.Client object');
+				throw TimeoutException('[$_uri] Connection timed out, current timeout is set to $timeout, try increasing the timeout or proof check your internet connection / resource availability. Set a onTimeout callback for such scenarios when creating your aqua.Client object');
 			}
 			Stream<List<int>> stream = Stream.empty();
 			return Future.value(http.StreamedResponse(
@@ -186,46 +186,60 @@ class Client {
 
 		var bodyStr;
 		Completer<dynamic> completer = Completer();
-		if(responseFuture != null){
-			if(timeout != null){
-				responseFuture.timeout(Duration(milliseconds: timeout!), onTimeout: isStreamedResponse ? _onTimeoutStreamedResponse : _onTimeoutResponse);
-			}
-			responseFuture.then((_res) async {
-				if(_res != null){
-					if(_res is http.StreamedResponse){
-						bodyStr = await _res.stream.bytesToString();
+		Future<dynamic> _parseResponse(dynamic _res) async {
+			if(_res != null){
+				if(_res is http.StreamedResponse){
+					bodyStr = await _res.stream.bytesToString();
+				} else {
+					bodyStr = _res.body;
+				}
+
+				if(verbose){
+					await pretifyOutput('[$_now][SERVER RESPONSE][${_res.statusCode}] $bodyStr');
+				}
+
+				_statusCode = _res.statusCode;
+				if(expectedStatusCodes!.contains(_statusCode)){
+					// we are using contain because the full header could return 
+					// e.g 'application/json; charset=utf-8
+					if(_res.headers['content-type'].contains('application/json')){
+						// return jsonDecode(bodyStr);
+						completer.complete(jsonDecode(bodyStr));
 					} else {
-						bodyStr = _res.body;
-					}
-
-					if(verbose){
-						await pretifyOutput('[$_now][SERVER RESPONSE][${_res.statusCode}] $bodyStr');
-					}
-
-					_statusCode = _res.statusCode;
-					if(expectedStatusCodes!.contains(_statusCode)){
-						// thoughts
-						// we are using contain because the full header could return 
-						// e.g 'application/json; charset=utf-8
-						if(_res.headers['content-type'].contains('application/json')){
-							// return jsonDecode(bodyStr);
-							completer.complete(jsonDecode(bodyStr));
-						} else {
-							completer.complete(bodyStr);
-						}
+						completer.complete(bodyStr);
 					}
 				} else {
 					completer.complete(null);
 				}
-			}, onError: (error){
-				if(verbose){
-					pretifyOutput('error: ${error.toString()}', color: AqColor.red);
-				}
+			} else {
 				completer.complete(null);
-			});
+			}
+		}
+		if(responseFuture != null){
+			if(timeout != null){
+				responseFuture.timeout(Duration(milliseconds: timeout!), onTimeout: isStreamedResponse ? _onTimeoutStreamedResponse : _onTimeoutResponse).then((_res) async {
+					return await _parseResponse(_res);
+				}, onError: (error){
+					if(verbose){
+						pretifyOutput('error: ${error.toString()}', color: AqColor.red);
+					}
+					completer.complete(null);
+				});
+			} else {
+				responseFuture.then((_res) async {
+					return await _parseResponse(_res);
+				}, onError: (error){
+					if(verbose){
+						pretifyOutput('error: ${error.toString()}', color: AqColor.red);
+					}
+					completer.complete(null);
+				});
+			}
 			return completer.future;
 		}
 	}
+
+	
 
 	Future<Uint8List?> downloadBinary(String filePath, {String method='POST', String size='small', StreamController<double>? controller}) async {
 		var uri;

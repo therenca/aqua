@@ -1,27 +1,29 @@
 import 'package:flutter/material.dart';
 
 class DropDown extends StatefulWidget {
-
-	final List<dynamic> items;
-	final ValueKey? key;
+	final List<String> items;
 	final String? initValue;
+	final String? placeholder;
 	final Function? callback;
 	final TextStyle? textStyle;
 	final Color? dropdownColor;
 	final Function? initCallback;
 	final Color? iconEnabledColor;
 	final bool? isExpanded;
-
+	final int? elevation;
+	final double? itemHeight;
 	DropDown({
 		required this.items,
-		this.key,
 		this.initValue,
 		this.textStyle,
 		this.callback,
 		this.dropdownColor,
 		this.iconEnabledColor,
 		this.initCallback,
-		this.isExpanded=false
+		this.isExpanded=false,
+		this.elevation,
+		this.itemHeight,
+		this.placeholder
 	});
 
 	@override
@@ -37,17 +39,21 @@ class _DropDownState extends State<DropDown>{
 		if(widget.initCallback != null){
 			widget.initCallback!();
 		}
+
+		if(widget.placeholder != null){
+			widget.items.insert(0, widget.placeholder!);
+		}
 	}
 
 	String? selectedValue;
 	Widget _buildDropDown(BuildContext context){
-		return DropdownButton<dynamic>(
-			key: widget.key,
+		return DropdownButton<String>(
 			isExpanded: widget.isExpanded ?? false,
 			dropdownColor: widget.dropdownColor,
-			value: selectedValue ?? widget.initValue ?? widget.items.first,
+			value: selectedValue ?? widget.initValue ?? widget.placeholder ?? widget.items.first,
+			elevation: widget.elevation ?? 0,
 			underline: Container(),
-			onChanged: (dynamic newValue) async {
+			onChanged: (String? newValue) async {
 				setState(() {
 					selectedValue = newValue;
 				});
@@ -56,10 +62,10 @@ class _DropDownState extends State<DropDown>{
 					await widget.callback!(newValue);
 				}
 			},
+			itemHeight: widget.itemHeight,
 			iconEnabledColor: widget.iconEnabledColor,
-
-			items: widget.items
-				.map<DropdownMenuItem<String>>((dynamic value){
+			items: widget.items.toSet()
+				.map<DropdownMenuItem<String>>((String value){
 					return DropdownMenuItem<String>(
 						value: value,
 						child: Text(
@@ -68,7 +74,6 @@ class _DropDownState extends State<DropDown>{
 								color: Colors.black,
 							) : widget.textStyle
 						),
-						
 					);
 				}).toList()
 		);
