@@ -10,7 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  http: ^0.13.0
+  http: ^0.13.5
   intl: ^0.17.0
   colorize: ^3.0.0
   collection: ^1.15.0
