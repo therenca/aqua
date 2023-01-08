@@ -19,12 +19,17 @@ class  TextFormFieldCustom extends StatefulWidget {
 	final double borderRadius;
 	final String labelText;
 	final String hintText;
+	final TextStyle? textStyle;
+	final TextAlignVertical? textAlignVertical;
 	final FloatingLabelBehavior floatingLabelBehavior;
 
 	final bool isOutlineBorder;
 	final bool isObscureText;
+	final bool isCollapsed;
 
 	final int maxLines;
+	final int? maxLength;
+	final double cursorWidth;
 	final double verticalPadding;
 	final double horizontalPadding;
 	final TextInputType keyboardType;
@@ -76,7 +81,11 @@ class  TextFormFieldCustom extends StatefulWidget {
 		this.prefix,
 		this.isOutlineBorder=false,
 		this.isObscureText=false,
+		this.isCollapsed=false,
+		this.textAlignVertical,
 		this.maxLines=1,
+		this.maxLength,
+		this.cursorWidth=2.0,
 		this.verticalPadding=0.0,
 		this.horizontalPadding=0.0,
 		this.keyboardType=TextInputType.text,
@@ -93,6 +102,7 @@ class  TextFormFieldCustom extends StatefulWidget {
 		this.cursorColor=Colors.red,
 		this.streamController,
 		this.textAlign,
+		this.textStyle,
 		this.floatingLabelBehavior=FloatingLabelBehavior.auto
 	});
 
@@ -156,10 +166,11 @@ class _TextFormFieldCustomState extends State<TextFormFieldCustom>{
 
 		return TextFormField(
 			key: widget.key,
-			style: TextStyle(
+			style: widget.textStyle ?? TextStyle(
 				fontSize: widget.fontSize,
 				color: widget.textColor
 			),
+			textAlignVertical: widget.textAlignVertical,
 			keyboardType: widget.keyboardType,
 			obscureText: widget.isObscureText,
 			validator: (inputValue) => widget.validator!(inputValue),
@@ -169,6 +180,7 @@ class _TextFormFieldCustomState extends State<TextFormFieldCustom>{
 			textInputAction: widget.textInputAction,
 			onFieldSubmitted: (inputValue) => widget.onSubmitted!(inputValue),
 			decoration: InputDecoration(
+				isCollapsed: widget.isCollapsed,
 				icon: widget.beforeInput,
 				floatingLabelBehavior: widget.floatingLabelBehavior,
 				enabledBorder: widget.isOutlineBorder ? OutlineInputBorder(
@@ -198,6 +210,8 @@ class _TextFormFieldCustomState extends State<TextFormFieldCustom>{
 				fillColor: widget.filledColor,
 			),
 			cursorColor: widget.cursorColor,
+			cursorWidth: widget.cursorWidth,
+			maxLength: widget.maxLength,
 			onChanged: (String value){
 				// var checked;
 				if(widget.onChanged != null){

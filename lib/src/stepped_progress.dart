@@ -68,7 +68,7 @@ class _SteppedProgressState extends State<SteppedProgress> {
 		// aqua.pretifyOutput('plotted to real: $plottedToReal');
 		// aqua.pretifyOutput('real to plotted: $realToPlotted');
 
-		WidgetsBinding.instance!.addPostFrameCallback((_){
+		WidgetsBinding.instance.addPostFrameCallback((_){
 			offstageKeys.forEach((index, globalKey) {
 				var textSize = _getWidgetSize(globalKey);
 				var pointSize = _getWidgetSize(stepKeys[realToPlotted[index+1]]!);

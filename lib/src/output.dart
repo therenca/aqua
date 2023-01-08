@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:async';
 import 'package:colorize/colorize.dart';
 import 'log.dart';

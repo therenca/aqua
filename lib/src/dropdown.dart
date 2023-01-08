@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class DropDown extends StatefulWidget {
+	final Key? key;
 	final List<String> items;
 	final String? initValue;
 	final String? placeholder;
@@ -14,6 +15,7 @@ class DropDown extends StatefulWidget {
 	final double? itemHeight;
 	DropDown({
 		required this.items,
+		this.key,
 		this.initValue,
 		this.textStyle,
 		this.callback,
@@ -27,11 +29,11 @@ class DropDown extends StatefulWidget {
 	});
 
 	@override
-	_DropDownState createState() => _DropDownState();
+	DropDownState createState() => DropDownState();
 
 }
 
-class _DropDownState extends State<DropDown>{
+class DropDownState extends State<DropDown>{
 
 	@override
 	void initState(){
@@ -79,5 +81,10 @@ class _DropDownState extends State<DropDown>{
 		);
 	}
 
+	@override
 	Widget build(BuildContext context) => _buildDropDown(context);
+
+	void redraw(List values){
+		
+	}
 }
