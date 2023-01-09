@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:collection/collection.dart';
 
 class DropDown extends StatefulWidget {
 	final Key? key;
 	final List<String> items;
-	final String? initValue;
-	final String? placeholder;
 	final Function? callback;
 	final TextStyle? textStyle;
 	final Color? dropdownColor;
@@ -16,7 +15,6 @@ class DropDown extends StatefulWidget {
 	DropDown({
 		required this.items,
 		this.key,
-		this.initValue,
 		this.textStyle,
 		this.callback,
 		this.dropdownColor,
@@ -25,7 +23,6 @@ class DropDown extends StatefulWidget {
 		this.isExpanded=false,
 		this.elevation,
 		this.itemHeight,
-		this.placeholder
 	});
 
 	@override
@@ -34,16 +31,14 @@ class DropDown extends StatefulWidget {
 }
 
 class DropDownState extends State<DropDown>{
-
+	late List<String> _items;
 	@override
 	void initState(){
 		super.initState();
+		_items = widget.items;
+		selectedValue = widget.items.first;
 		if(widget.initCallback != null){
 			widget.initCallback!();
-		}
-
-		if(widget.placeholder != null){
-			widget.items.insert(0, widget.placeholder!);
 		}
 	}
 
@@ -52,7 +47,7 @@ class DropDownState extends State<DropDown>{
 		return DropdownButton<String>(
 			isExpanded: widget.isExpanded ?? false,
 			dropdownColor: widget.dropdownColor,
-			value: selectedValue ?? widget.initValue ?? widget.placeholder ?? widget.items.first,
+			value: selectedValue,
 			elevation: widget.elevation ?? 0,
 			underline: Container(),
 			onChanged: (String? newValue) async {
@@ -66,7 +61,7 @@ class DropDownState extends State<DropDown>{
 			},
 			itemHeight: widget.itemHeight,
 			iconEnabledColor: widget.iconEnabledColor,
-			items: widget.items.toSet()
+			items: _items.toSet()
 				.map<DropdownMenuItem<String>>((String value){
 					return DropdownMenuItem<String>(
 						value: value,
@@ -84,7 +79,10 @@ class DropDownState extends State<DropDown>{
 	@override
 	Widget build(BuildContext context) => _buildDropDown(context);
 
-	void redraw(List values){
-		
+	void redraw(List<String> values){
+		setState((){
+			_items = values;
+			selectedValue = _items.firstOrNull;
+		});
 	}
 }
