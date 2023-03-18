@@ -282,21 +282,14 @@ To get height and width for an expanded widget
 ```dart
 @override
 Widget build(BuildContext context){
-  return Column(
-    children: [
-      Expanded(
-        child: aqua.DynamicDimensions(
-          renderWidget: (double width, double height){
-            return Container(
-              width: width,
-              height: height
-              color: Colors.red,
-            );
-          }
-        ),
-      ),
-      SizedBox(height: 10.0),
-    ]
+  return aqua.DynamicDimensions(
+    renderWidget: (double width, double height){
+      return Container(
+        width: width,
+        height: height
+        color: Colors.red,
+      );
+    }
   );
 }
 ```
