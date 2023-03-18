@@ -36,7 +36,6 @@ export 'src/center_in_column.dart';
 export 'src/stepped_progress.dart';
 export 'src/palette_generator.dart';
 export 'src/dynamic_dimensions.dart';
-export 'src/windows/navigation.dart';
 export 'src/graphics/smooth_corner.dart';
 export 'src/graphics/rounded_corners.dart';
 export 'src/graphics/skeleton_animation.dart';

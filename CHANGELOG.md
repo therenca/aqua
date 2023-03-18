@@ -94,3 +94,6 @@
 - aqua.Client, timeout optional
 [TOODS]
 - show loader within textformfield to indicate error or input control successful
+
+### 1.1.2+7
+- removed navigation; separated it to its own package for desktop apps
