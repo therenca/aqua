@@ -16,8 +16,6 @@ class Client {
 	Map <String, dynamic>? query;
 	Map<String, String>? headers;
 	List<int>? expectedStatusCodes; // anticipate successful response
-	int? timeout;
-	Function? onTimeout;
 
 	String? _now;
 	String? _uri;
@@ -37,10 +35,9 @@ class Client {
 			this.headers,
 			this.expectedStatusCodes,
 			this.contentType='application/json',
-			this.timeout,
-			this.onTimeout
 		}){
 		
+		query ??= {};
 		if(expectedStatusCodes != null){
 			if(!expectedStatusCodes!.contains(ok)){
 				expectedStatusCodes!.add(ok);
@@ -55,33 +52,34 @@ class Client {
 	int? get statusCode => _statusCode;
 
 	Uri httpUri (String method){
-		Uri uri;
+		Uri? uri;
 		if(query != null && method == 'GET'){	
 			Map<String, String> _query = query!.cast<String, String>();
-			uri = Uri.http('$serverIp:$serverPort', path, _query);
+			if(query!.isNotEmpty) uri = Uri.http('$serverIp:$serverPort', path, _query);
+			if(query!.isEmpty) uri = Uri.http('$serverIp:$serverPort', path);
 		} else {
 			uri = Uri.http('$serverIp:$serverPort', path);
 		}
 
-		return uri;
+		return uri!;
 	}
 
 	Uri httpsUri (String method){
-		Uri uri;
+		Uri? uri;
 		if(query != null && method == 'GET'){
-			Map<String, String> _query = query!.cast<String, String>();	
-			uri = Uri.https('$serverIp:$serverPort', path, _query);
+			Map<String, String> _query = query!.cast<String, String>();
+			if(query!.isNotEmpty) uri = Uri.https('$serverIp:$serverPort', path, _query);
+			if(query!.isEmpty) uri = Uri.https('$serverIp:$serverPort', path);
 		} else {
 			uri = Uri.https('$serverIp:$serverPort', path);
 		}
-		return uri;
+		return uri!;
 	}
 
 
 	Future<dynamic> getResponse({String method='POST', Map<String, String>? multipartInfo, Map<String, String>? files}) async {
 		
 		Future? responseFuture;
-		bool isStreamedResponse = false;
 
 		var uri;
 		if(isSecured){
@@ -122,7 +120,6 @@ class Client {
 						});
 					}
 
-					isStreamedResponse = true;
 					responseFuture = request.send();
 				} else {
 					responseFuture = http.post(
@@ -159,31 +156,6 @@ class Client {
 			}
 		}
 
-		FutureOr<http.Response> Function() _onTimeoutResponse = (){
-			if(onTimeout != null){
-				onTimeout!();
-			} else {
-				throw TimeoutException('[$_uri] Connection timed out, current timeout is set to $timeout, try increasing the timeout or proof check your internet connection / resource availability. Set a onTimeout callback for such scenarios when creating your aqua.Client object');
-			}
-			return Future.value(http.Response(
-				method,
-				HttpStatus.gatewayTimeout
-			));
-		};
-
-		FutureOr<http.StreamedResponse> Function() _onTimeoutStreamedResponse = (){
-			if(onTimeout != null){
-				onTimeout!();
-			} else {
-				throw TimeoutException('[$_uri] Connection timed out, current timeout is set to $timeout, try increasing the timeout or proof check your internet connection / resource availability. Set a onTimeout callback for such scenarios when creating your aqua.Client object');
-			}
-			Stream<List<int>> stream = Stream.empty();
-			return Future.value(http.StreamedResponse(
-				stream,
-				HttpStatus.gatewayTimeout
-			));
-		};
-
 		var bodyStr;
 		Completer<dynamic> completer = Completer();
 		Future<dynamic> _parseResponse(dynamic _res) async {
@@ -216,8 +188,7 @@ class Client {
 			}
 		}
 		if(responseFuture != null){
-			if(timeout != null){
-				responseFuture.timeout(Duration(milliseconds: timeout!), onTimeout: isStreamedResponse ? _onTimeoutStreamedResponse : _onTimeoutResponse).then((_res) async {
+			responseFuture.then((_res) async {
 					return await _parseResponse(_res);
 				}, onError: (error){
 					if(verbose){
@@ -225,21 +196,9 @@ class Client {
 					}
 					completer.complete(null);
 				});
-			} else {
-				responseFuture.then((_res) async {
-					return await _parseResponse(_res);
-				}, onError: (error){
-					if(verbose){
-						pretifyOutput('error: ${error.toString()}', color: AqColor.red);
-					}
-					completer.complete(null);
-				});
-			}
 			return completer.future;
 		}
 	}
-
-	
 
 	Future<Uint8List?> downloadBinary(String filePath, {String method='POST', String size='small', StreamController<double>? controller}) async {
 		var uri;
@@ -252,8 +211,12 @@ class Client {
 		}
 
 		_uri = uri.toString();
+		if(verbose){
+			pretifyOutput('[$_now][$method] $uri');
+		}
 		var client = http.Client();
 		var request = http.Request(method, uri);
+		request.headers.addAll({HttpHeaders.contentTypeHeader: 'application/octet-stream'});
 		http.StreamedResponse response = await client.send(request);
 		_statusCode = response.statusCode;
 

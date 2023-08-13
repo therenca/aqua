@@ -408,7 +408,7 @@ Widget build(BuildContext context){
   // some code
   // then
   Widget clippedImage = aqua.ClippedCircle(
-    child: aqua.ImageFit(
+    child: aqua.Fit(
       child: child // Image.asset(path/to/file) or even a network image
     ) // some widget, could be an image, wrapped in a container,
     color: Colors.blue // border of the circle

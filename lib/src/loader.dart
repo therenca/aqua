@@ -2,16 +2,15 @@
 import 'package:flutter/material.dart';
 
 class Loader extends StatelessWidget {
-
 	final Color? color;
-	final double? width;
-	final double? height;
+	final double width;
+	final double height;
 	final double bgOpacity;
 	final double fgOpacity;
 	Loader({
+		required this.width,
+		required this.height,
 		this.color,
-		this.width,
-		this.height,
 		this.bgOpacity=0.4,
 		this.fgOpacity=0.2
 	});

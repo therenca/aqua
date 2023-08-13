@@ -31,6 +31,7 @@ class DropDown extends StatefulWidget {
 }
 
 class DropDownState extends State<DropDown>{
+	String? selectedValue;
 	late List<String> _items;
 	@override
 	void initState(){
@@ -42,7 +43,6 @@ class DropDownState extends State<DropDown>{
 		}
 	}
 
-	String? selectedValue;
 	Widget _buildDropDown(BuildContext context){
 		return DropdownButton<String>(
 			isExpanded: widget.isExpanded ?? false,
