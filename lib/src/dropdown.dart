@@ -79,10 +79,10 @@ class DropDownState extends State<DropDown>{
 	@override
 	Widget build(BuildContext context) => _buildDropDown(context);
 
-	void redraw(List<String> values){
+	void redraw(List<String>? values, [String? selected]){
 		setState((){
-			_items = values;
-			selectedValue = _items.firstOrNull;
+			if(values != null) _items = values;
+			selectedValue = selected ?? _items.firstOrNull;
 		});
 	}
 }
