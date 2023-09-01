@@ -7,7 +7,6 @@ import 'package:http/http.dart' as http;
 import 'output.dart';
 
 class Client {
-
 	String serverIp;
 	int serverPort;
 	String path;
@@ -200,10 +199,11 @@ class Client {
 		}
 	}
 
-	Future<Uint8List?> downloadBinary(String filePath, {String method='POST', String size='small', StreamController<double>? controller}) async {
+	Future<Uint8List?> downloadBinary(String filePath, {Size size=Size.small, StreamController<double>? controller}) async {
 		var uri;
-		var file;
+		File? file;
 		Uint8List? binary;
+		String method = 'GET';
 		if(isSecured){
 			uri = httpsUri(method);
 		} else {
@@ -214,51 +214,74 @@ class Client {
 		if(verbose){
 			pretifyOutput('[$_now][$method] $uri');
 		}
+
+		// there is a small delay as the client tries to determine the size of the large resource
+		// total size of resource is needed to provide the download progress needed for ui rendition
+		controller?.sink.add(0);
+
 		var client = http.Client();
 		var request = http.Request(method, uri);
-		request.headers.addAll({HttpHeaders.contentTypeHeader: 'application/octet-stream'});
-		http.StreamedResponse response = await client.send(request);
-		_statusCode = response.statusCode;
-
-		if(filePath.isNotEmpty){
-			file = await File(filePath).create();
-		}
-
+		request.headers.addAll({
+			HttpHeaders.contentTypeHeader: 'application/octet-stream',
+			HttpHeaders.connectionHeader: 'keep-alive'
+		});
+		http.StreamedResponse streamedResponse = await client.send(request);
 		switch(size){
-			case 'small': {
-				binary =  await response.stream.toBytes();
-				file != null ? await file.writeAsBytes(binary) : file = null;
+			case Size.small: {
+				binary =  await streamedResponse.stream.toBytes();
+				client.close();
 				break;
 			}
-			case 'large': {
-				if(filePath.isNotEmpty){
-					var received = 0;
-					var length = response.contentLength;
-					var sink = file.openWrite();
-					List<int> fullBytes = [];
-					await response.stream.map((List<int> bytes){
-						received += bytes.length;
-						fullBytes += bytes;
-						if(verbose){
-							pretifyOutput('[DOWNLOAD | $size] $received / $length');
+			case Size.large: {
+				try {
+					int startByte = 0;
+					int chunkSize = 1024 * 1024;
+					int endByte = (startByte + chunkSize) - 1; 
+					int contentLength = streamedResponse.contentLength!;
+					var builder = BytesBuilder();
+					client.close();
+					while (true){
+						var headers = {
+							HttpHeaders.contentTypeHeader: 'application/octet-stream',
+							HttpHeaders.rangeHeader: 'bytes=$startByte-$endByte',
+							HttpHeaders.connectionHeader: 'keep-alive'
+						};
+						var response = await http.get(uri, headers: headers);
+						var _statusCode = response.statusCode;
+						if(_statusCode == 206){
+							startByte = endByte + 1;
+							endByte = (startByte + chunkSize) - 1;
+							builder.add(response.bodyBytes);
+							if(verbose) pretifyOutput('[$_uri][progress] $startByte / $contentLength}');
+							var progress = startByte/contentLength;
+							controller?.sink.add(progress);
+						} else if(_statusCode == 416){
+							controller?.close();
+							break;
 						}
-						if(controller != null){
-							var downloadProgress = received / length!;
-							controller.sink.add(downloadProgress);
-
-							if(length == received){
-								controller.close();
-							}
-						}
-						return bytes;
-					}).pipe(sink);
-
-					sink.close();
-					binary = Uint8List.fromList(fullBytes);
+					}
+					binary = builder.toBytes();
+				} catch(e){
+					if(verbose) pretifyOutput('[error][progress] ${e.toString()}', color: AqColor.red);
+					binary = null;
+					controller?.close();
 				}
 				break;
 			}
 		}
+
+		if(filePath.isNotEmpty){
+			if(binary != null ){
+				file = await File(filePath).create();
+				await file.writeAsBytes(binary);
+			}
+		}
+
 		return binary;
 	}
+}
+
+enum Size {
+	large,
+	small,
 }
