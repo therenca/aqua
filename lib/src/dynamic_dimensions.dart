@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 class DynamicDimensions extends StatelessWidget {
   final bool withColumn;
 	final Function renderWidget;
+  final int? flex;
 
 	DynamicDimensions({
 		required this.renderWidget,
-    this.withColumn=true
+    this.withColumn=true,
+    this.flex
 	});
 
 	@override
@@ -14,6 +16,7 @@ class DynamicDimensions extends StatelessWidget {
 		return withColumn ? Column(
 			children: [
 				Expanded(
+          flex: flex ?? 1,
 					child: Row(
 						children: [
 							Expanded(
@@ -31,6 +34,7 @@ class DynamicDimensions extends StatelessWidget {
 				),
 			],
 		) : Expanded(
+      flex: flex ?? 1,
       child: Row(
         children: [
           Expanded(

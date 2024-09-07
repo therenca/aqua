@@ -97,3 +97,9 @@
 
 ### 1.1.2+7
 - removed navigation; separated it to its own package for desktop apps
+
+### 1.1.3
+- updated to flutter's ^3.5.2
+
+### 1.1.4
+- added flex to DynamicDimensions
