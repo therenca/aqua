@@ -1353,3 +1353,42 @@ class _ColorCutQuantizer {
     return colors;
   }
 }
+
+Future<ColorFromImage> getPalette(ImageProvider imageProvider) async {
+	final completer = Completer<ImageInfo>();
+	imageProvider.resolve(const ImageConfiguration()).addListener(
+		ImageStreamListener((info, _) => completer.complete(info))
+	);
+	ImageInfo info = await completer.future;
+	var palette = await PaletteGenerator.fromImage(info.image);
+	return ColorFromImage(
+		vibrant: palette.vibrantColor?.color,
+		dominant: palette.dominantColor?.color
+	);
+}
+
+class ColorFromImage {
+	Color? vibrant;
+	Color? dominant;
+
+	ColorFromImage({
+		this.vibrant,
+		this.dominant
+	});
+
+	static ColorFromImage fromMap(Map<String, dynamic> data) {
+		var v = data['vibrant'];
+		var d = data['dominant'];
+		return ColorFromImage(
+			dominant: Color.fromRGBO(d[0], d[1], d[2], d[3].toDouble()),
+			vibrant: v != null ? Color.fromRGBO(v[0], v[1], v[2], v[3].toDouble()) : null, 
+		);	
+	}
+
+	Map<String, dynamic> toMap(){
+		return <String, dynamic>{
+			'dominant': [dominant!.red, dominant!.green, dominant!.blue, dominant!.alpha],
+			'vibrant': vibrant != null ? [vibrant!.red, vibrant!.green, vibrant!.blue, vibrant!.alpha] : null,
+		};
+	}
+}

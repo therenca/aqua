@@ -12,6 +12,7 @@ class DropDown extends StatefulWidget {
 	final bool? isExpanded;
 	final int? elevation;
 	final double? itemHeight;
+  final String? selected;
 	DropDown({
 		required this.items,
 		this.key,
@@ -23,6 +24,7 @@ class DropDown extends StatefulWidget {
 		this.isExpanded=false,
 		this.elevation,
 		this.itemHeight,
+    this.selected
 	});
 
 	@override
@@ -37,17 +39,15 @@ class DropDownState extends State<DropDown>{
 	void initState(){
 		super.initState();
 		_items = widget.items;
-		selectedValue = widget.items.first;
-		if(widget.initCallback != null){
-			widget.initCallback!();
-		}
+		selectedValue = widget.selected ?? widget.items.first;
+    widget.initCallback?.call();
 	}
 
 	Widget _buildDropDown(BuildContext context){
 		return DropdownButton<String>(
 			isExpanded: widget.isExpanded ?? false,
 			dropdownColor: widget.dropdownColor,
-			value: selectedValue,
+			value: selectedValue ?? widget.selected,
 			elevation: widget.elevation ?? 0,
 			underline: Container(),
 			onChanged: (String? newValue) async {

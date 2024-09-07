@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 class CustomNavigator{
-
 	bool forward;
 	bool replaceSingle;
 	bool replaceAll;
@@ -53,12 +52,7 @@ class CustomNavigator{
 					);
 				}
 			} else {
-
-				// unnamed route
-				// rendering screens using buildScreen method
-
 				if(replaceSingle){
-
 					results = await Navigator.pushReplacement(
 						context,
 						MaterialPageRoute(
