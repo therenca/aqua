@@ -103,3 +103,5 @@
 
 ### 1.1.4
 - added flex to DynamicDimensions
+### 1.1.5
+- added enums for request methods

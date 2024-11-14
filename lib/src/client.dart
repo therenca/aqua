@@ -50,10 +50,10 @@ class Client {
 	String? get uri => _uri;
 	int? get statusCode => _statusCode;
 
-	Uri httpUri (String method){
+	Uri httpUri (Method method){
 		Uri? uri;
-		if(query != null && method == 'GET'){	
-			Map<String, String> _query = query!.cast<String, String>();
+		if(query != null && method == Method.GET){	
+			Map<String, String> _query = query?.map<String,String>((k,v) => MapEntry(k, v as String)) ?? <String,String>{};
 			if(query!.isNotEmpty) uri = Uri.http('$serverIp:$serverPort', path, _query);
 			if(query!.isEmpty) uri = Uri.http('$serverIp:$serverPort', path);
 		} else {
@@ -63,9 +63,9 @@ class Client {
 		return uri!;
 	}
 
-	Uri httpsUri (String method){
+	Uri httpsUri (Method method){
 		Uri? uri;
-		if(query != null && method == 'GET'){
+		if(query != null && method == Method.GET){
 			Map<String, String> _query = query!.cast<String, String>();
 			if(query!.isNotEmpty) uri = Uri.https('$serverIp:$serverPort', path, _query);
 			if(query!.isEmpty) uri = Uri.https('$serverIp:$serverPort', path);
@@ -76,11 +76,9 @@ class Client {
 	}
 
 
-	Future<dynamic> getResponse({String method='POST', Map<String, String>? multipartInfo, Map<String, String>? files}) async {
-		
-		Future? responseFuture;
-
+	Future<dynamic> getResponse({Method method=Method.POST, Map<String, String>? multipartInfo, Map<String, String>? files}) async {
 		var uri;
+		Future? responseFuture;
 		if(isSecured){
 			uri = httpsUri(method);
 		} else {
@@ -98,7 +96,7 @@ class Client {
 		}
 		
 		switch(method){
-			case 'POST': {
+			case Method.POST: {
 				if(multipartInfo != null || files != null){
 					var request = http.MultipartRequest('POST', uri);
 					_headers[HttpHeaders.contentTypeHeader] = 'multipart/form-data';
@@ -131,12 +129,12 @@ class Client {
 				break;
 			}
 
-			case 'GET': {
+			case Method.GET: {
 				responseFuture = http.get(uri, headers: _headers);
 				break;
 			}
 
-			case 'PUT': {
+			case Method.PUT: {
 				responseFuture = http.put(
 					uri,
 					headers: _headers,
@@ -145,7 +143,7 @@ class Client {
 				break;
 			}
 
-			case 'DELETE': {
+			case Method.DELETE: {
 				responseFuture = http.delete(
 					uri,
 					headers: _headers,
@@ -203,7 +201,7 @@ class Client {
 		var uri;
 		File? file;
 		Uint8List? binary;
-		String method = 'GET';
+		Method method = Method.GET;
 		if(isSecured){
 			uri = httpsUri(method);
 		} else {
@@ -220,7 +218,7 @@ class Client {
 		controller?.sink.add(0);
 
 		var client = http.Client();
-		var request = http.Request(method, uri);
+		var request = http.Request('get', uri);
 		request.headers.addAll({
 			HttpHeaders.contentTypeHeader: 'application/octet-stream',
 			HttpHeaders.connectionHeader: 'keep-alive'
@@ -284,4 +282,11 @@ class Client {
 enum Size {
 	large,
 	small,
+}
+
+enum Method {
+  GET,
+  POST,
+  PUT,
+  DELETE
 }
