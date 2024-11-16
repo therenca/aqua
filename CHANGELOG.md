@@ -105,3 +105,5 @@
 - added flex to DynamicDimensions
 ### 1.1.5
 - added enums for request methods
+### 1.1.6
+- added generic type for fractionate static methods

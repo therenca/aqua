@@ -1,14 +1,14 @@
 class Fractionate {
-	static List<List<dynamic>> generate(List<dynamic> listing, int pieces){
+	static List<List<T>> generate<T>(List<T> listing, int pieces){
 		assert(listing.length > 3);
-		var listingF = <List<dynamic>>[];
+		var listingF = <List<T>>[];
 		var distribution = listing.length ~/ pieces;
 
 		var start = 0;
 		var end = distribution;
 		while(true){
 			
-			List<dynamic>? segmentRange;
+			List<T>? segmentRange;
 			if(start < listing.length){
 				if(end < listing.length){
 					segmentRange = listing.sublist(start, end);
@@ -30,7 +30,7 @@ class Fractionate {
 		return listingF;
 	}
 
-	static List<List<dynamic>> dualsInRow(List<dynamic> listing){
+	static List<List<T>> dualsInRow<T>(List<T> listing){
 		// where
 		// listing == [a, b, c, d, e, f, g]
 		// and afer processing we will get
@@ -40,7 +40,7 @@ class Fractionate {
 		// 	[e,f],
 		// 	[g]
 		// ]
-		List<List<dynamic>> formatted = [];
+		List<List<T>> formatted = [];
 		int firstIndex = 0;
 		int secondIndex = 0;
 		int trips = (listing.length / 2).round();
