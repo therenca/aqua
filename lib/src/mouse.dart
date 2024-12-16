@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
 
 class MouseInteractivity extends StatelessWidget {
+  final Widget child;
 
-	final Widget child;
+  MouseInteractivity({required this.child});
 
-	MouseInteractivity({required this.child});
+  Widget _buildMouseInteractivity(BuildContext context) {
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: child,
+    );
+  }
 
-	Widget _buildMouseInteractivity(BuildContext context){
-		return MouseRegion(
-			cursor: SystemMouseCursors.click,
-			child: child,
-		);
-	}
-
-	@override
-	Widget build(BuildContext context) => _buildMouseInteractivity(context);
-
+  @override
+  Widget build(BuildContext context) => _buildMouseInteractivity(context);
 }

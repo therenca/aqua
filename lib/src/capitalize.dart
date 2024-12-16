@@ -1,1 +1,2 @@
-String capitalize(String input) => '${input[0].toUpperCase()}${input.substring(1)}';
+String capitalize(String input) =>
+    '${input[0].toUpperCase()}${input.substring(1)}';

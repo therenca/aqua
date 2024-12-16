@@ -107,3 +107,5 @@
 - added enums for request methods
 ### 1.1.6
 - added generic type for fractionate static methods
+### 1.1.7
+- dart format; dart fix;
