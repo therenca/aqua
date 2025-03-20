@@ -13,11 +13,15 @@ class TextFormFieldCustom extends StatefulWidget {
   final Color labelColor;
   final Color borderColor;
   final Color focusedBorderColor;
+  final Color errorBorderColor;
   final double borderWidth;
   final double focusBorderWidth;
+  final double errorBorderWidth;
   final double borderRadius;
   final String labelText;
   final String hintText;
+  final Widget? error;
+  final String? errorText;
   final TextStyle? textStyle;
   final TextAlignVertical? textAlignVertical;
   final FloatingLabelBehavior floatingLabelBehavior;
@@ -68,12 +72,14 @@ class TextFormFieldCustom extends StatefulWidget {
       this.labelColor = Colors.black,
       this.borderColor = Colors.black,
       this.focusedBorderColor = Colors.black,
+      this.errorBorderColor = Colors.red,
       this.prefixIconData,
       this.prefixIconColor = Colors.black,
       this.focusedPrefixIconColor = Colors.black,
       this.prefixIconSize = 17.0,
       this.borderWidth = 2.0,
       this.focusBorderWidth = 2.0,
+      this.errorBorderWidth = 1.0,
       this.borderRadius = 4.0,
       this.labelText = '',
       this.hintText = '',
@@ -102,6 +108,8 @@ class TextFormFieldCustom extends StatefulWidget {
       this.streamController,
       this.textAlign,
       this.textStyle,
+      this.error,
+      this.errorText,
       this.floatingLabelBehavior = FloatingLabelBehavior.auto});
 
   @override
@@ -139,6 +147,8 @@ class _TextFormFieldCustomState extends State<TextFormFieldCustom> {
 
     BorderSide focusedBorderSide = BorderSide(
         width: widget.focusBorderWidth, color: widget.focusedBorderColor);
+    BorderSide errorBorderSide = BorderSide(
+        width: widget.errorBorderWidth, color: widget.errorBorderColor);
 
     Widget? _buildPrefixIcon() {
       Widget? _prefixIcon;
@@ -168,35 +178,51 @@ class _TextFormFieldCustomState extends State<TextFormFieldCustom> {
       textInputAction: widget.textInputAction,
       onFieldSubmitted: (inputValue) => widget.onSubmitted?.call(inputValue),
       decoration: InputDecoration(
-        isCollapsed: widget.isCollapsed,
-        icon: widget.beforeInput,
-        floatingLabelBehavior: widget.floatingLabelBehavior,
-        enabledBorder: widget.isOutlineBorder
-            ? OutlineInputBorder(
-                borderSide: borderSide,
-                borderRadius: BorderRadius.circular(widget.borderRadius))
-            : UnderlineInputBorder(
-                borderSide: borderSide,
-              ),
-        focusedBorder: widget.isOutlineBorder
-            ? OutlineInputBorder(
-                borderSide: focusedBorderSide,
-                borderRadius: BorderRadius.circular(widget.borderRadius))
-            : UnderlineInputBorder(borderSide: focusedBorderSide),
-        contentPadding: EdgeInsets.symmetric(
-            vertical: widget.verticalPadding,
-            horizontal: widget.horizontalPadding),
-        labelText: widget.labelText,
-        labelStyle: widget.labelTextStyle,
-        hintText: widget.hintText,
-        hintStyle: widget.hintTextStyle,
-        prefix: widget.prefix,
-        prefixIcon:
-            widget.prefixIcon == null ? _buildPrefixIcon() : widget.prefixIcon,
-        suffixIcon: widget.suffixIcon,
-        filled: widget.isFilled,
-        fillColor: widget.filledColor,
-      ),
+          isCollapsed: widget.isCollapsed,
+          icon: widget.beforeInput,
+          floatingLabelBehavior: widget.floatingLabelBehavior,
+          enabledBorder: widget.isOutlineBorder
+              ? OutlineInputBorder(
+                  borderSide: borderSide,
+                  borderRadius: BorderRadius.circular(widget.borderRadius))
+              : UnderlineInputBorder(
+                  borderSide: borderSide,
+                ),
+          focusedBorder: widget.isOutlineBorder
+              ? OutlineInputBorder(
+                  borderSide: focusedBorderSide,
+                  borderRadius: BorderRadius.circular(widget.borderRadius))
+              : UnderlineInputBorder(borderSide: focusedBorderSide),
+          contentPadding: EdgeInsets.symmetric(
+              vertical: widget.verticalPadding,
+              horizontal: widget.horizontalPadding),
+          labelText: widget.labelText,
+          labelStyle: widget.labelTextStyle,
+          hintText: widget.hintText,
+          hintStyle: widget.hintTextStyle,
+          prefix: widget.prefix,
+          prefixIcon: widget.prefixIcon == null
+              ? _buildPrefixIcon()
+              : widget.prefixIcon,
+          suffixIcon: widget.suffixIcon,
+          filled: widget.isFilled,
+          fillColor: widget.filledColor,
+          errorText: widget.errorText,
+          error: widget.error,
+          errorBorder: widget.isOutlineBorder
+              ? OutlineInputBorder(
+                  borderSide: errorBorderSide,
+                  borderRadius: BorderRadius.circular(widget.borderRadius))
+              : UnderlineInputBorder(
+                  borderSide: errorBorderSide,
+                ),
+          focusedErrorBorder: widget.isOutlineBorder
+              ? OutlineInputBorder(
+                  borderSide: errorBorderSide,
+                  borderRadius: BorderRadius.circular(widget.borderRadius))
+              : UnderlineInputBorder(
+                  borderSide: errorBorderSide,
+                )),
       cursorColor: widget.cursorColor,
       cursorWidth: widget.cursorWidth,
       maxLength: widget.maxLength,

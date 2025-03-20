@@ -50,32 +50,15 @@ class Client {
   int? get statusCode => _statusCode;
 
   Uri httpUri(Method method) {
-    Uri? uri;
-    if (query != null && method == Method.GET) {
-      Map<String, String> _query =
-          query?.map<String, String>((k, v) => MapEntry(k, v as String)) ??
-              <String, String>{};
-      if (query!.isNotEmpty)
-        uri = Uri.http('$serverIp:$serverPort', path, _query);
-      if (query!.isEmpty) uri = Uri.http('$serverIp:$serverPort', path);
-    } else {
-      uri = Uri.http('$serverIp:$serverPort', path);
-    }
-
-    return uri!;
+    return method == Method.GET
+        ? Uri.http('$serverIp:$serverPort', path, query)
+        : Uri.http('$serverIp:$serverPort', path);
   }
 
   Uri httpsUri(Method method) {
-    Uri? uri;
-    if (query != null && method == Method.GET) {
-      Map<String, String> _query = query!.cast<String, String>();
-      if (query!.isNotEmpty)
-        uri = Uri.https('$serverIp:$serverPort', path, _query);
-      if (query!.isEmpty) uri = Uri.https('$serverIp:$serverPort', path);
-    } else {
-      uri = Uri.https('$serverIp:$serverPort', path);
-    }
-    return uri!;
+    return method == Method.GET
+        ? Uri.https('$serverIp:$serverPort', path, query)
+        : Uri.https('$serverIp:$serverPort', path);
   }
 
   Future<dynamic> getResponse(
@@ -210,7 +193,7 @@ class Client {
       completer.complete(null);
     });
     return completer.future;
-    }
+  }
 
   Future<Uint8List?> downloadBinary(String filePath,
       {Size size = Size.small, StreamController<double>? controller}) async {

@@ -109,3 +109,19 @@
 - added generic type for fractionate static methods
 ### 1.1.7
 - dart format; dart fix;
+### 1.1.8
+- add error text to TextFormField;
+### 1.1.9
+- add error color and error border text to TextFormField;
+### 1.2.0
+- add error widget;
+### 1.2.1
+- add error border width;
+### 1.2.2
+- update client query parameter;
+### 1.2.3
+- update remove redundant checks;
+### 1.2.4
+- --
+### 1.2.5
+- enforce types for trycatch clause

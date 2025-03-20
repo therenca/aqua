@@ -5,6 +5,6 @@ Future<void> delay(int milliseconds,
     {Function? callback, bool verbose = false}) async {
   await Future.delayed(Duration(milliseconds: milliseconds));
   if (callback != null) {
-    await aqua.tryCatch(callback, verbose: verbose);
+    await aqua.tryCatch(([_]) => callback(), verbose: verbose);
   }
 }
