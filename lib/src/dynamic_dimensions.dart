@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class DynamicDimensions extends StatelessWidget {
   final bool withColumn;
-  final Function renderWidget;
+  final Widget Function(double w, double h) renderWidget;
   final int? flex;
 
   DynamicDimensions(

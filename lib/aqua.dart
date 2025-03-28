@@ -1,6 +1,5 @@
 library aqua;
 
-export 'src/log.dart';
 export 'src/try.dart';
 export 'src/pref.dart';
 export 'src/line.dart';
@@ -23,10 +22,12 @@ export 'src/tab_header.dart';
 export 'src/dimensions.dart';
 export 'src/capitalize.dart';
 export 'src/dotted_line.dart';
-export 'src/create_file.dart';
+export 'src/create_file/io_stub.dart'
+    if (dart.library.io) 'src/create_file/io_platform.dart';
 export 'src/fractionate.dart';
 export 'src/generate_id.dart';
 export 'src/navigate_to.dart';
+export 'src/glassmorphism.dart';
 export 'src/disallow_glow.dart';
 export 'src/request_focus.dart';
 export 'src/pretify_number.dart';

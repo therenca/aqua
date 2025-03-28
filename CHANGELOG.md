@@ -125,3 +125,5 @@
 - --
 ### 1.2.5
 - enforce types for trycatch clause
+### 1.2.5+1
+- add glassmorphism
