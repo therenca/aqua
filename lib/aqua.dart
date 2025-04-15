@@ -17,6 +17,7 @@ export 'src/isolate.dart';
 export 'src/dropdown.dart';
 export 'src/snackbar.dart';
 export 'src/image_fit.dart';
+export 'src/responsive.dart';
 export 'src/validators.dart';
 export 'src/tab_header.dart';
 export 'src/dimensions.dart';

@@ -18,6 +18,7 @@ class Client {
 
   String? _now;
   String? _uri;
+  String? _responseContentType;
   int? _statusCode;
   final int ok = 200;
   String contentType;
@@ -48,15 +49,16 @@ class Client {
 
   String? get uri => _uri;
   int? get statusCode => _statusCode;
+  String? get responseContentType => _responseContentType;
 
   Uri httpUri(Method method) {
-    return method == Method.GET
+    return method == Method.GET && (query?.isNotEmpty ?? false)
         ? Uri.http('$serverIp:$serverPort', path, query)
         : Uri.http('$serverIp:$serverPort', path);
   }
 
   Uri httpsUri(Method method) {
-    return method == Method.GET
+    return method == Method.GET && (query?.isNotEmpty ?? false)
         ? Uri.https('$serverIp:$serverPort', path, query)
         : Uri.https('$serverIp:$serverPort', path);
   }
@@ -167,6 +169,7 @@ class Client {
         }
 
         _statusCode = _res.statusCode;
+        _responseContentType = _res.headers['content-type'];
         if (expectedStatusCodes!.contains(_statusCode)) {
           // we are using contain because the full header could return
           // e.g 'application/json; charset=utf-8

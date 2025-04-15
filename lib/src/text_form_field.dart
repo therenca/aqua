@@ -37,9 +37,9 @@ class TextFormFieldCustom extends StatefulWidget {
   final double horizontalPadding;
   final TextInputType keyboardType;
 
-  final Function? onChanged;
-  final Function? validator;
-  final Function? onSubmitted;
+  final Function(String, TextEditingController?)? onChanged;
+  final Function(String?)? validator;
+  final Function(String)? onSubmitted;
 
   final FocusNode? focusNode;
   final TextInputAction? textInputAction;
